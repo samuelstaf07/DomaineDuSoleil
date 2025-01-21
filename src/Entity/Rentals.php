@@ -35,9 +35,6 @@ class Rentals
     private ?bool $has_heating = null;
 
     #[ORM\Column]
-    private ?float $base_deposit = null;
-
-    #[ORM\Column]
     private ?bool $pets_accepted = null;
 
     #[ORM\Column]
@@ -141,18 +138,6 @@ class Rentals
     public function setHasHeating(bool $has_heating): static
     {
         $this->has_heating = $has_heating;
-
-        return $this;
-    }
-
-    public function getBaseDeposit(): ?float
-    {
-        return $this->base_deposit;
-    }
-
-    public function setBaseDeposit(float $base_deposit): static
-    {
-        $this->base_deposit = $base_deposit;
 
         return $this;
     }
