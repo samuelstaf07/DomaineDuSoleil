@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'Greek-Freak'; /* Nom que vous donnerez à votre police */
+    src: url('fonts/Greek-Freak.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+nav a h2{
+    font-family: Greek-Freak;
+    font-size: 41.9px;
+    color: #95C11F;
+}
