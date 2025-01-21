@@ -20,9 +20,6 @@ class Bills
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $date = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    private ?\DateTimeImmutable $date_expired = null;
-
     #[ORM\Column]
     private ?float $total_price = null;
 
@@ -61,18 +58,6 @@ class Bills
     public function setDate(\DateTimeImmutable $date): static
     {
         $this->date = $date;
-
-        return $this;
-    }
-
-    public function getDateExpired(): ?\DateTimeImmutable
-    {
-        return $this->date_expired;
-    }
-
-    public function setDateExpired(\DateTimeImmutable $date_expired): static
-    {
-        $this->date_expired = $date_expired;
 
         return $this;
     }
