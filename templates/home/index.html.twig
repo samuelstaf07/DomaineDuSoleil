@@ -5,6 +5,11 @@
 {% block body %}
     <h1>Accueil</h1>
     {% if app.user %}
-        <h2>Bienvenue <span class="text-primary">{{ app.user.firstname }}</span> !</h2>
+        <h2>Bienvenue <span class="text-primary"> {{ app.user.firstname }} {{ app.user.lastname }}</span> !</h2>
+        <h3>Vous êtes
+            {% for role in app.user.roles %}
+                <li>{{ role }}</li>
+            {% endfor %}
+        </h3>
     {% endif %}
 {% endblock %}

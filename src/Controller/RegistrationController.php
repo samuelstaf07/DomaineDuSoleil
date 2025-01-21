@@ -38,10 +38,15 @@ class RegistrationController extends AbstractController
                 ->setUpdatedAt(new \DateTimeImmutable())
                 ->setCreatedAt(new \DateTimeImmutable())
                 ->setImage($image)
-                ->setRoles(['ROLE_USER'])
                 ->setLastname('Doe')
                 ->setFirstname('John')
             ;
+
+            if(rand(0, 1)==1){
+                $user->setRoles(['ROLE_USER']);
+            }else{
+                $user->setRoles(['ROLE_ADMIN']);
+            }
 
             $entityManager->persist($user);
             $entityManager->flush();
