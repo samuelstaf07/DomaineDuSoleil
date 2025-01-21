@@ -32,9 +32,6 @@ class ReservationsEvents
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $date_start = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    private ?\DateTimeImmutable $date_end = null;
-
     #[ORM\Column]
     private ?bool $is_active = null;
 
@@ -106,18 +103,6 @@ class ReservationsEvents
     public function setDateStart(\DateTimeImmutable $date_start): static
     {
         $this->date_start = $date_start;
-
-        return $this;
-    }
-
-    public function getDateEnd(): ?\DateTimeImmutable
-    {
-        return $this->date_end;
-    }
-
-    public function setDateEnd(\DateTimeImmutable $date_end): static
-    {
-        $this->date_end = $date_end;
 
         return $this;
     }
