@@ -6,6 +6,7 @@
 - [Symfony CLI](https://symfony.com/download)
 - [PHP 8.2](https://www.php.net/downloads.php)
 - [Composer](https://getcomposer.org/download/)
+- [Git](https://git-scm.com/downloads)
 
 ---
 
