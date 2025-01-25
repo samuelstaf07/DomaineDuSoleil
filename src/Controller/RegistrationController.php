@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Images;
 use App\Entity\Users;
 use App\Form\RegistrationFormType;
+use App\Repository\UsersRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -16,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager, UsersRepository $usersRepository): Response
     {
         $user = new Users();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -42,10 +43,10 @@ class RegistrationController extends AbstractController
                 ->setFirstname('John')
             ;
 
-            if(rand(0, 1)==1){
-                $user->setRoles(['ROLE_USER']);
-            }else{
+            if ($usersRepository->count([]) === 0) {
                 $user->setRoles(['ROLE_ADMIN']);
+            } else {
+                $user->setRoles(['ROLE_USER']);
             }
 
             $entityManager->persist($user);
