@@ -16,7 +16,7 @@ class Comments
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?posts $post_id = null;
+    private ?rentals $rental_id = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -43,14 +43,14 @@ class Comments
         return $this;
     }
 
-    public function getPostId(): ?posts
+    public function getPostId(): ?rentals
     {
-        return $this->post_id;
+        return $this->rental_id;
     }
 
-    public function setPostId(?posts $post_id): static
+    public function setRentalId(?rentals $rental_id): static
     {
-        $this->post_id = $post_id;
+        $this->rental_id = $rental_id;
 
         return $this;
     }
