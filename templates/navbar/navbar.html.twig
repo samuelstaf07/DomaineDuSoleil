@@ -10,6 +10,11 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto flex gap-2">
                 {% if app.user %}
+                    {% if is_granted("ROLE_ADMIN") %}
+                        <li class="nav-item">
+                            <a class="btn btn-warning" href="{{ path('app_admin') }}">Admin</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="btn btn-danger" href="{{ path('app_logout') }}">Deconnexion</a>
                     </li>
