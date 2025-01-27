@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration{% endblock %}
+
+{% block body %}
+        <h1 class="mb-4">Administration</h1>
+
+        <p class="mb-4">Bienvenue sur la page d'administration. Vous pouvez gérer les entités suivantes :</p>
+
+        <div class="list-group">
+            <a href="{{ path('app_users_index') }}" class="list-group-item list-group-item-action">
+                <strong>Users</strong>
+            </a>
+            <a href="{{ path('app_comments_index') }}" class="list-group-item list-group-item-action">
+                <strong>Comments</strong>
+            </a>
+            <a href="{{ path('app_events_index') }}" class="list-group-item list-group-item-action">
+                <strong>Events</strong>
+            </a>
+            <a href="{{ path('app_images_index') }}" class="list-group-item list-group-item-action">
+                <strong>Images</strong>
+            </a>
+            <a href="{{ path('app_post_images_index') }}" class="list-group-item list-group-item-action">
+                <strong>Posts Images</strong>
+            </a>
+            <a href="{{ path('app_posts_index') }}" class="list-group-item list-group-item-action">
+                <strong>Posts</strong>
+            </a>
+            <a href="{{ path('app_rental_images_index') }}" class="list-group-item list-group-item-action">
+                <strong>Rentals Images</strong>
+            </a>
+            <a href="{{ path('app_rentals_index') }}" class="list-group-item list-group-item-action">
+                <strong>Rentals</strong>
+            </a>
+            <a href="{{ path('app_reservations_events_index') }}" class="list-group-item list-group-item-action">
+                <strong>Reservations Event</strong>
+            </a>
+            <a href="{{ path('app_reservations_rentals_index') }}" class="list-group-item list-group-item-action">
+                <strong>Reservation Rentals</strong>
+            </a>
+        </div>
+{% endblock %}
