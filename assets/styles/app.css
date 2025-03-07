@@ -1,12 +1,209 @@
 @font-face {
-    font-family: 'Greek-Freak'; /* Nom que vous donnerez à votre police */
+    font-family: 'Greek-Freak';
     src: url('fonts/Greek-Freak.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
+:root{
+    --myWhite: #F8F9FA;
+    --myLightGrey: #414141;
+    --myLightGreen: #95C11F;
+    --myDarkGreen: #006633;
+    --myYellow: #F7D844;
+    --myBlack: #212429;
+}
+
+body{
+    background-color: var(--myWhite);
+    font-family: DM Sans;
+    color: var(--myBlack);
+}
+
 nav a h2{
     font-family: Greek-Freak;
     font-size: 41.9px;
-    color: #95C11F;
+    color: var(--myLightGreen);
+}
+
+#imageFond{
+    height: 100vh;
+    width: 100vw;
+    background: url('img/imageAccueil.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#imageFond h1{
+    font-family: Greek-Freak;
+    font-size: 67.8px;
+    color: var(--myWhite);
+    z-index: 1;
+}
+
+#imageFond::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 0;
+}
+
+#promotion h2{
+    font-family: Greek-Freak;
+    color: var(--myDarkGreen);
+}
+
+.swiper {
+    width: 100%;
+    height: 100%;
+    padding: 5%;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+    background-color: var(--myWhite);
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.5);
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.swiper-button-next, .swiper-button-prev{
+    color: red;
+}
+
+.custom-prev, .custom-next {
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-prev::after, .custom-next::after {
+    content: '';
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 30px;
+}
+
+.custom-prev::after {
+    background-image: url('img/ArrowLeft.svg');
+}
+
+.custom-next::after {
+    background-image: url('img/ArrowRight.svg');
+}
+
+.imageTop {
+    height: 50%;
+    width: 100%;
+    background: url('img/Chalet.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 0;
+}
+
+.imageTop .rate {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--myLightGrey);
+    color: white;
+    padding: 5px 10px;
+    border-top-left-radius: 5px;
+    font-weight: bold;
+    height: 35px;
+}
+
+.imageTop img{
+    height: 30px;
+}
+
+.description{
+    height: 50%;
+    width: 100%;
+    bottom: 0;
+}
+
+.titlePromotion{
+    width: 100%;
+}
+
+.textPromotion{
+    text-align: left;
+}
+
+.strike{
+    text-decoration: line-through;
+    text-decoration-thickness: 3px;
+}
+
+.pricePromotion{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.newPrice{
+    color: var(--myDarkGreen);
+}
+
+.swiper-slide::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0);
+    transition: background 0.3s ease-in-out;
+    z-index: 1;
+}
+
+.swiper-slide:hover::before {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.seeMore {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 2;
+}
+
+.swiper-slide:hover .seeMore {
+    opacity: 1;
 }
