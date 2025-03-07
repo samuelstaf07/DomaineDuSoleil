@@ -3,13 +3,260 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-    <h1>Accueil</h1>
-    {% if app.user %}
-        <h2>Bienvenue <span class="text-primary"> {{ app.user.firstname }} {{ app.user.lastname }}</span> !</h2>
-        <h3>Vous êtes
-            {% for role in app.user.roles %}
-                <li>{{ role }}</li>
-            {% endfor %}
-        </h3>
-    {% endif %}
+{#    {% if app.user %}#}
+{#        <h2>Bienvenue <span class="text-primary"> {{ app.user.firstname }} {{ app.user.lastname }}</span> !</h2>#}
+{#        <h3>Vous êtes#}
+{#            {% for role in app.user.roles %}#}
+{#                <li>{{ role }}</li>#}
+{#            {% endfor %}#}
+{#        </h3>#}
+{#    {% endif %}#}
+    <header id="imageFond">
+        <h1>Domaine Du Soleil</h1>
+    </header>
+    <section id="promotion">
+        <h2 class="m-5">Nos logements en promotions</h2>
+
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide rounded-4">
+                    <div class="imageTop rounded-top-4">
+                        <div class="rate d-flex gap-2 align-items-center">
+                            <span>3,5 (23)</span>
+                            <div class="d-flex gap-1">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/HalfStar.svg') }}" alt="Half star icon">
+                                <img src="{{ asset('styles/img/EmptyStar.svg') }}" alt="Empty star icon">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="description position-absolute rounded-bottom-4">
+                        <div class="titlePromotion d-flex justify-content-between align-items-center px-4 py-2">
+                            <h3 class="fw-bold">Chalet n°23</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="75" height="75" viewBox="0 0 16 16"><path fill="#EB4034" fill-rule="evenodd" d="M9.744 2.072L7.818.917L5.892 2.072l-2.237.198l-.88 2.066l-1.693 1.475L1.585 8l-.503 2.189l1.693 1.475l.88 2.066l2.237.198l1.926 1.155l1.926-1.155l2.237-.198l.88-2.066l1.694-1.475L14.05 8l.504-2.189l-1.694-1.475l-.88-2.066zM5.5 6.5a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0M6 5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m-.146 5.854l5-5l-.708-.708l-5 5zM9.5 10a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0m.5-1.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div class="d-flex">
+                            <div class="d-flex flex-column gap-1 w-50">
+                                <p class="textPromotion m-0 px-4">1-4 personnes</p>
+                                <p class="textPromotion m-0 px-4">2 lits simples</p>
+                                <p class="textPromotion m-0 px-4">1 lit double</p>
+                                <div class="px-4 d-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 256 256"><path fill="#212429" d="M60 88h136a4 4 0 0 0 4-4V40a16 16 0 0 0-16-16H72a16 16 0 0 0-16 16v44a4 4 0 0 0 4 4m28-40h15.73a8.18 8.18 0 0 1 8.27 7.47a8 8 0 0 1-8 8.53H88.27A8.18 8.18 0 0 1 80 56.53A8 8 0 0 1 88 48m136 64.06a8 8 0 0 0-8-8.06H40a8 8 0 0 0-8 8.06a96.1 96.1 0 0 0 51.68 85.08l-3.47 24.27a16.43 16.43 0 0 0 1.63 10A16 16 0 0 0 96 240h63.66a16.52 16.52 0 0 0 9.72-3a16 16 0 0 0 6.46-15.23l-3.52-24.6A96.1 96.1 0 0 0 224 112.06M96 224l2.93-20.5a96.15 96.15 0 0 0 58.14 0L160 224Z"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#212429" d="M8 18q-.425 0-.712-.288T7 17t.288-.712T8 16t.713.288T9 17t-.288.713T8 18m4 0q-.425 0-.712-.288T11 17t.288-.712T12 16t.713.288T13 17t-.288.713T12 18m4 0q-.425 0-.712-.288T15 17t.288-.712T16 16t.713.288T17 17t-.288.713T16 18M6 14q-.425 0-.712-.288T5 13v-1q0-2.65 1.7-4.6T11 5.1V4q0-.425.288-.713T12 3t.713.288T13 4v1.1q2.6.35 4.3 2.3T19 12v1q0 .425-.288.713T18 14zm2 7q-.425 0-.712-.288T7 20t.288-.712T8 19t.713.288T9 20t-.288.713T8 21m4 0q-.425 0-.712-.288T11 20t.288-.712T12 19t.713.288T13 20t-.288.713T12 21m4 0q-.425 0-.712-.288T15 20t.288-.712T16 19t.713.288T17 20t-.288.713T16 21"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#212429" fill-rule="evenodd" d="M20.4 21.75a1.35 1.35 0 0 0 1.35-1.35V3.6a1.35 1.35 0 0 0-1.35-1.35H3.6A1.35 1.35 0 0 0 2.25 3.6v16.8c0 .746.604 1.35 1.35 1.35zM7.424 12.48c.829.995 1.015 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 0 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.83-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 1 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862m8.924 2.736c.091-.82-.095-1.741-.924-2.736c-1.086-1.303-1.4-2.63-1.262-3.862c.133-1.198.686-2.241 1.214-3.034a.75.75 0 0 1 1.249.832c-.472.708-.877 1.515-.972 2.368c-.092.82.095 1.741.924 2.736c1.086 1.303 1.4 2.631 1.262 3.862c-.134 1.198-.686 2.242-1.214 3.034a.75.75 0 1 1-1.249-.832c.472-.707.877-1.515.972-2.368m-4.924-2.736c.829.995 1.016 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 1 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.829-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 0 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862" clip-rule="evenodd"/></svg>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column gap-1 w-50 align-items-center justify-content-end">
+                                <div class="pricePromotion d-flex flex-column align-items-start">
+                                    <span class="newPrice">50€</span>
+                                    <p><span class="strike">65€</span>/nuit</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ path('app_home') }}" class="seeMore">Voir plus</a>
+                </div>
+                <div class="swiper-slide rounded-4">
+                    <div class="imageTop rounded-top-4">
+                        <div class="rate d-flex gap-2 align-items-center">
+                            <span>3,5 (23)</span>
+                            <div class="d-flex gap-1">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/HalfStar.svg') }}" alt="Half star icon">
+                                <img src="{{ asset('styles/img/EmptyStar.svg') }}" alt="Empty star icon">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="description position-absolute rounded-bottom-4">
+                        <div class="titlePromotion d-flex justify-content-between align-items-center px-4 py-2">
+                            <h3 class="fw-bold">Chalet n°23</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="75" height="75" viewBox="0 0 16 16"><path fill="#EB4034" fill-rule="evenodd" d="M9.744 2.072L7.818.917L5.892 2.072l-2.237.198l-.88 2.066l-1.693 1.475L1.585 8l-.503 2.189l1.693 1.475l.88 2.066l2.237.198l1.926 1.155l1.926-1.155l2.237-.198l.88-2.066l1.694-1.475L14.05 8l.504-2.189l-1.694-1.475l-.88-2.066zM5.5 6.5a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0M6 5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m-.146 5.854l5-5l-.708-.708l-5 5zM9.5 10a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0m.5-1.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div class="d-flex">
+                            <div class="d-flex flex-column gap-1 w-50">
+                                <p class="textPromotion m-0 px-4">1-4 personnes</p>
+                                <p class="textPromotion m-0 px-4">2 lits simples</p>
+                                <p class="textPromotion m-0 px-4">1 lit double</p>
+                                <div class="px-4 d-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 256 256"><path fill="#212429" d="M60 88h136a4 4 0 0 0 4-4V40a16 16 0 0 0-16-16H72a16 16 0 0 0-16 16v44a4 4 0 0 0 4 4m28-40h15.73a8.18 8.18 0 0 1 8.27 7.47a8 8 0 0 1-8 8.53H88.27A8.18 8.18 0 0 1 80 56.53A8 8 0 0 1 88 48m136 64.06a8 8 0 0 0-8-8.06H40a8 8 0 0 0-8 8.06a96.1 96.1 0 0 0 51.68 85.08l-3.47 24.27a16.43 16.43 0 0 0 1.63 10A16 16 0 0 0 96 240h63.66a16.52 16.52 0 0 0 9.72-3a16 16 0 0 0 6.46-15.23l-3.52-24.6A96.1 96.1 0 0 0 224 112.06M96 224l2.93-20.5a96.15 96.15 0 0 0 58.14 0L160 224Z"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#212429" d="M8 18q-.425 0-.712-.288T7 17t.288-.712T8 16t.713.288T9 17t-.288.713T8 18m4 0q-.425 0-.712-.288T11 17t.288-.712T12 16t.713.288T13 17t-.288.713T12 18m4 0q-.425 0-.712-.288T15 17t.288-.712T16 16t.713.288T17 17t-.288.713T16 18M6 14q-.425 0-.712-.288T5 13v-1q0-2.65 1.7-4.6T11 5.1V4q0-.425.288-.713T12 3t.713.288T13 4v1.1q2.6.35 4.3 2.3T19 12v1q0 .425-.288.713T18 14zm2 7q-.425 0-.712-.288T7 20t.288-.712T8 19t.713.288T9 20t-.288.713T8 21m4 0q-.425 0-.712-.288T11 20t.288-.712T12 19t.713.288T13 20t-.288.713T12 21m4 0q-.425 0-.712-.288T15 20t.288-.712T16 19t.713.288T17 20t-.288.713T16 21"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#212429" fill-rule="evenodd" d="M20.4 21.75a1.35 1.35 0 0 0 1.35-1.35V3.6a1.35 1.35 0 0 0-1.35-1.35H3.6A1.35 1.35 0 0 0 2.25 3.6v16.8c0 .746.604 1.35 1.35 1.35zM7.424 12.48c.829.995 1.015 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 0 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.83-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 1 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862m8.924 2.736c.091-.82-.095-1.741-.924-2.736c-1.086-1.303-1.4-2.63-1.262-3.862c.133-1.198.686-2.241 1.214-3.034a.75.75 0 0 1 1.249.832c-.472.708-.877 1.515-.972 2.368c-.092.82.095 1.741.924 2.736c1.086 1.303 1.4 2.631 1.262 3.862c-.134 1.198-.686 2.242-1.214 3.034a.75.75 0 1 1-1.249-.832c.472-.707.877-1.515.972-2.368m-4.924-2.736c.829.995 1.016 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 1 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.829-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 0 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862" clip-rule="evenodd"/></svg>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column gap-1 w-50 align-items-center justify-content-end">
+                                <div class="pricePromotion d-flex flex-column align-items-start">
+                                    <span class="newPrice">50€</span>
+                                    <p><span class="strike">65€</span>/nuit</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ path('app_home') }}" class="seeMore">Voir plus</a>
+                </div>
+                <div class="swiper-slide rounded-4">
+                    <div class="imageTop rounded-top-4">
+                        <div class="rate d-flex gap-2 align-items-center">
+                            <span>3,5 (23)</span>
+                            <div class="d-flex gap-1">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/HalfStar.svg') }}" alt="Half star icon">
+                                <img src="{{ asset('styles/img/EmptyStar.svg') }}" alt="Empty star icon">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="description position-absolute rounded-bottom-4">
+                        <div class="titlePromotion d-flex justify-content-between align-items-center px-4 py-2">
+                            <h3 class="fw-bold">Chalet n°23</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="75" height="75" viewBox="0 0 16 16"><path fill="#EB4034" fill-rule="evenodd" d="M9.744 2.072L7.818.917L5.892 2.072l-2.237.198l-.88 2.066l-1.693 1.475L1.585 8l-.503 2.189l1.693 1.475l.88 2.066l2.237.198l1.926 1.155l1.926-1.155l2.237-.198l.88-2.066l1.694-1.475L14.05 8l.504-2.189l-1.694-1.475l-.88-2.066zM5.5 6.5a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0M6 5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m-.146 5.854l5-5l-.708-.708l-5 5zM9.5 10a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0m.5-1.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div class="d-flex">
+                            <div class="d-flex flex-column gap-1 w-50">
+                                <p class="textPromotion m-0 px-4">1-4 personnes</p>
+                                <p class="textPromotion m-0 px-4">2 lits simples</p>
+                                <p class="textPromotion m-0 px-4">1 lit double</p>
+                                <div class="px-4 d-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 256 256"><path fill="#212429" d="M60 88h136a4 4 0 0 0 4-4V40a16 16 0 0 0-16-16H72a16 16 0 0 0-16 16v44a4 4 0 0 0 4 4m28-40h15.73a8.18 8.18 0 0 1 8.27 7.47a8 8 0 0 1-8 8.53H88.27A8.18 8.18 0 0 1 80 56.53A8 8 0 0 1 88 48m136 64.06a8 8 0 0 0-8-8.06H40a8 8 0 0 0-8 8.06a96.1 96.1 0 0 0 51.68 85.08l-3.47 24.27a16.43 16.43 0 0 0 1.63 10A16 16 0 0 0 96 240h63.66a16.52 16.52 0 0 0 9.72-3a16 16 0 0 0 6.46-15.23l-3.52-24.6A96.1 96.1 0 0 0 224 112.06M96 224l2.93-20.5a96.15 96.15 0 0 0 58.14 0L160 224Z"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#212429" d="M8 18q-.425 0-.712-.288T7 17t.288-.712T8 16t.713.288T9 17t-.288.713T8 18m4 0q-.425 0-.712-.288T11 17t.288-.712T12 16t.713.288T13 17t-.288.713T12 18m4 0q-.425 0-.712-.288T15 17t.288-.712T16 16t.713.288T17 17t-.288.713T16 18M6 14q-.425 0-.712-.288T5 13v-1q0-2.65 1.7-4.6T11 5.1V4q0-.425.288-.713T12 3t.713.288T13 4v1.1q2.6.35 4.3 2.3T19 12v1q0 .425-.288.713T18 14zm2 7q-.425 0-.712-.288T7 20t.288-.712T8 19t.713.288T9 20t-.288.713T8 21m4 0q-.425 0-.712-.288T11 20t.288-.712T12 19t.713.288T13 20t-.288.713T12 21m4 0q-.425 0-.712-.288T15 20t.288-.712T16 19t.713.288T17 20t-.288.713T16 21"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#212429" fill-rule="evenodd" d="M20.4 21.75a1.35 1.35 0 0 0 1.35-1.35V3.6a1.35 1.35 0 0 0-1.35-1.35H3.6A1.35 1.35 0 0 0 2.25 3.6v16.8c0 .746.604 1.35 1.35 1.35zM7.424 12.48c.829.995 1.015 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 0 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.83-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 1 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862m8.924 2.736c.091-.82-.095-1.741-.924-2.736c-1.086-1.303-1.4-2.63-1.262-3.862c.133-1.198.686-2.241 1.214-3.034a.75.75 0 0 1 1.249.832c-.472.708-.877 1.515-.972 2.368c-.092.82.095 1.741.924 2.736c1.086 1.303 1.4 2.631 1.262 3.862c-.134 1.198-.686 2.242-1.214 3.034a.75.75 0 1 1-1.249-.832c.472-.707.877-1.515.972-2.368m-4.924-2.736c.829.995 1.016 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 1 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.829-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 0 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862" clip-rule="evenodd"/></svg>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column gap-1 w-50 align-items-center justify-content-end">
+                                <div class="pricePromotion d-flex flex-column align-items-start">
+                                    <span class="newPrice">50€</span>
+                                    <p><span class="strike">65€</span>/nuit</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ path('app_home') }}" class="seeMore">Voir plus</a>
+                </div>
+                <div class="swiper-slide rounded-4">
+                    <div class="imageTop rounded-top-4">
+                        <div class="rate d-flex gap-2 align-items-center">
+                            <span>3,5 (23)</span>
+                            <div class="d-flex gap-1">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/HalfStar.svg') }}" alt="Half star icon">
+                                <img src="{{ asset('styles/img/EmptyStar.svg') }}" alt="Empty star icon">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="description position-absolute rounded-bottom-4">
+                        <div class="titlePromotion d-flex justify-content-between align-items-center px-4 py-2">
+                            <h3 class="fw-bold">Chalet n°23</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="75" height="75" viewBox="0 0 16 16"><path fill="#EB4034" fill-rule="evenodd" d="M9.744 2.072L7.818.917L5.892 2.072l-2.237.198l-.88 2.066l-1.693 1.475L1.585 8l-.503 2.189l1.693 1.475l.88 2.066l2.237.198l1.926 1.155l1.926-1.155l2.237-.198l.88-2.066l1.694-1.475L14.05 8l.504-2.189l-1.694-1.475l-.88-2.066zM5.5 6.5a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0M6 5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m-.146 5.854l5-5l-.708-.708l-5 5zM9.5 10a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0m.5-1.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div class="d-flex">
+                            <div class="d-flex flex-column gap-1 w-50">
+                                <p class="textPromotion m-0 px-4">1-4 personnes</p>
+                                <p class="textPromotion m-0 px-4">2 lits simples</p>
+                                <p class="textPromotion m-0 px-4">1 lit double</p>
+                                <div class="px-4 d-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 256 256"><path fill="#212429" d="M60 88h136a4 4 0 0 0 4-4V40a16 16 0 0 0-16-16H72a16 16 0 0 0-16 16v44a4 4 0 0 0 4 4m28-40h15.73a8.18 8.18 0 0 1 8.27 7.47a8 8 0 0 1-8 8.53H88.27A8.18 8.18 0 0 1 80 56.53A8 8 0 0 1 88 48m136 64.06a8 8 0 0 0-8-8.06H40a8 8 0 0 0-8 8.06a96.1 96.1 0 0 0 51.68 85.08l-3.47 24.27a16.43 16.43 0 0 0 1.63 10A16 16 0 0 0 96 240h63.66a16.52 16.52 0 0 0 9.72-3a16 16 0 0 0 6.46-15.23l-3.52-24.6A96.1 96.1 0 0 0 224 112.06M96 224l2.93-20.5a96.15 96.15 0 0 0 58.14 0L160 224Z"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#212429" d="M8 18q-.425 0-.712-.288T7 17t.288-.712T8 16t.713.288T9 17t-.288.713T8 18m4 0q-.425 0-.712-.288T11 17t.288-.712T12 16t.713.288T13 17t-.288.713T12 18m4 0q-.425 0-.712-.288T15 17t.288-.712T16 16t.713.288T17 17t-.288.713T16 18M6 14q-.425 0-.712-.288T5 13v-1q0-2.65 1.7-4.6T11 5.1V4q0-.425.288-.713T12 3t.713.288T13 4v1.1q2.6.35 4.3 2.3T19 12v1q0 .425-.288.713T18 14zm2 7q-.425 0-.712-.288T7 20t.288-.712T8 19t.713.288T9 20t-.288.713T8 21m4 0q-.425 0-.712-.288T11 20t.288-.712T12 19t.713.288T13 20t-.288.713T12 21m4 0q-.425 0-.712-.288T15 20t.288-.712T16 19t.713.288T17 20t-.288.713T16 21"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#212429" fill-rule="evenodd" d="M20.4 21.75a1.35 1.35 0 0 0 1.35-1.35V3.6a1.35 1.35 0 0 0-1.35-1.35H3.6A1.35 1.35 0 0 0 2.25 3.6v16.8c0 .746.604 1.35 1.35 1.35zM7.424 12.48c.829.995 1.015 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 0 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.83-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 1 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862m8.924 2.736c.091-.82-.095-1.741-.924-2.736c-1.086-1.303-1.4-2.63-1.262-3.862c.133-1.198.686-2.241 1.214-3.034a.75.75 0 0 1 1.249.832c-.472.708-.877 1.515-.972 2.368c-.092.82.095 1.741.924 2.736c1.086 1.303 1.4 2.631 1.262 3.862c-.134 1.198-.686 2.242-1.214 3.034a.75.75 0 1 1-1.249-.832c.472-.707.877-1.515.972-2.368m-4.924-2.736c.829.995 1.016 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 1 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.829-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 0 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862" clip-rule="evenodd"/></svg>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column gap-1 w-50 align-items-center justify-content-end">
+                                <div class="pricePromotion d-flex flex-column align-items-start">
+                                    <span class="newPrice">50€</span>
+                                    <p><span class="strike">65€</span>/nuit</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ path('app_home') }}" class="seeMore">Voir plus</a>
+                </div>
+                <div class="swiper-slide rounded-4">
+                    <div class="imageTop rounded-top-4">
+                        <div class="rate d-flex gap-2 align-items-center">
+                            <span>3,5 (23)</span>
+                            <div class="d-flex gap-1">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/HalfStar.svg') }}" alt="Half star icon">
+                                <img src="{{ asset('styles/img/EmptyStar.svg') }}" alt="Empty star icon">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="description position-absolute rounded-bottom-4">
+                        <div class="titlePromotion d-flex justify-content-between align-items-center px-4 py-2">
+                            <h3 class="fw-bold">Chalet n°23</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="75" height="75" viewBox="0 0 16 16"><path fill="#EB4034" fill-rule="evenodd" d="M9.744 2.072L7.818.917L5.892 2.072l-2.237.198l-.88 2.066l-1.693 1.475L1.585 8l-.503 2.189l1.693 1.475l.88 2.066l2.237.198l1.926 1.155l1.926-1.155l2.237-.198l.88-2.066l1.694-1.475L14.05 8l.504-2.189l-1.694-1.475l-.88-2.066zM5.5 6.5a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0M6 5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m-.146 5.854l5-5l-.708-.708l-5 5zM9.5 10a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0m.5-1.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div class="d-flex">
+                            <div class="d-flex flex-column gap-1 w-50">
+                                <p class="textPromotion m-0 px-4">1-4 personnes</p>
+                                <p class="textPromotion m-0 px-4">2 lits simples</p>
+                                <p class="textPromotion m-0 px-4">1 lit double</p>
+                                <div class="px-4 d-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 256 256"><path fill="#212429" d="M60 88h136a4 4 0 0 0 4-4V40a16 16 0 0 0-16-16H72a16 16 0 0 0-16 16v44a4 4 0 0 0 4 4m28-40h15.73a8.18 8.18 0 0 1 8.27 7.47a8 8 0 0 1-8 8.53H88.27A8.18 8.18 0 0 1 80 56.53A8 8 0 0 1 88 48m136 64.06a8 8 0 0 0-8-8.06H40a8 8 0 0 0-8 8.06a96.1 96.1 0 0 0 51.68 85.08l-3.47 24.27a16.43 16.43 0 0 0 1.63 10A16 16 0 0 0 96 240h63.66a16.52 16.52 0 0 0 9.72-3a16 16 0 0 0 6.46-15.23l-3.52-24.6A96.1 96.1 0 0 0 224 112.06M96 224l2.93-20.5a96.15 96.15 0 0 0 58.14 0L160 224Z"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#212429" d="M8 18q-.425 0-.712-.288T7 17t.288-.712T8 16t.713.288T9 17t-.288.713T8 18m4 0q-.425 0-.712-.288T11 17t.288-.712T12 16t.713.288T13 17t-.288.713T12 18m4 0q-.425 0-.712-.288T15 17t.288-.712T16 16t.713.288T17 17t-.288.713T16 18M6 14q-.425 0-.712-.288T5 13v-1q0-2.65 1.7-4.6T11 5.1V4q0-.425.288-.713T12 3t.713.288T13 4v1.1q2.6.35 4.3 2.3T19 12v1q0 .425-.288.713T18 14zm2 7q-.425 0-.712-.288T7 20t.288-.712T8 19t.713.288T9 20t-.288.713T8 21m4 0q-.425 0-.712-.288T11 20t.288-.712T12 19t.713.288T13 20t-.288.713T12 21m4 0q-.425 0-.712-.288T15 20t.288-.712T16 19t.713.288T17 20t-.288.713T16 21"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#212429" fill-rule="evenodd" d="M20.4 21.75a1.35 1.35 0 0 0 1.35-1.35V3.6a1.35 1.35 0 0 0-1.35-1.35H3.6A1.35 1.35 0 0 0 2.25 3.6v16.8c0 .746.604 1.35 1.35 1.35zM7.424 12.48c.829.995 1.015 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 0 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.83-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 1 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862m8.924 2.736c.091-.82-.095-1.741-.924-2.736c-1.086-1.303-1.4-2.63-1.262-3.862c.133-1.198.686-2.241 1.214-3.034a.75.75 0 0 1 1.249.832c-.472.708-.877 1.515-.972 2.368c-.092.82.095 1.741.924 2.736c1.086 1.303 1.4 2.631 1.262 3.862c-.134 1.198-.686 2.242-1.214 3.034a.75.75 0 1 1-1.249-.832c.472-.707.877-1.515.972-2.368m-4.924-2.736c.829.995 1.016 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 1 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.829-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 0 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862" clip-rule="evenodd"/></svg>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column gap-1 w-50 align-items-center justify-content-end">
+                                <div class="pricePromotion d-flex flex-column align-items-start">
+                                    <span class="newPrice">50€</span>
+                                    <p><span class="strike">65€</span>/nuit</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ path('app_home') }}" class="seeMore">Voir plus</a>
+                </div>
+                <div class="swiper-slide rounded-4">
+                    <div class="imageTop rounded-top-4">
+                        <div class="rate d-flex gap-2 align-items-center">
+                            <span>3,5 (23)</span>
+                            <div class="d-flex gap-1">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                <img src="{{ asset('styles/img/HalfStar.svg') }}" alt="Half star icon">
+                                <img src="{{ asset('styles/img/EmptyStar.svg') }}" alt="Empty star icon">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="description position-absolute rounded-bottom-4">
+                        <div class="titlePromotion d-flex justify-content-between align-items-center px-4 py-2">
+                            <h3 class="fw-bold">Chalet n°23</h3>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="75" height="75" viewBox="0 0 16 16"><path fill="#EB4034" fill-rule="evenodd" d="M9.744 2.072L7.818.917L5.892 2.072l-2.237.198l-.88 2.066l-1.693 1.475L1.585 8l-.503 2.189l1.693 1.475l.88 2.066l2.237.198l1.926 1.155l1.926-1.155l2.237-.198l.88-2.066l1.694-1.475L14.05 8l.504-2.189l-1.694-1.475l-.88-2.066zM5.5 6.5a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0M6 5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m-.146 5.854l5-5l-.708-.708l-5 5zM9.5 10a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0m.5-1.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div class="d-flex">
+                            <div class="d-flex flex-column gap-1 w-50">
+                                <p class="textPromotion m-0 px-4">1-4 personnes</p>
+                                <p class="textPromotion m-0 px-4">2 lits simples</p>
+                                <p class="textPromotion m-0 px-4">1 lit double</p>
+                                <div class="px-4 d-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 256 256"><path fill="#212429" d="M60 88h136a4 4 0 0 0 4-4V40a16 16 0 0 0-16-16H72a16 16 0 0 0-16 16v44a4 4 0 0 0 4 4m28-40h15.73a8.18 8.18 0 0 1 8.27 7.47a8 8 0 0 1-8 8.53H88.27A8.18 8.18 0 0 1 80 56.53A8 8 0 0 1 88 48m136 64.06a8 8 0 0 0-8-8.06H40a8 8 0 0 0-8 8.06a96.1 96.1 0 0 0 51.68 85.08l-3.47 24.27a16.43 16.43 0 0 0 1.63 10A16 16 0 0 0 96 240h63.66a16.52 16.52 0 0 0 9.72-3a16 16 0 0 0 6.46-15.23l-3.52-24.6A96.1 96.1 0 0 0 224 112.06M96 224l2.93-20.5a96.15 96.15 0 0 0 58.14 0L160 224Z"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#212429" d="M8 18q-.425 0-.712-.288T7 17t.288-.712T8 16t.713.288T9 17t-.288.713T8 18m4 0q-.425 0-.712-.288T11 17t.288-.712T12 16t.713.288T13 17t-.288.713T12 18m4 0q-.425 0-.712-.288T15 17t.288-.712T16 16t.713.288T17 17t-.288.713T16 18M6 14q-.425 0-.712-.288T5 13v-1q0-2.65 1.7-4.6T11 5.1V4q0-.425.288-.713T12 3t.713.288T13 4v1.1q2.6.35 4.3 2.3T19 12v1q0 .425-.288.713T18 14zm2 7q-.425 0-.712-.288T7 20t.288-.712T8 19t.713.288T9 20t-.288.713T8 21m4 0q-.425 0-.712-.288T11 20t.288-.712T12 19t.713.288T13 20t-.288.713T12 21m4 0q-.425 0-.712-.288T15 20t.288-.712T16 19t.713.288T17 20t-.288.713T16 21"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24"><path fill="#212429" fill-rule="evenodd" d="M20.4 21.75a1.35 1.35 0 0 0 1.35-1.35V3.6a1.35 1.35 0 0 0-1.35-1.35H3.6A1.35 1.35 0 0 0 2.25 3.6v16.8c0 .746.604 1.35 1.35 1.35zM7.424 12.48c.829.995 1.015 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 0 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.83-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 1 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862m8.924 2.736c.091-.82-.095-1.741-.924-2.736c-1.086-1.303-1.4-2.63-1.262-3.862c.133-1.198.686-2.241 1.214-3.034a.75.75 0 0 1 1.249.832c-.472.708-.877 1.515-.972 2.368c-.092.82.095 1.741.924 2.736c1.086 1.303 1.4 2.631 1.262 3.862c-.134 1.198-.686 2.242-1.214 3.034a.75.75 0 1 1-1.249-.832c.472-.707.877-1.515.972-2.368m-4.924-2.736c.829.995 1.016 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 1 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.829-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 0 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862" clip-rule="evenodd"/></svg>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column gap-1 w-50 align-items-center justify-content-end">
+                                <div class="pricePromotion d-flex flex-column align-items-start">
+                                    <span class="newPrice">50€</span>
+                                    <p><span class="strike">65€</span>/nuit</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ path('app_home') }}" class="seeMore">Voir plus</a>
+                </div>
+            </div>
+            <div class="swiper-button-next custom-next"></div>
+            <div class="swiper-button-prev custom-prev"></div>
+        </div>
+
+    </section>
 {% endblock %}
