@@ -10,10 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/rental/images')]
-#[IsGranted('ROLE_ADMIN')]
+#[Route('/admin/rental/images')]
 final class RentalImagesController extends AbstractController
 {
     #[Route(name: 'app_rental_images_index', methods: ['GET'])]

@@ -1,11 +1,11 @@
-{% extends './base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}New RentalImages{% endblock %}
 
 {% block body %}
     <h1>Create new RentalImages</h1>
 
-    {{ include('rental_images/_form.html.twig') }}
+    {{ include('admin/rental_images/_form.html.twig') }}
 
     <a href="{{ path('app_rental_images_index') }}">back to list</a>
 {% endblock %}

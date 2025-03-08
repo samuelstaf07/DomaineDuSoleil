@@ -20,15 +20,17 @@ class CommentsType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('rating')
-            ->add('rental_id', EntityType::class, [
-                'class' => rentals::class,
+            ->add('is_active')
+            ->add('rentals', EntityType::class, [
+                'class' => Rentals::class,
                 'choice_label' => 'id',
+                'placeholder' => 'Sélectionnez une location',
             ])
-            ->add('user_id', EntityType::class, [
-                'class' => users::class,
-                'choice_label' => 'id',
-            ])
-        ;
+            ->add('user', EntityType::class, [
+                'class' => Users::class,
+                'choice_label' => 'email',
+                'placeholder' => 'Sélectionnez un utilisateur',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

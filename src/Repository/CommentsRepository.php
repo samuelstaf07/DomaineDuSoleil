@@ -16,13 +16,13 @@ class CommentsRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Comments::class);
     }
-    public function findCommentsByRentals(Rentals $rental): array
+    public function findCommentsByRentals(Rentals $rentals): array
     {
         return $this->createQueryBuilder('c')
             ->select('COUNT(c.id) as commentCount, AVG(c.rating) as averageRating, c')
-            ->where('c.rental_id = :rental')
+            ->where('c.rentals = :rentals')
             ->andWhere()
-            ->setParameter('rental', $rental)
+            ->setParameter('rentals', $rentals)
             ->groupBy('c.id')
             ->getQuery()
             ->getResult();

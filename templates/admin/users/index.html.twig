@@ -1,4 +1,4 @@
-{% extends './base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Users index{% endblock %}
 
@@ -11,6 +11,7 @@
                 <th>Id</th>
                 <th>Email</th>
                 <th>Roles</th>
+                <th>Password</th>
                 <th>Firstname</th>
                 <th>Lastname</th>
                 <th>Nb_points</th>
@@ -19,7 +20,7 @@
                 <th>Updated_at</th>
                 <th>Last_log_at</th>
                 <th>Is_active</th>
-                <th>Email Auth</th>
+                <th>Is_email_authentificated</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -29,6 +30,7 @@
                 <td>{{ user.id }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+                <td>{{ user.password }}</td>
                 <td>{{ user.firstname }}</td>
                 <td>{{ user.lastname }}</td>
                 <td>{{ user.nbPoints }}</td>
