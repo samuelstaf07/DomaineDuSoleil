@@ -10,10 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/users')]
-#[IsGranted('ROLE_ADMIN')]
+#[Route('/admin/users')]
 final class UsersController extends AbstractController
 {
     #[Route(name: 'app_users_index', methods: ['GET'])]

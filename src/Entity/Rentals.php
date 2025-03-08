@@ -13,6 +13,9 @@ class Rentals
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $title = null;
+
     #[ORM\Column]
     private ?int $nb_double_bed = null;
 
@@ -45,9 +48,6 @@ class Rentals
 
     #[ORM\Column]
     private ?bool $is_active = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $title = null;
 
     public function getId(): ?int
     {

@@ -3,18 +3,41 @@
 {% block title %}Hello AdminController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/wamp64/www/DomaineDuSoleil/src/Controller/AdminController.php</code></li>
-        <li>Your template at <code>C:/wamp64/www/DomaineDuSoleil/templates/admin/index.html.twig</code></li>
-    </ul>
-</div>
+    <div class="container pt-xl-5">
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a href="{{ path('app_users_index') }}" class="text-decoration-none">Users</a>
+            </li>
+            <li class="list-group-item">
+                <a href="{{ path('app_rentals_index') }}" class="text-decoration-none">Rentals</a>
+            </li>
+            <li class="list-group-item">
+                <a href="{{ path('app_rental_images_index') }}" class="text-decoration-none">Rentals images</a>
+            </li>
+            <li class="list-group-item">
+                <a href="{{ path('app_posts_index') }}" class="text-decoration-none">Posts</a>
+            </li>
+            <li class="list-group-item">
+                <a href="{{ path('app_post_images_index') }}" class="text-decoration-none">Post images</a>
+            </li>
+            <li class="list-group-item">
+                <a href="{{ path('app_events_index') }}" class="text-decoration-none">Events</a>
+            </li>
+            <li class="list-group-item">
+                <a href="{{ path('app_images_index') }}" class="text-decoration-none">Images</a>
+            </li>
+            <li class="list-group-item">
+                <a href="{{ path('app_comments_index') }}" class="text-decoration-none">Comments</a>
+            </li>
+            <li class="list-group-item">
+                <a href="{{ path('app_bills_index') }}" class="text-decoration-none">Bills</a>
+            </li>
+            <li class="list-group-item">
+                <a href="{{ path('app_reservations_rentals_index') }}" class="text-decoration-none">Reservations rentals</a>
+            </li>
+            <li class="list-group-item">
+                <a href="{{ path('app_reservations_events_index') }}" class="text-decoration-none">Reservations events</a>
+            </li>
+        </ul>
+    </div>
 {% endblock %}

@@ -1,13 +1,13 @@
-{% extends './base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Edit PostImages{% endblock %}
 
 {% block body %}
     <h1>Edit PostImages</h1>
 
-    {{ include('post_images/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('admin/post_images/_form.html.twig', {'button_label': 'Update'}) }}
 
     <a href="{{ path('app_post_images_index') }}">back to list</a>
 
-    {{ include('post_images/_delete_form.html.twig') }}
+    {{ include('admin/post_images/_delete_form.html.twig') }}
 {% endblock %}

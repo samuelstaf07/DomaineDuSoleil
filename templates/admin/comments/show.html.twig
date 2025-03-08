@@ -1,4 +1,4 @@
-{% extends './base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Comments{% endblock %}
 
@@ -22,6 +22,10 @@
             <tr>
                 <th>Rating</th>
                 <td>{{ comment.rating }}</td>
+            </tr>
+            <tr>
+                <th>Is_active</th>
+                <td>{{ comment.isActive ? 'Yes' : 'No' }}</td>
             </tr>
         </tbody>
     </table>

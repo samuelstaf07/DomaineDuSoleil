@@ -1,4 +1,4 @@
-{% extends './base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Rentals{% endblock %}
 
@@ -54,6 +54,10 @@
             <tr>
                 <th>Is_active</th>
                 <td>{{ rental.isActive ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ rental.title }}</td>
             </tr>
         </tbody>
     </table>

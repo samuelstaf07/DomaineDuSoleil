@@ -16,11 +16,11 @@ class Comments
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?rentals $rental_id = null;
+    private ?Rentals $rentals = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?users $user_id = null;
+    private ?Users $user = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
@@ -39,35 +39,29 @@ class Comments
         return $this->id;
     }
 
-    public function setId(int $id): static
+    public function setId(?int $id): void
     {
         $this->id = $id;
-
-        return $this;
     }
 
-    public function getPostId(): ?rentals
+    public function getRentals(): ?Rentals
     {
-        return $this->rental_id;
+        return $this->rentals;
     }
 
-    public function setRentalId(?rentals $rental_id): static
+    public function setRentals(?Rentals $rentals): void
     {
-        $this->rental_id = $rental_id;
-
-        return $this;
+        $this->rentals = $rentals;
     }
 
-    public function getUserId(): ?users
+    public function getUser(): ?Users
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?users $user_id): static
+    public function setUser(?Users $user): void
     {
-        $this->user_id = $user_id;
-
-        return $this;
+        $this->user = $user;
     }
 
     public function getContent(): ?string
@@ -75,11 +69,9 @@ class Comments
         return $this->content;
     }
 
-    public function setContent(string $content): static
+    public function setContent(?string $content): void
     {
         $this->content = $content;
-
-        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
@@ -87,11 +79,9 @@ class Comments
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    public function setCreatedAt(?\DateTimeImmutable $created_at): void
     {
         $this->created_at = $created_at;
-
-        return $this;
     }
 
     public function getRating(): ?float
@@ -99,22 +89,20 @@ class Comments
         return $this->rating;
     }
 
-    public function setRating(float $rating): static
+    public function setRating(?float $rating): void
     {
         $this->rating = $rating;
-
-        return $this;
     }
 
-    public function isActive(): ?bool
+    public function getIsActive(): ?bool
     {
         return $this->is_active;
     }
 
-    public function setIsActive(bool $is_active): static
+    public function setIsActive(?bool $is_active): void
     {
         $this->is_active = $is_active;
-
-        return $this;
     }
+
+
 }
