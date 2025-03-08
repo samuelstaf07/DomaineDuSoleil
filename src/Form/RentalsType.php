@@ -12,6 +12,7 @@ class RentalsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('title')
             ->add('nb_double_bed')
             ->add('nb_simple_bed')
             ->add('has_shower')
