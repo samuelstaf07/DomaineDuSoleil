@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Comments;
+use App\Entity\Rentals;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -15,29 +16,15 @@ class CommentsRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Comments::class);
     }
-
-//    /**
-//     * @return Comments[] Returns an array of Comments objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Comments
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findCommentsByRentals(Rentals $rental): array
+    {
+        return $this->createQueryBuilder('c')
+            ->select('COUNT(c.id) as commentCount, AVG(c.rating) as averageRating, c')
+            ->where('c.rental_id = :rental')
+            ->andWhere()
+            ->setParameter('rental', $rental)
+            ->groupBy('c.id')
+            ->getQuery()
+            ->getResult();
+    }
 }

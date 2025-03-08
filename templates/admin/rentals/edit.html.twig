@@ -5,9 +5,9 @@
 {% block body %}
     <h1>Edit Rentals</h1>
 
-    {{ include('rentals/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('admin/rentals/_form.html.twig', {'button_label': 'Update'}) }}
 
     <a href="{{ path('app_rentals_index') }}">back to list</a>
 
-    {{ include('rentals/_delete_form.html.twig') }}
+    {{ include('admin/rentals/_delete_form.html.twig') }}
 {% endblock %}
