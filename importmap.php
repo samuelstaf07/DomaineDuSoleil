@@ -35,4 +35,7 @@ return [
         'version' => '5.3.3',
         'type' => 'css',
     ],
+    'popper' => [
+        'version' => '1.0.1',
+    ],
 ];

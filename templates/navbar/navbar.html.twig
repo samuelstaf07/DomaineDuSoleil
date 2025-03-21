@@ -10,14 +10,26 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto flex gap-2">
                 {% if app.user %}
-                    {% if is_granted("ROLE_ADMIN") %}
-                        <li class="nav-item">
-                            <a class="btn btn-warning" href="{{ path('app_admin') }}">Admin</a>
-                        </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a class="btn btn-danger" href="{{ path('app_logout') }}">Deconnexion</a>
-                    </li>
+                    <div class="dropdown">
+                        <button class="d-flex gap-2 align-items-center btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ asset('uploads/user.svg') }}" alt="" class="rounded-circle" style="height: 30px; width: 30px;">
+                            {{ app.user.firstname }} {{ app.user.lastname }}
+                        </button>
+                        <ul class="dropdown-menu">
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li>
+                                    <a href="{{ path('app_admin') }}" class="dropdown-item text-center">
+                                        Administration
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                            {% endif %}
+                            <li class="text-center">
+                                <a href="{{ path('app_logout') }}" class="m-2 btn btn-primary w-75">Déconnexion</a>
+                            </li>
+
+                        </ul>
+                    </div>
                 {% else %}
                     <li class="nav-item">
                         <a class="btn btn-success" href="{{ path('app_login') }}">Connexion</a>

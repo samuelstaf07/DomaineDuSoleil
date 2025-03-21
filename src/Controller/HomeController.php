@@ -20,8 +20,6 @@ final class HomeController extends AbstractController
         foreach ($rentals as $rental){
             $comments[] = $commentsRepository->findCommentsByRentals($rental);
         }
-        dump($rentals);
-        dump($comments);
 
         return $this->render('home/index.html.twig', [
             'rentals' => $rentals,

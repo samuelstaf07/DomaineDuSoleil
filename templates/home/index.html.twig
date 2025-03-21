@@ -12,10 +12,13 @@
 {#        </h3>#}
 {#    {% endif %}#}
     <header id="imageFond">
-        <h1>Domaine Du Soleil</h1>
+        <div class="contentImage">
+            <h1>Domaine Du Soleil</h1>
+            <p>Là où vos vacances brillent de mille feux.</p>
+        </div>
     </header>
-    <section id="discount">
-        <h2 class="m-5">Nos logements en promotions</h2>
+    <section id="discount" class="d-flex flex-column justify-content-center align-items-center gap-5">
+        <h2 class="mt-5">Nos logements en promotions</h2>
 
         <div id="logementCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
@@ -96,5 +99,6 @@
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
             </button>
         </div>
+        <a href="{{ path('app_home') }}" class="btn btn-primary btn-lg w-25 text-center">Voir tous les logements</a>
     </section>
 {% endblock %}
