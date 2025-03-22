@@ -39,10 +39,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?images $image = null;
-
     #[ORM\Column]
     private ?int $nb_points = null;
 
@@ -63,6 +59,9 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?bool $is_email_authentificated = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Images $image = null;
 
     public function getId(): ?int
     {

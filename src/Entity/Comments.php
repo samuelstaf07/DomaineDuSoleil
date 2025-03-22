@@ -16,10 +16,6 @@ class Comments
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Rentals $rentals = null;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
     private ?Users $user = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -33,6 +29,10 @@ class Comments
 
     #[ORM\Column]
     private ?bool $is_active = null;
+
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Rentals $rentals = null;
 
     public function getId(): ?int
     {

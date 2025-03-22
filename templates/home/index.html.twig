@@ -31,13 +31,41 @@
                                     <div class="rentalDiscount card rounded-top-4">
                                         <div class="imageTop rounded-top-4">
                                             <div class="rate d-flex gap-2 align-items-center">
-                                                <span>3,5 (23)</span>
-                                                <div class="d-flex gap-1">
-                                                    <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
-                                                    <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
-                                                    <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
-                                                    <img src="{{ asset('styles/img/HalfStar.svg') }}" alt="Half star icon">
-                                                    <img src="{{ asset('styles/img/EmptyStar.svg') }}" alt="Empty star icon">
+                                                {% set averageData = item.getAverageRateAndCommentCount() %}
+                                                {{ averageData.averageRate }}/5
+                                                ({{ averageData.commentCount }})
+                                                <div class="d-flex gap-1 align-items-center">
+                                                    {% if averageData.commentCount > 0 %}
+
+                                                        {% set fullStars = averageData.averageRate|round(0, 'floor') %}
+                                                        {% set hasHalfStar = (averageData.averageRate - fullStars) == 0.5 %}
+                                                        {% set emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0) %}
+
+                                                        {% if fullStars > 0 %}
+                                                            {% for i in 1..fullStars %}
+                                                                <img src="{{ asset('styles/img/Star.svg') }}" alt="Star icon">
+                                                            {% endfor %}
+                                                        {% endif %}
+
+                                                        {% if hasHalfStar %}
+                                                            <img src="{{ asset('styles/img/HalfStar.svg') }}" alt="Half star icon">
+                                                        {% endif %}
+
+                                                        {% if averageData.averageRate <= 4 %}
+                                                            {% for i in 1..emptyStars %}
+                                                                <img src="{{ asset('styles/img/EmptyStar.svg') }}" alt="Empty star icon">
+                                                            {% endfor %}
+                                                        {% endif %}
+
+                                                    {% else %}
+
+                                                        {# Aucun avis, donc 5 étoiles vides #}
+                                                        {% for i in 1..5 %}
+                                                            <img src="{{ asset('styles/img/EmptyStar.svg') }}" alt="Empty star icon">
+                                                        {% endfor %}
+
+                                                    {% endif %}
+
                                                 </div>
                                             </div>
                                         </div>
@@ -99,6 +127,9 @@
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
             </button>
         </div>
-        <a href="{{ path('app_home') }}" class="btn btn-primary btn-lg w-25 text-center">Voir tous les logements</a>
+        <a href="{{ path('app_home') }}" class="btn btn-outline-success btn-lg w-25 text-center">Voir tous les logements</a>
+    </section>
+    <section>
+
     </section>
 {% endblock %}

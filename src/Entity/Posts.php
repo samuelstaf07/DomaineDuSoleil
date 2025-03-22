@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PostsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,6 +31,17 @@ class Posts
 
     #[ORM\Column]
     private ?bool $is_active = null;
+
+    /**
+     * @var Collection<int, Images>
+     */
+    #[ORM\OneToMany(targetEntity: Images::class, mappedBy: 'posts')]
+    private Collection $Images;
+
+    public function __construct()
+    {
+        $this->Images = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -98,6 +111,36 @@ class Posts
     public function setIsActive(bool $is_active): static
     {
         $this->is_active = $is_active;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Images>
+     */
+    public function getImages(): Collection
+    {
+        return $this->Images;
+    }
+
+    public function addImage(Images $image): static
+    {
+        if (!$this->Images->contains($image)) {
+            $this->Images->add($image);
+            $image->setPosts($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Images $image): static
+    {
+        if ($this->Images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getPosts() === $this) {
+                $image->setPosts(null);
+            }
+        }
 
         return $this;
     }

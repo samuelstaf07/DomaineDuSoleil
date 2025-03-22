@@ -19,6 +19,12 @@ class Images
     #[ORM\Column(length: 255)]
     private ?string $alt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'Images')]
+    private ?Posts $posts = null;
+
+    #[ORM\ManyToOne(inversedBy: 'Images')]
+    private ?Rentals $rentals = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -51,6 +57,30 @@ class Images
     public function setAlt(string $alt): static
     {
         $this->alt = $alt;
+
+        return $this;
+    }
+
+    public function getPosts(): ?Posts
+    {
+        return $this->posts;
+    }
+
+    public function setPosts(?Posts $posts): static
+    {
+        $this->posts = $posts;
+
+        return $this;
+    }
+
+    public function getRentals(): ?Rentals
+    {
+        return $this->rentals;
+    }
+
+    public function setRentals(?Rentals $rentals): static
+    {
+        $this->rentals = $rentals;
 
         return $this;
     }

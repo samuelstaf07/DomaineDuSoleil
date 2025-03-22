@@ -15,15 +15,9 @@ final class HomeController extends AbstractController
     public function index(RentalsRepository $rentalsRepository, CommentsRepository $commentsRepository): Response
     {
         $rentals = $rentalsRepository->findAllRentalsWithDiscount();
-        $comments = [];
-
-        foreach ($rentals as $rental){
-            $comments[] = $commentsRepository->findCommentsByRentals($rental);
-        }
 
         return $this->render('home/index.html.twig', [
             'rentals' => $rentals,
-            'comments' => $comments,
         ]);
     }
 }

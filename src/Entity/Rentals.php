@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RentalsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RentalsRepository::class)]
@@ -48,6 +50,24 @@ class Rentals
 
     #[ORM\Column]
     private ?bool $is_active = null;
+
+    /**
+     * @var Collection<int, Images>
+     */
+    #[ORM\OneToMany(targetEntity: Images::class, mappedBy: 'rentals')]
+    private Collection $Images;
+
+    /**
+     * @var Collection<int, Comments>
+     */
+    #[ORM\OneToMany(targetEntity: Comments::class, mappedBy: 'rentals')]
+    private Collection $comments;
+
+    public function __construct()
+    {
+        $this->Images = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -203,5 +223,89 @@ class Rentals
         $this->title = $title;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Images>
+     */
+    public function getImages(): Collection
+    {
+        return $this->Images;
+    }
+
+    public function addImage(Images $image): static
+    {
+        if (!$this->Images->contains($image)) {
+            $this->Images->add($image);
+            $image->setRentals($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Images $image): static
+    {
+        if ($this->Images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getRentals() === $this) {
+                $image->setRentals(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comments>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comments $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setRentals($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comments $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getRentals() === $this) {
+                $comment->setRentals(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getAverageRateAndCommentCount(): array
+    {
+        $totalRate = 0;
+        $commentCount = 0;
+
+        foreach ($this->comments as $comment) {
+            if ($comment->getIsActive()) {
+                $totalRate += $comment->getRating();
+                $commentCount++;
+            }
+        }
+
+        if ($commentCount > 0) {
+            $averageRate = $totalRate / $commentCount;
+        } else {
+            $averageRate = 0;
+        }
+
+        return [
+            'averageRate' => $averageRate,
+            'commentCount' => $commentCount,
+        ];
     }
 }
