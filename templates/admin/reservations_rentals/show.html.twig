@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ReservationsRentals{% endblock %}
+
+{% block body %}
+    <h1>ReservationsRentals</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ reservations_rental.id }}</td>
+            </tr>
+            <tr>
+                <th>Has_cleaning_deposit</th>
+                <td>{{ reservations_rental.hasCleaningDeposit ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Total_deposit_returned</th>
+                <td>{{ reservations_rental.totalDepositReturned }}</td>
+            </tr>
+            <tr>
+                <th>Status_base_deposit</th>
+                <td>{{ reservations_rental.statusBaseDeposit }}</td>
+            </tr>
+            <tr>
+                <th>Date_reservation</th>
+                <td>{{ reservations_rental.dateReservation ? reservations_rental.dateReservation|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date_start</th>
+                <td>{{ reservations_rental.dateStart ? reservations_rental.dateStart|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date_end</th>
+                <td>{{ reservations_rental.dateEnd ? reservations_rental.dateEnd|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Status_reservation</th>
+                <td>{{ reservations_rental.statusReservation }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reservations_rentals_index') }}">back to list</a>
+
+    <a href="{{ path('app_reservations_rentals_edit', {'id': reservations_rental.id}) }}">edit</a>
+
+    {{ include('admin/reservations_rentals/_delete_form.html.twig') }}
+{% endblock %}

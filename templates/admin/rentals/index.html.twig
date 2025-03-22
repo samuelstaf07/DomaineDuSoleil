@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rentals index{% endblock %}
+
+{% block body %}
+    <h1>Rentals index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Nb_double_bed</th>
+                <th>Nb_simple_bed</th>
+                <th>Has_shower</th>
+                <th>Has_toilet</th>
+                <th>Has_kitchen</th>
+                <th>Has_fridge</th>
+                <th>Has_heating</th>
+                <th>Pets_accepted</th>
+                <th>Price_per_day</th>
+                <th>Is_on_promotion</th>
+                <th>Is_active</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for rental in rentals %}
+            <tr>
+                <td>{{ rental.id }}</td>
+                <td>{{ rental.title }}</td>
+                <td>{{ rental.nbDoubleBed }}</td>
+                <td>{{ rental.nbSimpleBed }}</td>
+                <td>{{ rental.hasShower ? 'Yes' : 'No' }}</td>
+                <td>{{ rental.hasToilet ? 'Yes' : 'No' }}</td>
+                <td>{{ rental.hasKitchen ? 'Yes' : 'No' }}</td>
+                <td>{{ rental.hasFridge ? 'Yes' : 'No' }}</td>
+                <td>{{ rental.hasHeating ? 'Yes' : 'No' }}</td>
+                <td>{{ rental.petsAccepted ? 'Yes' : 'No' }}</td>
+                <td>{{ rental.pricePerDay }}</td>
+                <td>{{ rental.isOnPromotion ? 'Yes' : 'No' }}</td>
+                <td>{{ rental.isActive ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_rentals_show', {'id': rental.id}) }}">show</a>
+                    <a href="{{ path('app_rentals_edit', {'id': rental.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="14">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_rentals_new') }}">Create new</a>
+{% endblock %}

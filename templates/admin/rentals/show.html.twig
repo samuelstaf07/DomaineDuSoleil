@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rentals{% endblock %}
+
+{% block body %}
+    <h1>Rentals</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ rental.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ rental.title }}</td>
+            </tr>
+            <tr>
+                <th>Nb_double_bed</th>
+                <td>{{ rental.nbDoubleBed }}</td>
+            </tr>
+            <tr>
+                <th>Nb_simple_bed</th>
+                <td>{{ rental.nbSimpleBed }}</td>
+            </tr>
+            <tr>
+                <th>Has_shower</th>
+                <td>{{ rental.hasShower ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Has_toilet</th>
+                <td>{{ rental.hasToilet ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Has_kitchen</th>
+                <td>{{ rental.hasKitchen ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Has_fridge</th>
+                <td>{{ rental.hasFridge ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Has_heating</th>
+                <td>{{ rental.hasHeating ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Pets_accepted</th>
+                <td>{{ rental.petsAccepted ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Price_per_day</th>
+                <td>{{ rental.pricePerDay }}</td>
+            </tr>
+            <tr>
+                <th>Is_on_promotion</th>
+                <td>{{ rental.isOnPromotion ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Is_active</th>
+                <td>{{ rental.isActive ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_rentals_index') }}">back to list</a>
+
+    <a href="{{ path('app_rentals_edit', {'id': rental.id}) }}">edit</a>
+
+    {{ include('admin/rentals/_delete_form.html.twig') }}
+{% endblock %}
