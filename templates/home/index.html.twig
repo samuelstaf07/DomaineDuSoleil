@@ -29,8 +29,18 @@
                                                 <div class="d-flex gap-1 align-items-center">
                                                     {% if averageData.commentCount > 0 %}
 
-                                                        {% set fullStars = averageData.averageRate|round(0, 'floor') %}
-                                                        {% set hasHalfStar = (averageData.averageRate - fullStars) == 0.5 %}
+                                                        {% set fullStars = (averageData.averageRate // 1) %}
+                                                        {% set decimalPart = averageData.averageRate - fullStars %}
+
+                                                        {% if decimalPart <= 0.25 %}
+                                                            {% set hasHalfStar = false %}
+                                                        {% elseif decimalPart > 0.25 and decimalPart < 0.75 %}
+                                                            {% set hasHalfStar = true %}
+                                                        {% else %}
+                                                            {% set hasHalfStar = false %}
+                                                            {% set fullStars = fullStars + 1 %}
+                                                        {% endif %}
+
                                                         {% set emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0) %}
 
                                                         {% if fullStars > 0 %}
@@ -111,12 +121,16 @@
 
             </div>
 
-            <button class="carousel-control-prev" type="button" data-bs-target="#logementCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#logementCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            </button>
+
+            {% if rentals|length > 3 %}
+                <button class="carousel-control-prev" type="button" data-bs-target="#logementCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#logementCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </button>
+            {% endif %}
+
         </div>
         <a href="{{ path('app_home') }}" class="btn btn-outline-success btn-lg w-25 text-center">Voir tous les logements</a>
     </section>
@@ -143,7 +157,7 @@
                                         </p>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <a href="#" class="btn btn-warning">Voir plus</a>
-                                            <span class="price h3">15€ / pers</span>
+                                            <span class="price h3">{{ event.price|number_format(2, ',', '') }}€ / pers</span>
                                         </div>
                                     </div>
                                 </div>

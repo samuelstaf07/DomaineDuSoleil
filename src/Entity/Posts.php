@@ -24,7 +24,7 @@ class Posts
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?users $user_id = null;
+    private ?Users $user_id = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -79,12 +79,12 @@ class Posts
         return $this;
     }
 
-    public function getUserId(): ?users
+    public function getUserId(): ?Users
     {
         return $this->user_id;
     }
 
-    public function setUserId(?users $user_id): static
+    public function setUserId(?Users $user_id): static
     {
         $this->user_id = $user_id;
 

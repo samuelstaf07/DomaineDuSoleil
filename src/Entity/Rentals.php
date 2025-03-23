@@ -298,7 +298,7 @@ class Rentals
         }
 
         if ($commentCount > 0) {
-            $averageRate = $totalRate / $commentCount;
+            $averageRate = round($totalRate / $commentCount, 2);
         } else {
             $averageRate = 0;
         }
@@ -308,4 +308,5 @@ class Rentals
             'commentCount' => $commentCount,
         ];
     }
+
 }

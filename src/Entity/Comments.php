@@ -25,7 +25,7 @@ class Comments
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column]
-    private ?float $rating = null;
+    private ?int $rating = null;
 
     #[ORM\Column]
     private ?bool $is_active = null;
