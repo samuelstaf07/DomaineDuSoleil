@@ -16,8 +16,13 @@
     </head>
     <body>
         {% include '/navbar/navbar.html.twig' %}
-        {% block body %}{% endblock %}
-        {% include '/footer/footer.html.twig' %}
+        <div class="d-flex flex-column min-vh-100">
+            <div class="flex-grow-1">
+                {% block body %}{% endblock %}
+            </div>
+            {% include '/footer/footer.html.twig' %}
+        </div>
+
 
     </body>
 </html>

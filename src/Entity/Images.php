@@ -25,6 +25,9 @@ class Images
     #[ORM\ManyToOne(inversedBy: 'Images')]
     private ?Rentals $rentals = null;
 
+    #[ORM\ManyToOne(inversedBy: 'images')]
+    private ?Events $events = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -81,6 +84,18 @@ class Images
     public function setRentals(?Rentals $rentals): static
     {
         $this->rentals = $rentals;
+
+        return $this;
+    }
+
+    public function getEvents(): ?Events
+    {
+        return $this->events;
+    }
+
+    public function setEvents(?Events $events): static
+    {
+        $this->events = $events;
 
         return $this;
     }

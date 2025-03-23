@@ -40,4 +40,14 @@ class EventsRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findLatestActiveEvents(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.is_active = :isActive')
+            ->setParameter('isActive', true)
+            ->orderBy('e.created_at', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult();
+    }
 }

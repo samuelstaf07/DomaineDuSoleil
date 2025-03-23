@@ -3,10 +3,11 @@
 {% block title %}Users{% endblock %}
 
 {% block body %}
-    <h1>Users</h1>
+    <div class="contentMargin">
+        <h1>Users</h1>
 
-    <table class="table">
-        <tbody>
+        <table class="table">
+            <tbody>
             <tr>
                 <th>Id</th>
                 <td>{{ user.id }}</td>
@@ -55,12 +56,13 @@
                 <th>Is_email_authentificated</th>
                 <td>{{ user.isEmailAuthentificated ? 'Yes' : 'No' }}</td>
             </tr>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 
-    <a href="{{ path('app_users_index') }}">back to list</a>
+        <a href="{{ path('app_users_index') }}">back to list</a>
 
-    <a href="{{ path('app_users_edit', {'id': user.id}) }}">edit</a>
+        <a href="{{ path('app_users_edit', {'id': user.id}) }}">edit</a>
 
-    {{ include('admin/users/_delete_form.html.twig') }}
+        {{ include('admin/users/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

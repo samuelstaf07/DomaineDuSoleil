@@ -3,9 +3,11 @@
 {% block title %}New Rentals{% endblock %}
 
 {% block body %}
-    <h1>Create new Rentals</h1>
+    <div class="contentMargin">
+        <h1>Create new Rentals</h1>
 
-    {{ include('admin/rentals/_form.html.twig') }}
+        {{ include('admin/rentals/_form.html.twig') }}
 
-    <a href="{{ path('app_rentals_index') }}">back to list</a>
+        <a href="{{ path('app_rentals_index') }}">back to list</a>
+    </div>
 {% endblock %}

@@ -121,7 +121,44 @@
         <a href="{{ path('app_home') }}" class="btn btn-outline-success btn-lg w-25 text-center">Voir tous les logements</a>
     </section>
 
-    <section id="news" class="border-top mt-5 py-5" style="background: linear-gradient(to right, #006633, #95C11F);">
+    <section id="events" style="background: var(--myLightGrey)" class="mt-5 p-5">
+        <h2 style="color: var(--myWhite)" class="text-center">Événements</h2>
+        <div class="mt-5">
+            <div class="row">
+                {% for event in events|slice(0, 3) %}
+                    <div class="col-md-6 mb-4 px-5 rounded">
+                        <div class="card event-card h-100 border-0">
+                            <div class="row g-0 h-100">
+                                <div class="col-md-5 h-100">
+                                    <img src="{{ asset('img/imageAccueil.jpg') }}" class="img-fluid rounded-start h-100 w-100 object-fit-cover" alt="Tir à l'arc">
+                                </div>
+                                <div class="col-md-7 d-flex align-items-center">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ event.content }}</h5>
+                                        <p class="card-text">
+                                            <i class="fas fa-user-friends"></i> À partir de {{ event.ageRequirement }} ans<br>
+                                            <i class="fas fa-map-marker-alt"></i> Derrière l'accueil<br>
+                                            <i class="fas fa-calendar-alt"></i> le {{ event.date|date('d/m/Y') }}<br>
+                                            <i class="fas fa-ticket-alt"></i> {{ event.nbPlaces }} places
+                                        </p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <a href="#" class="btn btn-warning">Voir plus</a>
+                                            <span class="price h3">15€ / pers</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="text-end mt-4">
+                <a href="#" class="btn btn-warning">Voir tous les événements</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="news" class="border-top py-5" style="background: linear-gradient(to right, #006633, #95C11F);">
         <h2 class="text-light text-center">Notre actualité</h2>
         <div class="mt-5 d-flex justify-content-center">
             <ul class="list-group w-50">

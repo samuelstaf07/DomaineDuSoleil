@@ -18,7 +18,11 @@ body{
     background-color: var(--myWhite);
     font-family: DM Sans;
     color: var(--myBlack);
-    padding-top: 75px;
+}
+
+.contentMargin{
+    margin-top: 150px;
+    margin-left: 50px;
 }
 
 nav a h2{
@@ -42,13 +46,13 @@ nav a h2{
 
 .contentImage{
     border: 3px solid white;
-    padding: 50px;
     border-left: none;
     border-right: none;
     font-family: Greek-Freak;
     color: var(--myWhite);
     z-index: 1;
     text-align: center;
+    padding: 75px;
 }
 
 .contentImage h1{
@@ -70,7 +74,6 @@ nav a h2{
     height: 100%;
     background: rgba(0, 0, 0, 0.8);
     z-index: 0;
-    margin-top: 75px;
 }
 
 section h2{

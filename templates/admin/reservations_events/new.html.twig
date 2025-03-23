@@ -3,9 +3,11 @@
 {% block title %}New ReservationsEvents{% endblock %}
 
 {% block body %}
-    <h1>Create new ReservationsEvents</h1>
+    <div class="contentMargin">
+        <h1>Create new ReservationsEvents</h1>
 
-    {{ include('admin/reservations_events/_form.html.twig') }}
+        {{ include('admin/reservations_events/_form.html.twig') }}
 
-    <a href="{{ path('app_reservations_events_index') }}">back to list</a>
+        <a href="{{ path('app_reservations_events_index') }}">back to list</a>
+    </div>
 {% endblock %}

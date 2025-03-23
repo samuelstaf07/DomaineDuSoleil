@@ -3,10 +3,11 @@
 {% block title %}ReservationsRentals index{% endblock %}
 
 {% block body %}
-    <h1>ReservationsRentals index</h1>
+    <div class="contentMargin">
+        <h1>ReservationsRentals index</h1>
 
-    <table class="table">
-        <thead>
+        <table class="table">
+            <thead>
             <tr>
                 <th>Id</th>
                 <th>Has_cleaning_deposit</th>
@@ -18,30 +19,31 @@
                 <th>Status_reservation</th>
                 <th>actions</th>
             </tr>
-        </thead>
-        <tbody>
-        {% for reservations_rental in reservations_rentals %}
-            <tr>
-                <td>{{ reservations_rental.id }}</td>
-                <td>{{ reservations_rental.hasCleaningDeposit ? 'Yes' : 'No' }}</td>
-                <td>{{ reservations_rental.totalDepositReturned }}</td>
-                <td>{{ reservations_rental.statusBaseDeposit }}</td>
-                <td>{{ reservations_rental.dateReservation ? reservations_rental.dateReservation|date('Y-m-d') : '' }}</td>
-                <td>{{ reservations_rental.dateStart ? reservations_rental.dateStart|date('Y-m-d') : '' }}</td>
-                <td>{{ reservations_rental.dateEnd ? reservations_rental.dateEnd|date('Y-m-d') : '' }}</td>
-                <td>{{ reservations_rental.statusReservation }}</td>
-                <td>
-                    <a href="{{ path('app_reservations_rentals_show', {'id': reservations_rental.id}) }}">show</a>
-                    <a href="{{ path('app_reservations_rentals_edit', {'id': reservations_rental.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="9">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for reservations_rental in reservations_rentals %}
+                <tr>
+                    <td>{{ reservations_rental.id }}</td>
+                    <td>{{ reservations_rental.hasCleaningDeposit ? 'Yes' : 'No' }}</td>
+                    <td>{{ reservations_rental.totalDepositReturned }}</td>
+                    <td>{{ reservations_rental.statusBaseDeposit }}</td>
+                    <td>{{ reservations_rental.dateReservation ? reservations_rental.dateReservation|date('Y-m-d') : '' }}</td>
+                    <td>{{ reservations_rental.dateStart ? reservations_rental.dateStart|date('Y-m-d') : '' }}</td>
+                    <td>{{ reservations_rental.dateEnd ? reservations_rental.dateEnd|date('Y-m-d') : '' }}</td>
+                    <td>{{ reservations_rental.statusReservation }}</td>
+                    <td>
+                        <a href="{{ path('app_reservations_rentals_show', {'id': reservations_rental.id}) }}">show</a>
+                        <a href="{{ path('app_reservations_rentals_edit', {'id': reservations_rental.id}) }}">edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="9">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <a href="{{ path('app_reservations_rentals_new') }}">Create new</a>
+        <a href="{{ path('app_reservations_rentals_new') }}">Create new</a>
+    </div>
 {% endblock %}

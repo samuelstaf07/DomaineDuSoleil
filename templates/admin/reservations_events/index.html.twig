@@ -3,10 +3,11 @@
 {% block title %}ReservationsEvents index{% endblock %}
 
 {% block body %}
-    <h1>ReservationsEvents index</h1>
+    <div class="contentMargin">
+        <h1>ReservationsEvents index</h1>
 
-    <table class="table">
-        <thead>
+        <table class="table">
+            <thead>
             <tr>
                 <th>Id</th>
                 <th>Date_reservation</th>
@@ -14,26 +15,27 @@
                 <th>Is_active</th>
                 <th>actions</th>
             </tr>
-        </thead>
-        <tbody>
-        {% for reservations_event in reservations_events %}
-            <tr>
-                <td>{{ reservations_event.id }}</td>
-                <td>{{ reservations_event.dateReservation ? reservations_event.dateReservation|date('Y-m-d') : '' }}</td>
-                <td>{{ reservations_event.dateStart ? reservations_event.dateStart|date('Y-m-d') : '' }}</td>
-                <td>{{ reservations_event.isActive ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('app_reservations_events_show', {'id': reservations_event.id}) }}">show</a>
-                    <a href="{{ path('app_reservations_events_edit', {'id': reservations_event.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for reservations_event in reservations_events %}
+                <tr>
+                    <td>{{ reservations_event.id }}</td>
+                    <td>{{ reservations_event.dateReservation ? reservations_event.dateReservation|date('Y-m-d') : '' }}</td>
+                    <td>{{ reservations_event.dateStart ? reservations_event.dateStart|date('Y-m-d') : '' }}</td>
+                    <td>{{ reservations_event.isActive ? 'Yes' : 'No' }}</td>
+                    <td>
+                        <a href="{{ path('app_reservations_events_show', {'id': reservations_event.id}) }}">show</a>
+                        <a href="{{ path('app_reservations_events_edit', {'id': reservations_event.id}) }}">edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <a href="{{ path('app_reservations_events_new') }}">Create new</a>
+        <a href="{{ path('app_reservations_events_new') }}">Create new</a>
+    </div>
 {% endblock %}
