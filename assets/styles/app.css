@@ -21,8 +21,8 @@ body{
 }
 
 .contentMargin{
-    margin-top: 150px;
-    margin-left: 50px;
+    padding-top: 150px;
+    padding-left: 50px;
 }
 
 nav a h2{
@@ -82,7 +82,7 @@ section h2{
 }
 
 .imageTop {
-    height: 70%;
+    height: 50%;
     width: 100%;
     background: url('img/Chalet.jpg');
     background-size: cover;
@@ -103,8 +103,11 @@ section h2{
     height: 35px;
 }
 
-.carousel-item, .rentalDiscount{
-    height: 500px;
+.rentalDiscount{
+    height: 450px;
+    -webkit-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.5);
+    -moz-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.5);
+    box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.5);
 }
 
 .carousel-item .card-body{

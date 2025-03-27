@@ -16,7 +16,7 @@ final class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(RentalsRepository $rentalsRepository, PostsRepository $postsRepository, EventsRepository $eventsRepository): Response
     {
-        $rentals = $rentalsRepository->findAllRentalsWithDiscount();
+        $rentals = $rentalsRepository->findAllRentalsWithDiscountAndActive();
         $posts = $postsRepository->findLatestActivePosts();
         $events = $eventsRepository->findLatestActiveEvents();
 

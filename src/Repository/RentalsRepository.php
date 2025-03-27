@@ -40,11 +40,21 @@ class RentalsRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
-    public function findAllRentalsWithDiscount(): array
+    public function findAllRentalsWithDiscountAndActive(): array
     {
         return $this->createQueryBuilder('p')
             ->where('p.is_active = 1')
             ->andWhere('p.is_on_promotion = 1')
+            ->orderBy('p.id', 'DESC')
+            ->setMaxResults(9)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllRentalsActive(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.is_active = 1')
             ->orderBy('p.id', 'DESC')
             ->setMaxResults(9)
             ->getQuery()
