@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Images;
 use App\Entity\Users;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -19,22 +20,37 @@ class UsersFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create();
+        $faker = Factory::create('fr_FR');
 
         for ($i = 0; $i < 20; $i++) {
             $user = new Users();
-            $user->setEmail($faker->unique()->safeEmail);
-            $user->setPassword($this->passwordHasher->hashPassword($user, 'password')); // Hash the password
-            $user->setRoles(['ROLE_USER']);
+            $user->setEmail($faker->email);
             $user->setFirstname($faker->firstName);
             $user->setLastname($faker->lastName);
-            $user->setNbPoints($faker->numberBetween(0, 100));
-            $user->setAccountNumber($faker->unique()->bankAccountNumber);
-            $user->setCreatedAt(new \DateTimeImmutable('now'));
-            $user->setUpdatedAt(new \DateTimeImmutable('now'));
-            $user->setLastLogAt(new \DateTimeImmutable('now'));
+            $user->setNbPoints($faker->numberBetween(0, 1000));
+            $user->setAccountNumber($faker->iban('FR'));
+            $createdAt = new \DateTimeImmutable('now');
+            $user->setCreatedAt($createdAt);
+            $user->setUpdatedAt($createdAt);
+            $user->setLastLogAt($createdAt);
             $user->setIsActive($faker->boolean);
             $user->setIsEmailAuthentificated($faker->boolean);
+            $user->setRoles(['ROLE_USER']);
+
+            // Hash the password
+            $hashedPassword = $this->passwordHasher->hashPassword(
+                $user,
+                'password' // Default password for all users
+            );
+            $user->setPassword($hashedPassword);
+
+            // Create and associate an image
+            $image = new Images();
+            $image->setAlt('blabla');
+            $image->setSrc($faker->imageUrl(640, 480, 'people', true)); // Example image path
+            $manager->persist($image);
+
+            $user->setImage($image);
 
             $manager->persist($user);
         }

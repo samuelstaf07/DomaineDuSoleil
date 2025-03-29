@@ -17,6 +17,7 @@ class EventsFixtures extends Fixture
         for ($i = 0; $i < 20; $i++) {
             $event = new Events();
             $event->setContent($faker->text(200));
+            $event->setLocation($faker->words(5, true));
             $event->setPrice($faker->randomFloat(2, 10, 200));
             $event->setDate(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('now', '+1 year')));
             $event->setNbPlaces($faker->numberBetween(10, 500));

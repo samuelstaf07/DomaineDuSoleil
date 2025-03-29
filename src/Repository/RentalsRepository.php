@@ -56,7 +56,6 @@ class RentalsRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->where('p.is_active = 1')
             ->orderBy('p.id', 'DESC')
-            ->setMaxResults(9)
             ->getQuery()
             ->getResult();
     }

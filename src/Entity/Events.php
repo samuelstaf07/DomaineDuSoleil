@@ -43,6 +43,9 @@ class Events
     #[ORM\OneToMany(targetEntity: Images::class, mappedBy: 'events')]
     private Collection $images;
 
+    #[ORM\Column(length: 255)]
+    private ?string $location = null;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
@@ -170,6 +173,18 @@ class Events
                 $image->setEvents(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLocation(): ?string
+    {
+        return $this->location;
+    }
+
+    public function setLocation(string $location): static
+    {
+        $this->location = $location;
 
         return $this;
     }

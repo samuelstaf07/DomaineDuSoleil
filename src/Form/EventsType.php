@@ -18,6 +18,7 @@ class EventsType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('nb_places')
+            ->add('location')
             ->add('is_active')
             ->add('age_requirement')
             ->add('created_at', null, [

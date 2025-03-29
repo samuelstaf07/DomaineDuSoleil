@@ -14,6 +14,7 @@
                 <th>Price</th>
                 <th>Date</th>
                 <th>Nb_places</th>
+                <th>Location</th>
                 <th>Is_active</th>
                 <th>Age_requirement</th>
                 <th>Created_at</th>
@@ -28,6 +29,7 @@
                     <td>{{ event.price }}</td>
                     <td>{{ event.date ? event.date|date('Y-m-d') : '' }}</td>
                     <td>{{ event.nbPlaces }}</td>
+                    <th>{{ event.location }}</th>
                     <td>{{ event.isActive ? 'Yes' : 'No' }}</td>
                     <td>{{ event.ageRequirement }}</td>
                     <td>{{ event.createdAt ? event.createdAt|date('Y-m-d H:i:s') : '' }}</td>

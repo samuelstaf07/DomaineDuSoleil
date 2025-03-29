@@ -13,7 +13,7 @@ class RentalsFixtures extends Fixture
     {
         $faker = Factory::create();
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             $rental = new Rentals();
             $rental->setTitle($faker->words(3, true));
             $rental->setNbDoubleBed($faker->numberBetween(0, 3));

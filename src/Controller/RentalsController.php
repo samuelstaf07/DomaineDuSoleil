@@ -12,7 +12,6 @@ final class RentalsController extends AbstractController
     #[Route('/rentals', name: 'app_rentals')]
     public function index(RentalsRepository $rentalsRepository): Response
     {
-        dump($rentalsRepository->findAllRentalsActive());
         return $this->render('rentals/index.html.twig', [
             'rentals' => $rentalsRepository->findAllRentalsActive(),
         ]);

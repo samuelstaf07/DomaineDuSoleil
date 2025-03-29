@@ -3,12 +3,106 @@
 {% block title %}Tous les logements{% endblock %}
 
 {% block body %}
-    <div class="contentMargin d-flex align-content-center">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('filtre.js') }}"></script>
+
+    <div class="contentMargin d-flex align-items-center flex-column">
         <h3>Tous les logements</h3>
-        <div class="row w-75 m-5">
+        <div class="d-flex w-75 justify-content-center">
+            <div class="d-flex flex-column w-75">
+                <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltre" aria-expanded="false" aria-controls="collapseFiltre">
+                        Voir tous les filtres
+                </button>
+                <div class="collapse" id="collapseFiltre">
+                    <div class="card card-body">
+                        <div class="filtres">
+                            <div class="d-flex gap-3 mb-3 w-75">
+                                <div class="input-group">
+                                    <span class="input-group-text">Nombre de personnes</span>
+                                    <input type="number" min="0" max="50" class="form-control" id="nb-personne" placeholder="Nombre de personnes" aria-label="Nombre de personnes">
+                                    <button class="btn btn-success align-self-center filtre-personne">Filtrer par personne</button>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-3 mb-3 w-75">
+                                <div class="input-group">
+                                    <span class="input-group-text">Prix maximum par jour</span>
+                                    <input type="number" min="0" max="5000" class="form-control" id="prix" placeholder="Prix" aria-label="Prix">
+                                    <span class="input-group-text">€</span>
+                                    <button class="btn btn-success align-self-center filtre-prix">Filtrer par prix</button>
+                                </div>
+                            </div>
+
+                            <div class="d-flex mb-3 gap-3">
+                                <div class="d-flex flex-column flex-grow-1">
+                                    <div class="d-flex mb-3 align-items-center">
+                                        <div class="input-group flex-grow-1 w-25">
+                                            <p class="mb-0 w-25 input-group-text">Nombre de lits simples</p>
+                                            <input type="number" min="0" max="25" class="form-control form-control-sm" id="simple-bed-min" placeholder="Nombre minimum" aria-label="Nombre minimum">
+                                            <span class="input-group-text">Maximum</span>
+                                            <input type="number" min="0" max="25" class="form-control form-control-sm" id="simple-bed-max" placeholder="Nombre maximum" aria-label="Nombre maximum">
+                                            <span class="input-group-text">Minimum</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="input-group flex-grow-1 w-25">
+                                            <p class="mb-0 w-25 input-group-text">Nombre de lits doubles</p>
+                                            <input type="number" min="0" max="25" class="form-control form-control-sm" id="double-bed-min" placeholder="Nombre minimum" aria-label="Nombre minimum">
+                                            <span class="input-group-text">Maximum</span>
+                                            <input type="number" min="0" max="25" class="form-control form-control-sm" id="double-bed-max" placeholder="Nombre maximum" aria-label="Nombre maximum">
+                                            <span class="input-group-text">Minimum</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-success align-self-center filtre-nombre">Filtrer par lits</button>
+                            </div>
+
+
+                            <div class="mt-4">
+                                <button class="btn btn-outline-success filtre me-2 mb-2" data-filtre="shower">Douche</button>
+                                <button class="btn btn-outline-success filtre me-2 mb-2" data-filtre="toilet">Toilettes</button>
+                                <button class="btn btn-outline-success filtre me-2 mb-2" data-filtre="kitchen">Cuisine</button>
+                                <button class="btn btn-outline-success filtre me-2 mb-2" data-filtre="fridge">Frigo</button>
+                                <button class="btn btn-outline-success filtre me-2 mb-2" data-filtre="heating">Chauffage</button>
+                                <button class="btn btn-outline-success filtre me-2 mb-2" data-filtre="pets">Animaux acceptés</button>
+                                <button class="btn btn-outline-success filtre me-2 mb-2" data-filtre="isonpromotion">en promotion</button>
+                                <button class="btn btn-dark filter-reset mb-2">Réinitialiser</button>
+                            </div>
+                        </div>
+                        <select id="triLogements" class="form-select form-select-lg mb-3" size="3" aria-label="tri des locations">
+                            <option value="">Choisissez un tri</option>
+                            <option value="prix_asc">Prix (ascendant)</option>
+                            <option value="prix_desc">Prix (descendant)</option>
+                            <option value="nbpersonne_asc">Nombre de personnes (ascendant)</option>
+                            <option value="nbpersonne_desc">Nombre de personnes (descendant)</option>
+                            <option value="nbsimplebed_asc">Nombre de lits simples (ascendant)</option>
+                            <option value="nbsimplebed_desc">Nombre de lits simples (descendant)</option>
+                            <option value="nbdoublebed_asc">Nombre de lits doubles (ascendant)</option>
+                            <option value="nbdoublebed_desc">Nombre de lits doubles (descendant)</option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row w-75" id="logementsContainer">
             {% for item in rentals %}
-                <div class="col-4 my-3">
-                    <div class="rentalDiscount rounded-4">
+                <div class="col-4 my-3 logement"
+                     data-prix="{% if item.isOnPromotion %}{{ (item.pricePerDay * 0.9)|number_format(2, '.', '') }}{% else %}{{ item.pricePerDay }}{% endif %}"
+                     data-nbpersonne="{{ item.nbSimpleBed + (2 * item.nbDoubleBed) }}"
+                     data-nbsimplebed="{{ item.nbSimpleBed }}"
+                     data-nbdoublebed="{{ item.nbDoubleBed }}"
+                     data-shower="{{ item.hasShower ? 'true' : 'false' }}"
+                     data-toilet="{{ item.hasToilet ? 'true' : 'false' }}"
+                     data-kitchen="{{ item.hasKitchen ? 'true' : 'false' }}"
+                     data-fridge="{{ item.hasFridge ? 'true' : 'false' }}"
+                     data-heating="{{ item.hasHeating ? 'true' : 'false' }}"
+                     data-pets="{{ item.petsAccepted ? 'true' : 'false' }}"
+                     data-isonpromotion="{{ item.isOnPromotion ? 'true' : 'false' }}">
+                <div class="rentalDiscount rounded-4">
                         <div class="imageTop rounded-top-4">
                             <div class="rate d-flex gap-2 align-items-center">
                                 {% set averageData = item.getAverageRateAndCommentCount() %}
@@ -60,12 +154,16 @@
                         </div>
                         <div class="card-body">
                             <div class="titlePromotion px-4">
-                                <h3 class="fw-bold">{{ item.title|capitalize }}</h3>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 16 16"><path fill="#EB4034" fill-rule="evenodd" d="M9.744 2.072L7.818.917L5.892 2.072l-2.237.198l-.88 2.066l-1.693 1.475L1.585 8l-.503 2.189l1.693 1.475l.88 2.066l2.237.198l1.926 1.155l1.926-1.155l2.237-.198l.88-2.066l1.694-1.475L14.05 8l.504-2.189l-1.694-1.475l-.88-2.066zM5.5 6.5a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0M6 5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m-.146 5.854l5-5l-.708-.708l-5 5zM9.5 10a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0m.5-1.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3" clip-rule="evenodd"/></svg>
+                                <div style="height: 75px;" class="d-flex align-items-center">
+                                    <h3 class="fw-bold">{{ item.title|capitalize }}</h3>
+                                </div>
+                                {% if item.isOnPromotion %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 16 16"><path fill="#EB4034" fill-rule="evenodd" d="M9.744 2.072L7.818.917L5.892 2.072l-2.237.198l-.88 2.066l-1.693 1.475L1.585 8l-.503 2.189l1.693 1.475l.88 2.066l2.237.198l1.926 1.155l1.926-1.155l2.237-.198l.88-2.066l1.694-1.475L14.05 8l.504-2.189l-1.694-1.475l-.88-2.066zM5.5 6.5a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0M6 5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m-.146 5.854l5-5l-.708-.708l-5 5zM9.5 10a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0m.5-1.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3" clip-rule="evenodd"/></svg>
+                                {% endif %}
                             </div>
                             <div class="d-flex">
                                 <div class="d-flex flex-column gap-1 w-50">
-                                    <p class="textPromotion m-0 px-4">1 personnes</p>
+                                    <p class="textPromotion m-0 px-4">{{ item.nbSimpleBed + (2 * item.nbDoubleBed) }} personne{% if (item.nbSimpleBed + (2 * item.nbDoubleBed))>1 %}s{% endif %} maximum</p>
                                     <p class="textPromotion m-0 px-4">{{ item.nbSimpleBed }} lits simples</p>
                                     <p class="textPromotion m-0 px-4">{{ item.nbDoubleBed }} lit double</p>
                                     <div class="px-4 d-flex w-100 align-items-center gap-1">
@@ -91,8 +189,8 @@
                                 </div>
                                 <div class="d-flex flex-column gap-1 w-50 align-items-center justify-content-end">
                                     <div class="pricePromotion d-flex flex-column align-items-start">
-                                        <span class="newPrice">{{ (item.pricePerDay * 0.9)|number_format(2, ',', '') }}€</span>
-                                        <p><span class="strike">{{ item.pricePerDay|number_format(2, ',', '') }}€</span>/nuit</p>
+                                        {% if item.isOnPromotion %}<span class="newPrice">{{ (item.pricePerDay * 0.9)|number_format(2, ',', '') }}€</span>{% endif %}
+                                        <p><span {% if item.isOnPromotion %} class="strike" {% endif %}>{{ item.pricePerDay|number_format(2, ',', '') }}€</span>/nuit</p>
                                     </div>
                                 </div>
                             </div>
@@ -104,6 +202,6 @@
                 </div>
             {% endfor %}
         </div>
-    </div>
+        <button class="btn btn-success voir-plus">Voir plus</button>
     </div>
 {% endblock %}
