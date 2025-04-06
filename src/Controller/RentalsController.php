@@ -16,4 +16,16 @@ final class RentalsController extends AbstractController
             'rentals' => $rentalsRepository->findAllRentalsActive(),
         ]);
     }
+
+    #[Route('/rental/{id}', name: 'app_rental')]
+    public function rental($id, RentalsRepository $rentalsRepository): Response
+    {
+        foreach ($rentalsRepository->find($id)->getImages() as $value){
+            dump($value);
+        }
+
+        return $this->render('rental/index.html.twig', [
+            'rental' => $rentalsRepository->find($id),
+        ]);
+    }
 }

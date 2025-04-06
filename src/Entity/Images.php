@@ -28,6 +28,9 @@ class Images
     #[ORM\ManyToOne(inversedBy: 'images')]
     private ?Events $events = null;
 
+    #[ORM\Column]
+    private ?bool $isHomePage = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -96,6 +99,18 @@ class Images
     public function setEvents(?Events $events): static
     {
         $this->events = $events;
+
+        return $this;
+    }
+
+    public function isHomePage(): ?bool
+    {
+        return $this->isHomePage;
+    }
+
+    public function setIsHomePage(bool $isHomePage): static
+    {
+        $this->isHomePage = $isHomePage;
 
         return $this;
     }

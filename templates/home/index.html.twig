@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Domaine du Soleil{% endblock %}
 
 {% block body %}
     <header id="imageFond">
@@ -113,7 +113,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <a href="{{ path('app_home') }}" class="seeMore d-flex align-items-center justify-content-center">
+                                        <a href="{{ path('app_rental', {id:item.id}) }}" class="seeMore d-flex align-items-center justify-content-center">
                                             Voir plus
                                         </a>
                                     </div>
@@ -136,7 +136,7 @@
             {% endif %}
 
         </div>
-        <a href="{{ path('app_rentals') }}" class="btn btn-outline-success btn-lg w-25 text-center">Voir tous les logements</a>
+        <a href="{{ path('app_rentals') }}" class="btn-outline-green btn-lg w-25 text-center">Voir tous les logements</a>
     </section>
     <section id="events" style="background: var(--myLightGrey)" class="mt-5 p-5">
         <h2 style="color: var(--myWhite)" class="text-center">Événements</h2>
@@ -174,7 +174,7 @@
                                     </div>
                                     <div class="card-footer bg-transparent border-0">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <a href="#" class="btn btn-warning">Voir plus</a>
+                                            <a href="#" class="btn-yellow">Voir plus</a>
                                             <span class="price h3">{{ event.price|number_format(2, ',', '') }}€/pers</span>
                                         </div>
                                     </div>
@@ -185,7 +185,7 @@
                 {% endfor %}
             </div>
             <div class="text-center mt-4">
-                <a href="#" class="btn btn-warning">Voir tous les événements</a>
+                <a href="#" class="btn-outline-yellow">Voir tous les événements</a>
             </div>
         </div>
     </section>
@@ -208,7 +208,7 @@
                                     {% endif %}
                                 </h6>
                             </div>
-                            <a href="#" class="btn btn-sm btn-success">Voir plus</a>
+                            <a href="#" class="btn-sm btn-yellow">Voir plus</a>
                         </div>
                     </li>
                 {% endfor %}

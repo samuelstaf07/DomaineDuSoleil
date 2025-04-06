@@ -28,20 +28,25 @@ class PostsFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 20; $i++) {
             $post = new Posts();
             $post->setTitle($faker->sentence(5));
-            $post->setContent($faker->text(500));
-            $post->setUserId($faker->randomElement($users)); // Associer un utilisateur aléatoire
+            $post->setContent($faker->text(300));
+            $post->setUserId($faker->randomElement($users));
             $post->setCreatedAt(new DateTimeImmutable());
-            $post->setIsActive($faker->boolean(80)); // 80% de chance d'être actif
+            $post->setIsActive($faker->boolean(80));
 
-            // Créer et associer des images au post
             $numberOfImages = $faker->numberBetween(1, 3);
             for ($j = 0; $j < $numberOfImages; $j++) {
                 $image = new Images();
-                $image->setSrc($faker->imageUrl(640, 480, 'posts', true));
+                if($i == 0){
+                    $image->setIsHomePage(true);
+                }else{
+                    $image->setIsHomePage(false);
+                }
+                $image->setSrc('Chalet.jpg');
                 $image->setAlt($faker->sentence(3));
-                $image->setPosts($post); // Associer l'image au post
+                $image->setPosts($post);
+                $post->addImage($image);
+
                 $manager->persist($image);
-                $post->addImage($image); // Ajouter l'image à la collection du post
             }
 
             $manager->persist($post);
@@ -53,7 +58,7 @@ class PostsFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
-            UsersFixtures::class, // S'assurer que UsersFixtures est exécuté en premier
+            UsersFixtures::class,
         ];
     }
 }

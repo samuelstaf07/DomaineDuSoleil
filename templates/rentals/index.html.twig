@@ -3,7 +3,6 @@
 {% block title %}Tous les logements{% endblock %}
 
 {% block body %}
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('filtre.js') }}"></script>
 
@@ -11,7 +10,7 @@
         <h3>Tous les logements</h3>
         <div class="d-flex w-75 justify-content-center">
             <div class="d-flex flex-column w-75">
-                <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltre" aria-expanded="false" aria-controls="collapseFiltre">
+                <button class="btn-green m-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltre" aria-expanded="false" aria-controls="collapseFiltre">
                         Voir tous les filtres
                 </button>
                 <div class="collapse" id="collapseFiltre">
@@ -21,7 +20,7 @@
                                 <div class="input-group">
                                     <span class="input-group-text">Nombre de personnes</span>
                                     <input type="number" min="0" max="50" class="form-control" id="nb-personne" placeholder="Nombre de personnes" aria-label="Nombre de personnes">
-                                    <button class="btn btn-success align-self-center filtre-personne">Filtrer par personne</button>
+                                    <button class="btn-green align-self-center filtre-personne">Filtrer par personne</button>
                                 </div>
                             </div>
 
@@ -30,7 +29,7 @@
                                     <span class="input-group-text">Prix maximum par jour</span>
                                     <input type="number" min="0" max="5000" class="form-control" id="prix" placeholder="Prix" aria-label="Prix">
                                     <span class="input-group-text">€</span>
-                                    <button class="btn btn-success align-self-center filtre-prix">Filtrer par prix</button>
+                                    <button class="btn-green align-self-center filtre-prix">Filtrer par prix</button>
                                 </div>
                             </div>
 
@@ -56,37 +55,40 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button class="btn btn-success align-self-center filtre-nombre">Filtrer par lits</button>
+                                <button class="btn-green align-self-center filtre-nombre">Filtrer par lits</button>
                             </div>
 
 
                             <div class="mt-4">
-                                <button class="btn btn-outline-success filtre me-2 mb-2" data-filtre="shower">Douche</button>
-                                <button class="btn btn-outline-success filtre me-2 mb-2" data-filtre="toilet">Toilettes</button>
-                                <button class="btn btn-outline-success filtre me-2 mb-2" data-filtre="kitchen">Cuisine</button>
-                                <button class="btn btn-outline-success filtre me-2 mb-2" data-filtre="fridge">Frigo</button>
-                                <button class="btn btn-outline-success filtre me-2 mb-2" data-filtre="heating">Chauffage</button>
-                                <button class="btn btn-outline-success filtre me-2 mb-2" data-filtre="pets">Animaux acceptés</button>
-                                <button class="btn btn-outline-success filtre me-2 mb-2" data-filtre="isonpromotion">en promotion</button>
-                                <button class="btn btn-dark filter-reset mb-2">Réinitialiser</button>
+                                <button class="btn-outline-green filtre me-2 mb-2" data-filtre="shower">Douche</button>
+                                <button class="btn-outline-green filtre me-2 mb-2" data-filtre="toilet">Toilettes</button>
+                                <button class="btn-outline-green filtre me-2 mb-2" data-filtre="kitchen">Cuisine</button>
+                                <button class="btn-outline-green filtre me-2 mb-2" data-filtre="fridge">Frigo</button>
+                                <button class="btn-outline-green filtre me-2 mb-2" data-filtre="heating">Chauffage</button>
+                                <button class="btn-outline-green filtre me-2 mb-2" data-filtre="pets">Animaux acceptés</button>
+                                <button class="btn-outline-green filtre me-2 mb-2" data-filtre="isonpromotion">En promotion</button>
+                                <button class="btn-black filter-reset mb-2">Réinitialiser</button>
                             </div>
                         </div>
-                        <select id="triLogements" class="form-select form-select-lg mb-3" size="3" aria-label="tri des locations">
-                            <option value="">Choisissez un tri</option>
-                            <option value="prix_asc">Prix (ascendant)</option>
-                            <option value="prix_desc">Prix (descendant)</option>
-                            <option value="nbpersonne_asc">Nombre de personnes (ascendant)</option>
-                            <option value="nbpersonne_desc">Nombre de personnes (descendant)</option>
-                            <option value="nbsimplebed_asc">Nombre de lits simples (ascendant)</option>
-                            <option value="nbsimplebed_desc">Nombre de lits simples (descendant)</option>
-                            <option value="nbdoublebed_asc">Nombre de lits doubles (ascendant)</option>
-                            <option value="nbdoublebed_desc">Nombre de lits doubles (descendant)</option>
-                        </select>
+                        <div class="container mt-4">
+                            <div class="mb-3">
+                                <label for="triLogements" class="form-label">Choisissez un tri</label>
+                                <select id="triLogements" class="form-select w-50" size="3" aria-label="tri des locations">
+                                    <option value="prix_asc">Prix (ascendant)</option>
+                                    <option value="prix_desc">Prix (descendant)</option>
+                                    <option value="nbpersonne_asc">Nombre de personnes (ascendant)</option>
+                                    <option value="nbpersonne_desc">Nombre de personnes (descendant)</option>
+                                    <option value="nbsimplebed_asc">Nombre de lits simples (ascendant)</option>
+                                    <option value="nbsimplebed_desc">Nombre de lits simples (descendant)</option>
+                                    <option value="nbdoublebed_asc">Nombre de lits doubles (ascendant)</option>
+                                    <option value="nbdoublebed_desc">Nombre de lits doubles (descendant)</option>
+                                </select>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="row w-75" id="logementsContainer">
             {% for item in rentals %}
@@ -195,13 +197,13 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="{{ path('app_home') }}" class="seeMore d-flex align-items-center justify-content-center">
+                        <a href="{{ path('app_rental', {id:item.id}) }}" class="seeMore d-flex align-items-center justify-content-center">
                             Voir plus
                         </a>
                     </div>
                 </div>
             {% endfor %}
         </div>
-        <button class="btn btn-success voir-plus">Voir plus</button>
+        <button class="btn-green voir-plus">Voir plus</button>
     </div>
 {% endblock %}

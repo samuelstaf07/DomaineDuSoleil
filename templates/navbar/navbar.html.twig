@@ -11,7 +11,7 @@
             <ul class="navbar-nav ms-auto flex gap-2">
                 {% if app.user %}
                     <div class="dropdown">
-                        <button class="d-flex gap-2 align-items-center btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="d-flex gap-2 align-items-center btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="{{ asset('uploads/user.svg') }}" alt="" class="rounded-circle" style="height: 30px; width: 30px;">
                             {{ app.user.firstname }} {{ app.user.lastname }}
                         </button>
@@ -25,17 +25,17 @@
                                 <li><hr class="dropdown-divider"></li>
                             {% endif %}
                             <li class="text-center">
-                                <a href="{{ path('app_logout') }}" class="m-2 btn btn-primary w-75">Déconnexion</a>
+                                <a href="{{ path('app_logout') }}" class="m-2 btn-primary w-75">Déconnexion</a>
                             </li>
 
                         </ul>
                     </div>
                 {% else %}
                     <li class="nav-item">
-                        <a class="btn btn-success" href="{{ path('app_login') }}">Connexion</a>
+                        <a class="btn-green" href="{{ path('app_login') }}">Connexion</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-secondary" href="{{ path('app_register') }}">Inscription</a>
+                        <a class="btn-signup" href="{{ path('app_register') }}">Inscription</a>
                     </li>
                 {% endif %}
             </ul>

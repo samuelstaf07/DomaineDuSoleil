@@ -49,6 +49,7 @@ class UsersFixtures extends Fixture
             $image->setAlt('blabla');
             $image->setSrc($faker->imageUrl(640, 480, 'people', true)); // Example image path
             $manager->persist($image);
+            $image->setIsHomePage(1);
 
             $user->setImage($image);
 

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\RentalsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RentalsRepository::class)]
@@ -62,6 +63,9 @@ class Rentals
      */
     #[ORM\OneToMany(targetEntity: Comments::class, mappedBy: 'rentals')]
     private Collection $comments;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $content = null;
 
     public function __construct()
     {
@@ -309,4 +313,26 @@ class Rentals
         ];
     }
 
+    public function getHomePageImage(): Images | null
+    {
+        foreach ($this->getImages() as $image) {
+            if ($image->isHomePage() === true) {
+                return $image;
+            }
+        }
+
+        return null;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): static
+    {
+        $this->content = $content;
+
+        return $this;
+    }
 }
