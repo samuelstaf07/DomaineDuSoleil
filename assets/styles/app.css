@@ -1,0 +1,400 @@
+@font-face {
+    font-family: 'Greek-Freak';
+    src: url('fonts/Greek-Freak.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root{
+    --myWhite: #F8F9FA;
+    --myLightGrey: #414141;
+    --myLightGreen: #95C11F;
+    --myDarkGreen: #006633;
+    --myYellow: #F7D844;
+    --myBlack: #212429;
+}
+
+body{
+    background-color: var(--myWhite);
+    font-family: DM Sans;
+    color: var(--myBlack);
+}
+
+.contentMargin{
+    padding-top: 150px;
+    padding-left: 50px;
+}
+
+nav a h2{
+    font-family: Greek-Freak;
+    font-size: 41.9px;
+    color: var(--myWhite);
+}
+
+#imageFond{
+    height: 100vh;
+    width: 100vw;
+    background: url('img/imageAccueil.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.contentImage{
+    border: 3px solid white;
+    border-left: none;
+    border-right: none;
+    font-family: Greek-Freak;
+    color: var(--myWhite);
+    z-index: 1;
+    text-align: center;
+    padding: 75px;
+}
+
+.contentImage h1{
+    font-size: 67.8px;
+}
+
+.contentImage p{
+    font-size: 28px;
+    font-family: "DM Sans";
+    font-weight: lighter;
+}
+
+#imageFond::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 0;
+}
+
+h2{
+    font-family: Greek-Freak;
+    color: var(--myDarkGreen);
+}
+
+.fc-toolbar-title{
+    font-family: "DM Sans";
+    color: var(--myLightGreen);
+}
+
+.imageTop {
+    height: 50%;
+    width: 100%;
+    background: url('img/Chalet.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.imageTop .rate {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--myLightGrey);
+    color: white;
+    padding: 5px 10px;
+    border-top-left-radius: 5px;
+    font-weight: bold;
+    height: 35px;
+}
+
+.rentalDiscount{
+    height: 450px;
+    -webkit-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.5);
+    -moz-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.5);
+    box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.5);
+}
+
+.carousel-item .card-body{
+    position: relative;
+    height: 50%;
+}
+
+.imageTop img{
+    height: 30px;
+}
+
+.description{
+    height: 30%;
+    width: 100%;
+    bottom: 0;
+}
+
+.titlePromotion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.textPromotion{
+    text-align: left;
+}
+
+.strike{
+    text-decoration: line-through;
+    text-decoration-thickness: 3px;
+}
+
+.pricePromotion{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.newPrice{
+    color: var(--myDarkGreen);
+}
+
+.rentalDiscount {
+    position: relative;
+}
+
+.carousel-item{
+    transition: transform 0.6s ease-in-out;
+}
+
+#logementCarousel {
+    width: 80%;
+    margin: auto;
+    position: relative;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 100;
+    width: 75px;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.carousel-control-prev {
+    left: -100px;
+}
+
+.carousel-control-next {
+    right: -100px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 75px;
+    height: 75px;
+}
+
+.carousel-control-prev-icon {
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%23F7D844" viewBox="0 0 24 24"%3E%3Cpolygon points="15,18 9,12 15,6" /%3E%3C/svg%3E');
+}
+
+.carousel-control-next-icon {
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%23F7D844" viewBox="0 0 24 24"%3E%3Cpolygon points="9,18 15,12 9,6" /%3E%3C/svg%3E');
+}
+
+.rentalDiscount::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0);
+    border-radius: 1rem;
+    transition: background 0.3s ease-in-out;
+    z-index: 1;
+}
+
+.rentalDiscount:hover::before {
+    background: rgba(0, 0, 0, 0.95);
+}
+
+.seeMore {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--myWhite);
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 5;
+    height: 100%;
+    width: 100%;
+}
+
+.rentalDiscount:hover .seeMore {
+    opacity: 1;
+}
+
+.dropdown button, .dropdown button:hover{
+    background-color: var(--myDarkGreen);
+}
+
+.smallImage{
+    height: 20rem;
+    width: 30rem;
+    object-fit: cover;
+}
+
+.btn-green,
+.btn-outline-green,
+.btn-signup,
+.btn-yellow,
+.btn-outline-yellow,
+.btn-black{
+    border: none;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    padding: 0.75rem;
+    font-weight: 500;
+}
+
+.btn-green{
+    background-color: var(--myDarkGreen);
+    color: var(--myWhite);
+}
+.btn-green:hover{
+    background-color: color-mix(in srgb, var(--myWhite), black 10%);
+    color: var(--myDarkGreen)
+}
+.btn-green:active{
+    background-color: color-mix(in srgb, var(--myWhite), black 10%) !important;
+    border: none !important;
+    color: var(--myDarkGreen) !important;
+}
+
+.btn-outline-green{
+    border: 1px solid var(--myDarkGreen);
+    background: none;
+    color: var(--myDarkGreen);
+}
+.btn-outline-green:hover{
+    background-color: var(--myDarkGreen);
+    color: var(--myWhite)
+}
+.btn-outline-green:active{
+    background-color: color-mix(in srgb, var(--myWhite), black 10%) !important;
+    border: none !important;
+    color: var(--myDarkGreen) !important;
+}
+
+.btn-signup{
+    background-color: var(--myLightGrey);
+    color: var(--myWhite);
+}
+.btn-signup:hover{
+    background-color: var(--myWhite);
+    color: var(--myLightGrey)
+}
+.btn-signup:active{
+    background-color: color-mix(in srgb, var(--myWhite), black 10%) !important;
+    border: none !important;
+    color: var(--myLightGrey) !important;
+}
+
+.btn-yellow{
+    background-color: var(--myYellow);
+    color: var(--myLightGrey);
+}
+.btn-yellow:hover{
+    background-color: var(--myLightGrey);
+    color: var(--myYellow)
+}
+.btn-yellow:active{
+    background-color: color-mix(in srgb, var(--myLightGrey), black 10%) !important;
+    border: none;
+    color: var(--myYellow);
+}
+
+.btn-outline-yellow{
+    border: 1px solid var(--myYellow);
+    background: none;
+    color: var(--myYellow);
+}
+.btn-outline-yellow:hover{
+    background-color: var(--myYellow);
+    color: var(--myLightGrey)
+}
+.btn-outline-yellow:active{
+    background-color: color-mix(in srgb, var(--myLightGrey), black 10%);
+    border: none !important;
+    color: var(--myYellow) !important;
+}
+
+.btn-black{
+    background-color: var(--myBlack);
+    color: var(--myWhite);
+}
+.btn-black:hover{
+    background-color: color-mix(in srgb, var(--myWhite), black 10%);
+    color: var(--myBlack)
+}
+.btn-black:active{
+    background-color: color-mix(in srgb, var(--myWhite), black 10%);
+    border: none !important;
+    color: var(--myBlack) !important;
+}
+
+.bg-lightGreen{
+    background: var(--myLightGreen);
+    color: var(--myBlack);
+}
+
+.bg-darkGreen{
+    background: var(--myDarkGreen);
+    color: var(--myWhite);
+}
+
+.bg-LightGrey{
+    background: var(--myBlack);
+    color: var(--myWhite);
+}
+
+.color-lightGreen{
+    color: var(--myLightGreen);
+}
+
+.myTitle{
+    font-weight: bold;
+    background: linear-gradient(to right, var(--myLightGrey), var(--myDarkGreen));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    display: inline-block;
+}
+
+.fc-button-primary{
+    background-color: var(--myDarkGreen) !important;
+    border: var(--myDarkGreen);
+}
+
+.fc-col-header-cell-cushion{
+    color: var(--myDarkGreen);
+    text-decoration: none;
+}
+
+.fc-daygrid-day-number{
+    color: var(--myBlack);
+    text-decoration: none;
+}
+
+.fc-event-title-container, .fc-event-main-frame, .fc-event-main-frame, .fc-event-main, .fc-daygrid-event, .fc-daygrid-block-event, .fc-h-event, .fc-event, .fc-event-start, .fc-event-future{
+    background-color: var(--myLightGreen);
+    border: var(--myLightGreen) !important;
+}
