@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\RentalsRepository;
+use App\Repository\ReservationsRentalsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,14 +19,22 @@ final class RentalsController extends AbstractController
     }
 
     #[Route('/rental/{id}', name: 'app_rental')]
-    public function rental($id, RentalsRepository $rentalsRepository): Response
+    public function rental($id, RentalsRepository $rentalsRepository, ReservationsRentalsRepository $reservationsRentalsRepository): Response
     {
-        foreach ($rentalsRepository->find($id)->getImages() as $value){
-            dump($value);
+        $rental = $rentalsRepository->find($id);
+        $eventsDates = [];
+
+        foreach ($rental->getReservations() as $reservation){
+            $eventsDates[] = [
+                'start' => $reservation->getDateStart()->format('Y-m-d'),
+                'end' => $reservation->getDateEnd()->format('Y-m-d'),
+                'title' => 'Réservé',
+            ];
         }
 
         return $this->render('rental/index.html.twig', [
-            'rental' => $rentalsRepository->find($id),
+            'rental' => $rental,
+            'events' => $eventsDates,
         ]);
     }
 }

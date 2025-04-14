@@ -20,11 +20,7 @@ class ReservationsRentals
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?users $user_id = null;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?rentals $rental_id = null;
+    private ?users $user = null;
 
     #[ORM\Column]
     private ?bool $has_cleaning_deposit = null;
@@ -46,6 +42,10 @@ class ReservationsRentals
 
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $status_reservation = null;
+
+    #[ORM\ManyToOne(inversedBy: 'reservations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Rentals $rentals = null;
 
     public function getId(): ?int
     {
@@ -71,26 +71,14 @@ class ReservationsRentals
         return $this;
     }
 
-    public function getUserId(): ?users
+    public function getUser(): ?users
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?users $user_id): static
+    public function setUser(?users $user_id): static
     {
-        $this->user_id = $user_id;
-
-        return $this;
-    }
-
-    public function getRentalId(): ?rentals
-    {
-        return $this->rental_id;
-    }
-
-    public function setRentalId(?rentals $rental_id): static
-    {
-        $this->rental_id = $rental_id;
+        $this->user = $user_id;
 
         return $this;
     }
@@ -175,6 +163,18 @@ class ReservationsRentals
     public function setStatusReservation(int $status_reservation): static
     {
         $this->status_reservation = $status_reservation;
+
+        return $this;
+    }
+
+    public function getRentals(): ?Rentals
+    {
+        return $this->rentals;
+    }
+
+    public function setRentals(?Rentals $rentals): static
+    {
+        $this->rentals = $rentals;
 
         return $this;
     }

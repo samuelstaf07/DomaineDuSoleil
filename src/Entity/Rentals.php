@@ -67,10 +67,17 @@ class Rentals
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
+    /**
+     * @var Collection<int, reservationsRentals>
+     */
+    #[ORM\OneToMany(targetEntity: reservationsRentals::class, mappedBy: 'rentals')]
+    private Collection $reservations;
+
     public function __construct()
     {
         $this->Images = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -332,6 +339,36 @@ class Rentals
     public function setContent(string $content): static
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, reservationsRentals>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(reservationsRentals $reservation): static
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setRentals($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(reservationsRentals $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getRentals() === $this) {
+                $reservation->setRentals(null);
+            }
+        }
 
         return $this;
     }
