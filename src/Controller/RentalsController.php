@@ -7,6 +7,7 @@ use App\Repository\ReservationsRentalsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\Date;
 
 final class RentalsController extends AbstractController
 {
@@ -22,19 +23,19 @@ final class RentalsController extends AbstractController
     public function rental($id, RentalsRepository $rentalsRepository, ReservationsRentalsRepository $reservationsRentalsRepository): Response
     {
         $rental = $rentalsRepository->find($id);
-        $eventsDates = [];
+        $reservedDates = [];
 
-        foreach ($rental->getReservations() as $reservation){
-            $eventsDates[] = [
-                'start' => $reservation->getDateStart()->format('Y-m-d'),
-                'end' => $reservation->getDateEnd()->format('Y-m-d'),
-                'title' => 'Réservé',
-            ];
+        foreach ($rental->getReservations() as $reservation) {
+            $startDate = $reservation->getDateStart();
+            $endDate = $reservation->getDateEnd();
+
+            
+
         }
 
         return $this->render('rental/index.html.twig', [
             'rental' => $rental,
-            'events' => $eventsDates,
+            '$reservedDates' => $reservedDates,
         ]);
     }
 }

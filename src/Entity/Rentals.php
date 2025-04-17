@@ -68,9 +68,9 @@ class Rentals
     private ?string $content = null;
 
     /**
-     * @var Collection<int, reservationsRentals>
+     * @var Collection<int, ReservationsRentals>
      */
-    #[ORM\OneToMany(targetEntity: reservationsRentals::class, mappedBy: 'rentals')]
+    #[ORM\OneToMany(targetEntity: ReservationsRentals::class, mappedBy: 'rentals')]
     private Collection $reservations;
 
     public function __construct()
@@ -344,14 +344,14 @@ class Rentals
     }
 
     /**
-     * @return Collection<int, reservationsRentals>
+     * @return Collection<int, ReservationsRentals>
      */
     public function getReservations(): Collection
     {
         return $this->reservations;
     }
 
-    public function addReservation(reservationsRentals $reservation): static
+    public function addReservation(ReservationsRentals $reservation): static
     {
         if (!$this->reservations->contains($reservation)) {
             $this->reservations->add($reservation);
@@ -361,7 +361,7 @@ class Rentals
         return $this;
     }
 
-    public function removeReservation(reservationsRentals $reservation): static
+    public function removeReservation(ReservationsRentals $reservation): static
     {
         if ($this->reservations->removeElement($reservation)) {
             // set the owning side to null (unless already changed)

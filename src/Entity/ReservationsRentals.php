@@ -16,7 +16,7 @@ class ReservationsRentals
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?bills $bill_id = null;
+    private ?Bills $bill_id = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -59,12 +59,12 @@ class ReservationsRentals
         return $this;
     }
 
-    public function getBillId(): ?bills
+    public function getBillId(): ?Bills
     {
         return $this->bill_id;
     }
 
-    public function setBillId(bills $bill_id): static
+    public function setBillId(Bills $bill_id): static
     {
         $this->bill_id = $bill_id;
 

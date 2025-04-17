@@ -83,7 +83,13 @@ h2{
 
 .fc-toolbar-title{
     font-family: "DM Sans";
-    color: var(--myLightGreen);
+    font-weight: bold;
+    background: linear-gradient(to right, var(--myLightGrey), var(--myDarkGreen));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    display: inline-block;
 }
 
 .imageTop {
@@ -381,7 +387,7 @@ h2{
 
 .fc-button-primary{
     background-color: var(--myDarkGreen) !important;
-    border: var(--myDarkGreen);
+    border: var(--myDarkGreen) !important;
 }
 
 .fc-col-header-cell-cushion{
@@ -395,6 +401,12 @@ h2{
 }
 
 .fc-event-title-container, .fc-event-main-frame, .fc-event-main-frame, .fc-event-main, .fc-daygrid-event, .fc-daygrid-block-event, .fc-h-event, .fc-event, .fc-event-start, .fc-event-future{
-    background-color: var(--myLightGreen);
-    border: var(--myLightGreen) !important;
+    background-color: var(--myDarkGreen);
+    border: var(--myDarkGreen) !important;
+}
+
+.titleDate {
+    font-family: "DM Sans";
+    font-weight: bold;
+    color: var(--myLightGrey);
 }

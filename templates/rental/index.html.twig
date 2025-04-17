@@ -5,11 +5,8 @@
 {% block body %}
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@5.11.3/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/fr.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js"></script>
@@ -26,46 +23,11 @@
             });
         });
         document.addEventListener('DOMContentLoaded', function() {
-            let calendarEl = document.getElementById('calendar');
-            let today = new Date();
-            let todayISO = today.toISOString().slice(0, 10);
-            let events = {{ events|json_encode|raw }};
 
-            events.forEach(event => {
-                let dateTemp = new Date(event.end);
-                dateTemp.setDate(dateTemp.getDate() + 1);
-                event.end = dateTemp.toISOString().slice(0, 10);
-                event.reserved = true;
+            flatpickr("#datepicker", {
+                dateFormat: "Y-m-d",
+                disable: reservedDates,
             });
-
-            let calendar = new FullCalendar.Calendar(calendarEl, {
-                locale: 'fr',
-                initialView: 'dayGridMonth',
-                headerToolbar: {
-                    left: 'title',
-                    center: '',
-                    right: 'prev,next',
-                },
-                validRange: {
-                    start: todayISO
-                },
-                selectable: true,
-                select: function(info) {
-                    let isReserved = events.some(event => {
-                        let eventStart = new Date(event.start);
-                        let eventEnd = new Date(event.end);
-
-                        return info.start < eventEnd && info.end > eventStart;
-                    });
-
-                    let dateTemp = new Date(info.endStr);
-                    dateTemp.setDate(dateTemp.getDate() - 1);
-                    info.endStr = dateTemp.toISOString().slice(0, 10);
-                    console.log('Plage sélectionnée :', info.startStr, 'à', info.endStr);
-                },
-                events: events,
-            });
-            calendar.render();
         });
     </script>
 
@@ -198,7 +160,7 @@
                                 {% if rental.isOnPromotion %}<span class="color-lightGreen">{{ (rental.pricePerDay * 0.9)|number_format(2, ',', '') }}€</span>{% endif %}
                                 <p><span {% if rental.isOnPromotion %} class="strike" {% endif %}>{{ rental.pricePerDay|number_format(2, ',', '') }}€</span>/nuit</p>
                             </div>
-                            <a href="#titleDates" class="btn-yellow not-image">Réserver içi</a>
+                            <a href="#dates" class="btn-yellow not-image">Réserver içi</a>
                         </div>
                     </div>
                 </div>
@@ -221,9 +183,8 @@
             {% endif %}
         </section>
 
-        <section id="dates" class="w-75">
-            <h2 id="titleDates">Réserver içi</h2>
-            <div id="calendar"></div>
+        <section id="dates" class="w-75 my-5">
+            <input type="text" id="datepicker" placeholder="Select Date">
         </section>
     </div>
 

@@ -25,7 +25,7 @@ class ReservationRentalsFixtures extends Fixture implements DependentFixtureInte
 
         $usedBillIds = []; // Tableau pour suivre les IDs de bills utilisés
 
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 300; $i++) {
             $reservation = new ReservationsRentals();
 
             // Assurez-vous qu'il y a des bills, user et rentals avant de les utiliser
@@ -62,7 +62,14 @@ class ReservationRentalsFixtures extends Fixture implements DependentFixtureInte
             $manager->persist($reservation);
         }
 
+
+        if (($i % 5) === 0) {
+            $manager->flush();
+            $manager->clear();
+        }
+
         $manager->flush();
+        $manager->clear();
     }
 
     public function getDependencies(): array
