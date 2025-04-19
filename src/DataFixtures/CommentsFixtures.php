@@ -19,24 +19,31 @@ class CommentsFixtures extends Fixture implements DependentFixtureInterface
         $users = $manager->getRepository(Users::class)->findAll();
         $rentals = $manager->getRepository(Rentals::class)->findAll();
 
-        for ($i = 0; $i < 40; $i++) {
-            $comment = new Comments();
-            $comment->setUser($faker->randomElement($users));
-            $comment->setContent($faker->paragraph);
-            $comment->setCreatedAt(new \DateTimeImmutable('now'));
-            $comment->setRating($faker->numberBetween(1, 5));
-            $comment->setIsActive($faker->boolean(90));
-            $comment->setRentals($faker->randomElement($rentals));
+        foreach ($rentals as $rental) {
+            $numUsersToComment = $faker->numberBetween(1, count($users));
+            $usersToComment = $faker->randomElements($users, $numUsersToComment, false);
 
-            $manager->persist($comment);
+            foreach ($usersToComment as $user) {
+                $comment = new Comments();
+                $comment->setUser($user);
+                $comment->setContent($faker->paragraph);
+                $comment->setCreatedAt(new \DateTimeImmutable('now'));
+                $comment->setRating($faker->numberBetween(1, 5));
+                $comment->setIsActive($faker->boolean(95));
+                $comment->setRentals($rental);
+
+                $manager->persist($comment);
+            }
         }
 
         $manager->flush();
     }
+
     public function getDependencies(): array
     {
         return [
             UsersFixtures::class,
+            RentalsFixtures::class,
         ];
     }
 }

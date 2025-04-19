@@ -2,3 +2,5 @@ import 'bootstrap';
 import './bootstrap.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/app.css';
+
+console.log('js connecté')

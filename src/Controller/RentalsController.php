@@ -25,7 +25,7 @@ final class RentalsController extends AbstractController
         $rental = $rentalsRepository->find($id);
         $reservedDates = [];
 
-        foreach ($rental->getReservations() as $reservation){
+        foreach ($rental->getUpcomingReservations() as $reservation){
             $reservedDates[] = [
                 'title' => 'Réservé',
                 'start' => $reservation->getDateStart()->format('Y-m-d'),
@@ -33,11 +33,10 @@ final class RentalsController extends AbstractController
             ];
         }
 
-        dump($reservedDates);
-
         return $this->render('rental/index.html.twig', [
             'rental' => $rental,
             'reservedDates' => $reservedDates,
+            'comments' => $rental->getComments(),
         ]);
     }
 }

@@ -394,3 +394,23 @@ h2{
 .bg-myGreen{
     background-color: var(--myLightGreen);
 }
+
+#dates input{
+    background-color: var(--myDarkGreen);
+    font-weight: bold;
+    border: none;
+    color: var(--myWhite);
+}
+
+.commentUser{
+    background: var(--myWhite);
+    -webkit-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.5);
+    -moz-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.5);
+    box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.5);
+}
+
+.imageUser{
+    background: var(--myLightGrey);
+    height: 75px;
+    width: 75px;
+}

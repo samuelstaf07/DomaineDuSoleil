@@ -7,7 +7,11 @@
     <script>
         $(document).ready(function() {
             $('.popup-gallery').magnificPopup({
-                delegate: 'a:not(.not-image):not(.fc-daygrid-day-number):not(.fc-col-header-cell-cushion):not(.fc-daygrid-event)',
+                delegate: 'a:not(.not-image)' +
+                            ':not(.fc-daygrid-day-number)' +
+                            ':not(.fc-col-header-cell-cushion)' +
+                            ':not(.fc-daygrid-event)' +
+                            ':not(.btn-yellow)',
                 type: 'image',
                 gallery: {
                     enabled: true,
@@ -15,82 +19,37 @@
                 }
             });
         });
-        /*document.addEventListener('turbo:load', function () {
-            let calendarEl = document.getElementById('calendar');
 
-            function normalizeDate(dateStrOrObj) {
-                const date = new Date(dateStrOrObj);
-                date.setHours(0, 0, 0, 0);
-                return date;
-            }
+        const reservedDates = {{ reservedDates|json_encode|raw }};
 
-            const rawEvents = {{ reservedDates|json_encode|raw }};
-            const adjustedEvents = rawEvents.map(event => {
-                const endDate = new Date(event.end);
-                endDate.setDate(endDate.getDate() + 1);
-                return {
-                    ...event,
-                    end: endDate.toISOString().split('T')[0]
-                };
+        function getAllDates(events) {
+            const allDates = new Set();
+            events.forEach(event => {
+                const start = new Date(event.start);
+                const end = new Date(event.end);
+                let currentDate = new Date(start);
+                while (currentDate <= end) {
+                    allDates.add(new Date(currentDate));
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                allDates.add(new Date(end));
             });
+            return Array.from(allDates);
+        }
 
-            let calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                locale: 'fr',
-                selectable: true,
-
-                select: function (info) {
-                    const selectedStart = normalizeDate(info.startStr);
-                    const selectedEnd = normalizeDate(info.endStr);
-
-                    const isOverlapping = calendar.getEvents().some(event => {
-                        if (event.title !== "Réservé") return false;
-
-                        const eventStart = normalizeDate(event.start);
-                        eventStart.setDate(eventStart.getDate() + 1);
-                        const eventEnd = normalizeDate(event.end);
-                        eventEnd.setDate(eventEnd.getDate() - 1);
-
-                        return selectedStart <= eventEnd && eventStart <= selectedEnd;
-                    });
-
-                    const realEnd = new Date(info.endStr);
-                    realEnd.setDate(realEnd.getDate() - 1);
-                    const endStr = realEnd.toISOString().split('T')[0];
-
-                    console.log(`${info.startStr} au ${endStr}`);
-
-                    if (isOverlapping) {
-                        alert("Cette plage contient déjà une réservation !");
-                        calendar.unselect();
-                        return;
-                    }
-
-                    changeMessage(info.startStr, endStr);
-                },
-
-                events: adjustedEvents
-            });
-
-            calendar.render();
-        });
-
-        function changeMessage(dateStart, dateEnd){
-            let inputDateStart = document.getElementById('dateStart');
-            let inputDateEnd = document.getElementById('dateEnd');
-
-            inputDateStart.value = dateStart;
-            inputDateEnd.value = dateEnd;
-        }*/
+        const allDates = getAllDates(reservedDates);
+        console.log(allDates);
 
         document.addEventListener('turbo:load', ()=>{
-            const picker = MCDatepicker.create({
+            const today = new Date();
+
+            const dateStartPicker = MCDatepicker.create({
                 el: '#dateStart',
                 dateFormat: 'dd/mm/yyyy',
                 autoClose: true,
                 closeOnBlur: true,
-                selectedDate: new Date(),
-                minDate: new Date(),
+                selectedDate: today,
+                minDate: today,
                 customCancelBTN: 'ANNULER',
                 customClearBTN: 'Réinitialiser',
                 customOkBTN: 'CONFIRMER',
@@ -98,18 +57,18 @@
                 customWeekDays: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
                 theme: {
                     theme_color: '#006633',
-                }
+                },
+                disableDates: allDates
             });
-        })
 
-        document.addEventListener('turbo:load', ()=>{
-            const picker = MCDatepicker.create({
+
+            const dateEndPicker = MCDatepicker.create({
                 el: '#dateEnd',
                 dateFormat: 'dd/mm/yyyy',
                 autoClose: true,
                 closeOnBlur: true,
-                selectedDate: new Date(),
-                minDate: new Date(),
+                selectedDate: today,
+                minDate: dateStartPicker.getDate() instanceof Date ? dateStartPicker.getDate() : today,
                 customCancelBTN: 'ANNULER',
                 customClearBTN: 'Réinitialiser',
                 customOkBTN: 'CONFIRMER',
@@ -117,21 +76,58 @@
                 customWeekDays: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
                 theme: {
                     theme_color: '#006633',
-                }
+                },
+                disableDates: allDates
             });
+
+            dateStartPicker.onClose(()=>{
+                isGoodDates();
+            })
+
+            dateEndPicker.onClose(()=>{
+                isGoodDates();
+            })
+
+            function isGoodDates(){
+                if(dateStartPicker == null ||
+                    dateEndPicker == null){
+                    notGood();
+                }
+
+                if(dateStartPicker.getFullDate() > dateEndPicker.getFullDate()){
+                    notGood();
+                }else{
+                    good();
+                }
+
+            }
+
+            function notGood(){
+                let message = document.querySelector('#dates .alert');
+
+                if(message.classList.contains('d-none')){
+                    message.classList.remove('d-none');
+                }
+            }
+
+            function good(){
+                let message = document.querySelector('#dates .alert');
+
+                message.classList.add('d-none');
+            }
         })
     </script>
 
-    <div class="contentMargin popup-gallery d-flex flex-column align-items-center gap-3">
+    <div class="contentMargin popup-gallery d-flex flex-column align-items-center gap-5">
         <h3 class="myTitle fs-2">{{ rental.title|capitalize }}</h3>
 
         <header class="w-75 d-flex gap-3">
             <a class="col-md-6" href="{{ asset('styles/img/' ~ rental.getHomePageImage().getSrc()) }}" title="{{ rental.getHomePageImage().getAlt() }}">
-                <img class="img-fluid rounded-3 w-100" src="{{ asset('styles/img/' ~ rental.getHomePageImage().getSrc()) }}" alt="{{ rental.getHomePageImage().getAlt() }}">
+                <img class="img-fluid rounded-4 w-100 h-100" src="{{ asset('styles/img/' ~ rental.getHomePageImage().getSrc()) }}" alt="{{ rental.getHomePageImage().getAlt() }}">
             </a>
             <div class="col-md-6">
-                <p class="bg-lightGreen rounded-3 p-2">{{ rental.content|capitalize }}</p>
-                <div class="bg-LightGrey rounded-3 p-2">
+                <p class="bg-lightGreen rounded-4 p-2">{{ rental.content|capitalize }}</p>
+                <div class="bg-LightGrey rounded-4 p-2">
                     <div class="d-flex gap-1 justify-content-between align-items-start">
                         <p class="fs-4">Conseillé pour <span class="color-lightGreen">{{ rental.nbSimpleBed + (2 * rental.nbDoubleBed) }} personne{% if (rental.nbSimpleBed + (2 * rental.nbDoubleBed))>1 %}s{% endif %} <span class="fw-bold">maximum</span></span></p>
                         {% if rental.isOnPromotion %}
@@ -258,7 +254,7 @@
             </div>
         </header>
 
-        <section id="galleryRental" class="d-flex flex-column align-items-center">
+        <section id="galleryRental" class="d-flex flex-column align-items-center gap-3">
             {% set images = rental.getImages() %}
             {% if images|length > 1 %}
             <h4>Gallerie photo du logement</h4>
@@ -266,7 +262,7 @@
                 {% for imageRental in images %}
                     {% if not imageRental.isHomePage %}
                         <a href="{{ asset('styles/img/' ~ imageRental.getSrc()) }}" title="{{ imageRental.getAlt() }}">
-                            <img src="{{ asset('styles/img/' ~ imageRental.getSrc()) }}" alt="{{ imageRental.getAlt() }}" class="img-fluid rounded-3 smallImage">
+                            <img src="{{ asset('styles/img/' ~ imageRental.getSrc()) }}" alt="{{ imageRental.getAlt() }}" class="img-fluid rounded-4 smallImage">
                         </a>
                     {% endif %}
                 {% endfor %}
@@ -274,18 +270,67 @@
             {% endif %}
         </section>
 
-        <section id="dates" class="w-75 my-5">
-            <h3>Dates souhaitées :</h3>
-            <div class="d-flex gap-4 border p-4 rounded bg-myGreen">
-                <div class="w-50 d-flex flex-column gap-1">
-                    <label for="dateStart" class="mx-2 fw-bold">Date de début</label>
-                    <input type="text" id="dateStart" name="dateStart" placeholder="{{ "now"|date("d/m/Y") }}" class="form-control">
+        <section id="dates" class="w-75 d-flex flex-column justify-content-center align-items-center gap-2 mb-5">
+            <div class="w-75 d-flex flex-column  gap-3">
+                <h3 class="text-center">Les disponibilités</h3>
+                <p class="alert alert-danger d-none">Dates non valide</p>
+                <div class="d-flex gap-4 p-4 rounded-4 bg-myGreen">
+                    <div class="w-50 d-flex flex-column gap-1">
+                        <label for="dateStart" class="mx-2 fw-bold text-center">Date de début</label>
+                        <input type="text" id="dateStart" name="dateStart" value="{{ "now"|date("d/m/Y") }}" class="form-control text-center">
+                    </div>
+                    <div class="w-50 d-flex flex-column gap-1">
+                        <label for="dateEnd" class="mx-2 fw-bold text-center">Date de fin</label>
+                        <input type="text" id="dateEnd" name="dateEnd" value="{{ "now"|date("d/m/Y") }}" class="form-control text-center">
+                    </div>
                 </div>
+            </div>
+            <a class="w-75 btn-yellow text-center rounded-4" href="#">Ajouter votre réservation au panier</a>
+        </section>
 
-                <div class="w-50 d-flex flex-column gap-1">
-                    <label for="dateEnd" class="mx-2 fw-bold">Date de fin</label>
-                    <input type="text" id="dateEnd" name="dateEnd" placeholder="{{ "now"|date("d/m/Y") }}" class="form-control">
-                </div>
+        <section id="comments" class="w-50 mb-4">
+            <h3 class="text-center">Avis et commentaires</h3>
+            <div class="d-flex flex-column gap-2">
+                {% for comment in comments %}
+                    <div class="commentUser p-4 rounded-4 d-flex gap-4">
+                        <div class="imageUser d-flex justify-content-center align-items-center rounded-circle">
+                            {% if comment.user.image.src == "null" %}
+                                <svg class="rounded-circle" xmlns="http://www.w3.org/2000/svg" width="75" height="75" viewBox="0 0 24 24"><path fill="#F8F9FA" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"/></svg>
+                            {% else %}
+                                <img class="rounded-circle" src="{{ asset('upload/' ~ comment.user.image.src) }}" alt="{{ comment.user.image.alt }}">
+                            {% endif %}
+                        </div>
+                        <div class="d-flex flex-column w-100">
+                            <div class="commentTitle d-flex mx-2 gap-2 w-100 border-bottom">
+                                <p class="w-25 h5 fw-bold">{{ comment.user.lastName }} {{ comment.user.firstName }}</p>
+                                <div class="w-50 d-flex gap-2">
+                                    <p>{{ comment.rating }}/5</p>
+                                    <div>
+                                        {% set emptyStars = 5 - comment.rating %}
+
+                                        {% if fullStars > 0 %}
+                                            {% for i in 1..comment.rating %}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none"><path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"/><path fill="#F7D844" d="M10.92 2.868a1.25 1.25 0 0 1 2.16 0l2.795 4.798l5.428 1.176a1.25 1.25 0 0 1 .667 2.054l-3.7 4.141l.56 5.525a1.25 1.25 0 0 1-1.748 1.27L12 19.592l-5.082 2.24a1.25 1.25 0 0 1-1.748-1.27l.56-5.525l-3.7-4.14a1.25 1.25 0 0 1 .667-2.055l5.428-1.176z"/></g></svg>
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        {% if emptyStars > 0 %}
+                                            {% for i in 1..emptyStars %}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="#F7D844" d="M7.194 2.102a.9.9 0 0 1 1.614 0l1.521 3.082l3.401.494a.9.9 0 0 1 .5 1.535l-2.462 2.4l.581 3.387a.9.9 0 0 1-1.306.948L8.001 12.35l-3.042 1.6A.9.9 0 0 1 3.653 13l.58-3.387l-2.46-2.399a.9.9 0 0 1 .499-1.535l3.4-.494zM8 2.726L6.546 5.673a.9.9 0 0 1-.677.493l-3.253.472L4.97 8.933a.9.9 0 0 1 .258.796l-.555 3.24l2.91-1.53a.9.9 0 0 1 .837 0l2.91 1.53l-.556-3.24a.9.9 0 0 1 .258-.796l2.354-2.295l-3.253-.472a.9.9 0 0 1-.677-.493z"/></svg>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <p class="w-25">
+                                    {{ comment.createdAt|date('d/m/Y') }}
+                                </p>
+                            </div>
+                            <div class="commentContent mx-2 mt-2">
+                                <p>{{ comment.content }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </section>
     </div>

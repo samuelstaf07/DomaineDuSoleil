@@ -47,7 +47,7 @@ class UsersFixtures extends Fixture
             // Create and associate an image
             $image = new Images();
             $image->setAlt('blabla');
-            $image->setSrc($faker->imageUrl(640, 480, 'people', true)); // Example image path
+            $image->setSrc("null"); // Example image path
             $manager->persist($image);
             $image->setIsHomePage(1);
 
