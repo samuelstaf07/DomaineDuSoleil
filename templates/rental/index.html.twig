@@ -4,13 +4,6 @@
 
 {% block body %}
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js"></script>
-
     <script>
         $(document).ready(function() {
             $('.popup-gallery').magnificPopup({
@@ -22,13 +15,111 @@
                 }
             });
         });
-        document.addEventListener('DOMContentLoaded', function() {
+        /*document.addEventListener('turbo:load', function () {
+            let calendarEl = document.getElementById('calendar');
 
-            flatpickr("#datepicker", {
-                dateFormat: "Y-m-d",
-                disable: reservedDates,
+            function normalizeDate(dateStrOrObj) {
+                const date = new Date(dateStrOrObj);
+                date.setHours(0, 0, 0, 0);
+                return date;
+            }
+
+            const rawEvents = {{ reservedDates|json_encode|raw }};
+            const adjustedEvents = rawEvents.map(event => {
+                const endDate = new Date(event.end);
+                endDate.setDate(endDate.getDate() + 1);
+                return {
+                    ...event,
+                    end: endDate.toISOString().split('T')[0]
+                };
             });
+
+            let calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'fr',
+                selectable: true,
+
+                select: function (info) {
+                    const selectedStart = normalizeDate(info.startStr);
+                    const selectedEnd = normalizeDate(info.endStr);
+
+                    const isOverlapping = calendar.getEvents().some(event => {
+                        if (event.title !== "Réservé") return false;
+
+                        const eventStart = normalizeDate(event.start);
+                        eventStart.setDate(eventStart.getDate() + 1);
+                        const eventEnd = normalizeDate(event.end);
+                        eventEnd.setDate(eventEnd.getDate() - 1);
+
+                        return selectedStart <= eventEnd && eventStart <= selectedEnd;
+                    });
+
+                    const realEnd = new Date(info.endStr);
+                    realEnd.setDate(realEnd.getDate() - 1);
+                    const endStr = realEnd.toISOString().split('T')[0];
+
+                    console.log(`${info.startStr} au ${endStr}`);
+
+                    if (isOverlapping) {
+                        alert("Cette plage contient déjà une réservation !");
+                        calendar.unselect();
+                        return;
+                    }
+
+                    changeMessage(info.startStr, endStr);
+                },
+
+                events: adjustedEvents
+            });
+
+            calendar.render();
         });
+
+        function changeMessage(dateStart, dateEnd){
+            let inputDateStart = document.getElementById('dateStart');
+            let inputDateEnd = document.getElementById('dateEnd');
+
+            inputDateStart.value = dateStart;
+            inputDateEnd.value = dateEnd;
+        }*/
+
+        document.addEventListener('turbo:load', ()=>{
+            const picker = MCDatepicker.create({
+                el: '#dateStart',
+                dateFormat: 'dd/mm/yyyy',
+                autoClose: true,
+                closeOnBlur: true,
+                selectedDate: new Date(),
+                minDate: new Date(),
+                customCancelBTN: 'ANNULER',
+                customClearBTN: 'Réinitialiser',
+                customOkBTN: 'CONFIRMER',
+                customMonths: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                customWeekDays: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+                theme: {
+                    theme_color: '#006633',
+                }
+            });
+        })
+
+        document.addEventListener('turbo:load', ()=>{
+            const picker = MCDatepicker.create({
+                el: '#dateEnd',
+                dateFormat: 'dd/mm/yyyy',
+                autoClose: true,
+                closeOnBlur: true,
+                selectedDate: new Date(),
+                minDate: new Date(),
+                customCancelBTN: 'ANNULER',
+                customClearBTN: 'Réinitialiser',
+                customOkBTN: 'CONFIRMER',
+                customMonths: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                customWeekDays: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+                theme: {
+                    theme_color: '#006633',
+                }
+            });
+        })
     </script>
 
     <div class="contentMargin popup-gallery d-flex flex-column align-items-center gap-3">
@@ -184,7 +275,18 @@
         </section>
 
         <section id="dates" class="w-75 my-5">
-            <input type="text" id="datepicker" placeholder="Select Date">
+            <h3>Dates souhaitées :</h3>
+            <div class="d-flex gap-4 border p-4 rounded bg-myGreen">
+                <div class="w-50 d-flex flex-column gap-1">
+                    <label for="dateStart" class="mx-2 fw-bold">Date de début</label>
+                    <input type="text" id="dateStart" name="dateStart" placeholder="{{ "now"|date("d/m/Y") }}" class="form-control">
+                </div>
+
+                <div class="w-50 d-flex flex-column gap-1">
+                    <label for="dateEnd" class="mx-2 fw-bold">Date de fin</label>
+                    <input type="text" id="dateEnd" name="dateEnd" placeholder="{{ "now"|date("d/m/Y") }}" class="form-control">
+                </div>
+            </div>
         </section>
     </div>
 

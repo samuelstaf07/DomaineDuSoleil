@@ -385,28 +385,12 @@ h2{
     display: inline-block;
 }
 
-.fc-button-primary{
-    background-color: var(--myDarkGreen) !important;
-    border: var(--myDarkGreen) !important;
-}
-
-.fc-col-header-cell-cushion{
-    color: var(--myDarkGreen);
-    text-decoration: none;
-}
-
-.fc-daygrid-day-number{
-    color: var(--myBlack);
-    text-decoration: none;
-}
-
-.fc-event-title-container, .fc-event-main-frame, .fc-event-main-frame, .fc-event-main, .fc-daygrid-event, .fc-daygrid-block-event, .fc-h-event, .fc-event, .fc-event-start, .fc-event-future{
-    background-color: var(--myDarkGreen);
-    border: var(--myDarkGreen) !important;
-}
-
 .titleDate {
     font-family: "DM Sans";
     font-weight: bold;
     color: var(--myLightGrey);
+}
+
+.bg-myGreen{
+    background-color: var(--myLightGreen);
 }

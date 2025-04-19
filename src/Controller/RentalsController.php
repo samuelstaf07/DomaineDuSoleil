@@ -25,17 +25,19 @@ final class RentalsController extends AbstractController
         $rental = $rentalsRepository->find($id);
         $reservedDates = [];
 
-        foreach ($rental->getReservations() as $reservation) {
-            $startDate = $reservation->getDateStart();
-            $endDate = $reservation->getDateEnd();
-
-            
-
+        foreach ($rental->getReservations() as $reservation){
+            $reservedDates[] = [
+                'title' => 'Réservé',
+                'start' => $reservation->getDateStart()->format('Y-m-d'),
+                'end' => $reservation->getDateEnd()->format('Y-m-d'),
+            ];
         }
+
+        dump($reservedDates);
 
         return $this->render('rental/index.html.twig', [
             'rental' => $rental,
-            '$reservedDates' => $reservedDates,
+            'reservedDates' => $reservedDates,
         ]);
     }
 }
