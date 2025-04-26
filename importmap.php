@@ -38,4 +38,5 @@ return [
     'popper' => [
         'version' => '1.0.1',
     ],
+
 ];

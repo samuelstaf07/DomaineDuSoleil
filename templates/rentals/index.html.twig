@@ -2,9 +2,13 @@
 
 {% block title %}Tous les logements{% endblock %}
 
-{% block body %}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('libs/jquery/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('filtre.js') }}"></script>
+{% endblock %}
+
+{% block body %}
 
     <div class="contentMargin d-flex align-items-center flex-column mb-3">
         <h3>Tous les logements</h3>
