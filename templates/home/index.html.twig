@@ -143,10 +143,10 @@
             <div class="row justify-content-center">
                 {% for event in events|slice(0, 3) %}
                     <div class="col-sm-4 mb-4 px-3">
-                        <div class="card event-card h-100 border-0">
+                        <div class="card event-card h-100 border-0 rounded-4">
                             <div class="row g-0 h-100">
                                 <div class="col-md-5 h-100">
-                                    <img src="{{ asset('img/imageAccueil.jpg') }}" class="img-fluid rounded-start h-100 w-100 object-fit-cover" alt="Tir à l'arc">
+                                    <img src="{{ asset('img/imageAccueil.jpg') }}" class="img-fluid rounded-start-4 h-100 w-100 object-fit-cover" alt="Tir à l'arc">
                                 </div>
                                 <div class="col-md-7 d-flex flex-column">
                                     <div class="card-body flex-grow-1">
@@ -189,12 +189,12 @@
         </div>
     </section>
 
-    <section id="news" class="border-top py-5" style="background: linear-gradient(to right, #006633, #95C11F);">
+    <section id="news" class="py-5" style="background: linear-gradient(to right, #006633, #95C11F);">
         <h2 class="text-light text-center">Notre actualité</h2>
         <div class="mt-5 d-flex justify-content-center">
-            <ul class="list-group w-50">
+            <ul class="list-group w-50 rounded-4">
                 {% for post in posts %}
-                    <li class="list-group-item d-flex align-items-center">
+                    <li class="list-group-item d-flex align-items-center px-2">
                         <div class="d-flex justify-content-between align-items-center w-100">
                             <div class="d-flex align-items-center">
                                 <small class="text-muted me-3 font-weight-bold">{{ post.createdAt|date('d/m/Y') }}</small>

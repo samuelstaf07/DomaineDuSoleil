@@ -10,8 +10,8 @@
 
 {% block body %}
 
-    <div class="contentMargin d-flex align-items-center flex-column mb-3">
-        <h3>Tous les logements</h3>
+    <div class="contentMargin d-flex align-items-center flex-column pb-3">
+        <h2 class="text-center">Tous les logements</h2>
         <div class="d-flex w-75 justify-content-center">
             <div class="d-flex flex-column w-75">
                 <button class="btn-green m-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltre" aria-expanded="false" aria-controls="collapseFiltre">
@@ -108,7 +108,7 @@
                      data-heating="{{ item.hasHeating ? 'true' : 'false' }}"
                      data-pets="{{ item.petsAccepted ? 'true' : 'false' }}"
                      data-isonpromotion="{{ item.isOnPromotion ? 'true' : 'false' }}">
-                <div class="rentalDiscount rounded-4">
+                <div class="rentalDiscount rounded-4 bg-white">
                         <div class="imageTop rounded-top-4">
                             <div class="rate d-flex gap-2 align-items-center">
                                 {% set averageData = item.getAverageRateAndCommentCount() %}

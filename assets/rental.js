@@ -20,18 +20,23 @@ $(document).ready(function() {
             const start = new Date(event.start);
             const end = new Date(event.end);
             let currentDate = new Date(start);
+
             while (currentDate <= end) {
                 allDates.add(new Date(currentDate));
                 currentDate.setDate(currentDate.getDate() + 1);
             }
-            allDates.add(new Date(end));
         });
         return Array.from(allDates);
     }
 
     const allDates = getAllDates(reservedDates);
+    console.log(reservedDates, allDates);
 
     const today = new Date();
+    let newReservedDates = [{
+        'start' : null,
+        'end' : null,
+    }];
 
     const dateStartPicker = MCDatepicker.create({
         el: '#dateStart',
@@ -78,31 +83,69 @@ $(document).ready(function() {
         isGoodDates();
     })
 
-    function isGoodDates(){
-        if(dateStartPicker == null ||
-            dateEndPicker == null){
-            notGood();
-        }
+    function checkBetweenDates(allDatesSelected) {
+        for (let i = 0; i < allDatesSelected.length; i++) {
+            let firstDate = allDatesSelected[i];
+            let day1 = String(firstDate.getDate()).padStart(2, '0');
+            let month1 = String(firstDate.getMonth() + 1).padStart(2, '0');
+            let year1 = firstDate.getFullYear();
+            let formattedFirst = `${day1}-${month1}-${year1}`;
 
-        if(dateStartPicker.getFullDate() > dateEndPicker.getFullDate()){
+            for (let j = 0; j < allDates.length; j++) {
+                let secondDate = allDates[j];
+                let day2 = String(secondDate.getDate()).padStart(2, '0');
+                let month2 = String(secondDate.getMonth() + 1).padStart(2, '0');
+                let year2 = secondDate.getFullYear();
+                let formattedSecond = `${day2}-${month2}-${year2}`;
+
+                if (formattedFirst === formattedSecond) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    function isGoodDates(){
+
+        newReservedDates[0].start = dateStartPicker.getFullDate();
+        newReservedDates[0].end = dateEndPicker.getFullDate();
+
+        let allDatesSelected = getAllDates(newReservedDates);
+
+        if((dateStartPicker == null || dateEndPicker == null) ||
+            (dateStartPicker.getFullDate() > dateEndPicker.getFullDate()) ||
+            checkBetweenDates(allDatesSelected)){
             notGood();
         }else{
             good();
         }
-
     }
 
     function notGood(){
         let message = document.querySelector('#dates .alert');
+        let addToCart = document.querySelector('.addToCart');
 
         if(message.classList.contains('d-none')){
             message.classList.remove('d-none');
+        }
+
+        if(!addToCart.classList.contains('disabled')){
+            addToCart.classList.add('disabled');
         }
     }
 
     function good(){
         let message = document.querySelector('#dates .alert');
+        let addToCart = document.querySelector('.addToCart');
 
-        message.classList.add('d-none');
+        if(!message.classList.contains('d-none')){
+            message.classList.add('d-none');
+        }
+
+        if(addToCart.classList.contains('disabled')){
+            addToCart.classList.remove('disabled');
+        }
     }
 })

@@ -50,4 +50,14 @@ class EventsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findActiveEvents(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.is_active = :active')
+            ->setParameter('active', true)
+            ->orderBy('e.date', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

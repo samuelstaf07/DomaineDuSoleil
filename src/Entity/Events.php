@@ -188,4 +188,10 @@ class Events
 
         return $this;
     }
+
+    public function isPast(): bool
+    {
+        $now = new \DateTimeImmutable();
+        return $this->date < $now;
+    }
 }
