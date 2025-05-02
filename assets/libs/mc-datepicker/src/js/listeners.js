@@ -369,7 +369,7 @@ export const applyListeners = (calendarNodes) => {
 		);
 	});
 
-	// add click event that dispatch a custom DATE_PICK event, to every calendar cell
+	// add click events that dispatch a custom DATE_PICK events, to every calendar cell
 	dateCells.forEach((cell) => {
 		cell.addEventListener('click', (e) => e.detail === 1 && dispatchDatePick(e.target));
 		cell.addEventListener('dblclick', (e) => e.detail === 2 && dispatchDatePick(e.target, true));

@@ -33,7 +33,7 @@ FullCalendar.GoogleCalendar = (function (exports, core, internal) {
             }
             else {
                 let url = buildUrl(meta);
-                // TODO: make DRY with json-feed-event-source
+                // TODO: make DRY with json-feed-events-source
                 let { extraParams } = meta;
                 let extraParamsObj = typeof extraParams === 'function' ? extraParams() : extraParams;
                 let requestParams = buildRequestParams(arg.range, apiKey, extraParamsObj, dateEnv);
@@ -98,7 +98,7 @@ FullCalendar.GoogleCalendar = (function (exports, core, internal) {
     }
     function gcalItemToRawEventDef(item, gcalTimezone) {
         let url = item.htmlLink || null;
-        // make the URLs for each event show times in the correct timezone
+        // make the URLs for each events show times in the correct timezone
         if (url && gcalTimezone) {
             url = injectQsComponent(url, 'ctz=' + gcalTimezone);
         }

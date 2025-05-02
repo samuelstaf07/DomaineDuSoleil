@@ -20,7 +20,7 @@ $(document).ready(function() {
     let nbLogement = 9;
     let nbLocationFiltre = 0;
 
-    // Click event for filters
+    // Click events for filters
     $('.filtre').click(function() {
         filtres[this.dataset.filtre] = !filtres[this.dataset.filtre];
 
@@ -117,7 +117,6 @@ $(document).ready(function() {
         let i = 0;
         nbLocationFiltre = 0;
         let logements = $('.logement').get();
-        console.log(filtres);
 
         if (filtres.triPar) {
             logements.sort(function(a, b) {

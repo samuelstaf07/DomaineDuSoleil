@@ -494,7 +494,7 @@ MagnificPopup.prototype = {
 		var type = item.type;
 
 		_mfpTrigger('BeforeChange', [mfp.currItem ? mfp.currItem.type : '', type]);
-		// BeforeChange event works like so:
+		// BeforeChange events works like so:
 		// _mfpOn('BeforeChange', function(e, prevType, newType) { });
 
 		mfp.currItem = item;
@@ -1320,7 +1320,7 @@ $.magnificPopup.registerModule('image', {
 				item.img = $(img).on('load.mfploader', onLoadComplete).on('error.mfploader', onLoadError);
 				img.src = item.src;
 
-				// without clone() "error" event is not firing when IMG is replaced by new IMG
+				// without clone() "error" events is not firing when IMG is replaced by new IMG
 				// TODO: find a way to avoid such cloning
 				if(el.is('img')) {
 					item.img = item.img.clone();

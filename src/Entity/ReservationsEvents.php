@@ -16,15 +16,15 @@ class ReservationsEvents
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?bills $bill_id = null;
+    private ?bills $bill = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?users $user_id = null;
+    private ?users $user = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?events $event_id = null;
+    private ?events $event = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $date_reservation = null;
@@ -34,6 +34,9 @@ class ReservationsEvents
 
     #[ORM\Column]
     private ?bool $is_active = null;
+
+    #[ORM\Column]
+    private ?int $nb_places = null;
 
     public function getId(): ?int
     {
@@ -49,36 +52,36 @@ class ReservationsEvents
 
     public function getBillId(): ?bills
     {
-        return $this->bill_id;
+        return $this->bill;
     }
 
-    public function setBillId(bills $bill_id): static
+    public function setBillId(bills $bill): static
     {
-        $this->bill_id = $bill_id;
+        $this->bill = $bill;
 
         return $this;
     }
 
     public function getUserId(): ?users
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?users $user_id): static
+    public function setUserId(?users $user): static
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }
 
     public function getEventId(): ?events
     {
-        return $this->event_id;
+        return $this->event;
     }
 
-    public function setEventId(?events $event_id): static
+    public function setEventId(?events $event): static
     {
-        $this->event_id = $event_id;
+        $this->event = $event;
 
         return $this;
     }
@@ -115,6 +118,18 @@ class ReservationsEvents
     public function setIsActive(bool $is_active): static
     {
         $this->is_active = $is_active;
+
+        return $this;
+    }
+
+    public function getNbPlaces(): ?int
+    {
+        return $this->nb_places;
+    }
+
+    public function setNbPlaces(int $nb_places): static
+    {
+        $this->nb_places = $nb_places;
 
         return $this;
     }

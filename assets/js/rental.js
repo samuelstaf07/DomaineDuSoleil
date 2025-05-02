@@ -1,9 +1,12 @@
 $(document).ready(function() {
+    document.getElementById('reservations_rentals_date_start').setAttribute('type', 'text');
+    document.getElementById('reservations_rentals_date_end').setAttribute('type', 'text');
+
     $('.popup-gallery').magnificPopup({
         delegate: 'a:not(.not-image)' +
             ':not(.fc-daygrid-day-number)' +
             ':not(.fc-col-header-cell-cushion)' +
-            ':not(.fc-daygrid-event)' +
+            ':not(.fc-daygrid-events)' +
             ':not(.btn-yellow)',
         type: 'image',
         gallery: {
@@ -11,6 +14,24 @@ $(document).ready(function() {
             tCounter: '%curr% sur %total%'
         }
     });
+
+    let visibleComments = 0;
+    const commentItems = $('.commentUser');
+    const afficherPlusButton = $('.voir-plus');
+
+    function addVisibleComment() {
+        visibleComments += 5;
+        const commentsToDisplay = commentItems.slice(0, visibleComments);
+        commentsToDisplay.removeClass('d-none').addClass('d-flex');
+
+        if (visibleComments >= commentItems.length) {
+            afficherPlusButton.addClass('d-none');
+        }
+    }
+
+    addVisibleComment();
+
+    afficherPlusButton.on('click', addVisibleComment);
 
     const reservedDates = window.reservedDates;
 
@@ -30,7 +51,6 @@ $(document).ready(function() {
     }
 
     const allDates = getAllDates(reservedDates);
-    console.log(reservedDates, allDates);
 
     const today = new Date();
     let newReservedDates = [{
@@ -39,8 +59,8 @@ $(document).ready(function() {
     }];
 
     const dateStartPicker = MCDatepicker.create({
-        el: '#dateStart',
-        dateFormat: 'dd/mm/yyyy',
+        el: '#reservations_rentals_date_start',
+        dateFormat: 'yyyy-mm-dd',
         autoClose: true,
         closeOnBlur: true,
         selectedDate: today,
@@ -56,10 +76,9 @@ $(document).ready(function() {
         disableDates: allDates
     });
 
-
     const dateEndPicker = MCDatepicker.create({
-        el: '#dateEnd',
-        dateFormat: 'dd/mm/yyyy',
+        el: '#reservations_rentals_date_end',
+        dateFormat: 'yyyy-mm-dd',
         autoClose: true,
         closeOnBlur: true,
         selectedDate: today,
@@ -148,4 +167,6 @@ $(document).ready(function() {
             addToCart.classList.remove('disabled');
         }
     }
+
+
 })

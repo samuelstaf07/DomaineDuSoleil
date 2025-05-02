@@ -16,7 +16,7 @@ class ReservationsRentals
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Bills $bill_id = null;
+    private ?Bills $bill = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -61,12 +61,12 @@ class ReservationsRentals
 
     public function getBillId(): ?Bills
     {
-        return $this->bill_id;
+        return $this->bill;
     }
 
-    public function setBillId(Bills $bill_id): static
+    public function setBillId(Bills $bill): static
     {
-        $this->bill_id = $bill_id;
+        $this->bill = $bill;
 
         return $this;
     }
@@ -76,9 +76,9 @@ class ReservationsRentals
         return $this->user;
     }
 
-    public function setUser(?users $user_id): static
+    public function setUser(?users $user): static
     {
-        $this->user = $user_id;
+        $this->user = $user;
 
         return $this;
     }

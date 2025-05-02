@@ -148,7 +148,7 @@ FullCalendar.DayGrid = (function (exports, core, internal$1, preact) {
     class TableBlockEvent extends internal$1.BaseComponent {
         render() {
             let { props } = this;
-            return (preact.createElement(internal$1.StandardEvent, Object.assign({}, props, { elClasses: ['fc-daygrid-event', 'fc-daygrid-block-event', 'fc-h-event'], defaultTimeFormat: DEFAULT_TABLE_EVENT_TIME_FORMAT, defaultDisplayEventEnd: props.defaultDisplayEventEnd, disableResizing: !props.seg.eventRange.def.allDay })));
+            return (preact.createElement(internal$1.StandardEvent, Object.assign({}, props, { elClasses: ['fc-daygrid-events', 'fc-daygrid-block-events', 'fc-h-events'], defaultTimeFormat: DEFAULT_TABLE_EVENT_TIME_FORMAT, defaultDisplayEventEnd: props.defaultDisplayEventEnd, disableResizing: !props.seg.eventRange.def.allDay })));
         }
     }
 
@@ -159,14 +159,14 @@ FullCalendar.DayGrid = (function (exports, core, internal$1, preact) {
             let { seg } = props;
             let timeFormat = options.eventTimeFormat || DEFAULT_TABLE_EVENT_TIME_FORMAT;
             let timeText = internal$1.buildSegTimeText(seg, timeFormat, context, true, props.defaultDisplayEventEnd);
-            return (preact.createElement(internal$1.EventContainer, Object.assign({}, props, { elTag: "a", elClasses: ['fc-daygrid-event', 'fc-daygrid-dot-event'], elAttrs: internal$1.getSegAnchorAttrs(props.seg, context), defaultGenerator: renderInnerContent, timeText: timeText, isResizing: false, isDateSelecting: false })));
+            return (preact.createElement(internal$1.EventContainer, Object.assign({}, props, { elTag: "a", elClasses: ['fc-daygrid-events', 'fc-daygrid-dot-events'], elAttrs: internal$1.getSegAnchorAttrs(props.seg, context), defaultGenerator: renderInnerContent, timeText: timeText, isResizing: false, isDateSelecting: false })));
         }
     }
     function renderInnerContent(renderProps) {
         return (preact.createElement(preact.Fragment, null,
-            preact.createElement("div", { className: "fc-daygrid-event-dot", style: { borderColor: renderProps.borderColor || renderProps.backgroundColor } }),
-            renderProps.timeText && (preact.createElement("div", { className: "fc-event-time" }, renderProps.timeText)),
-            preact.createElement("div", { className: "fc-event-title" }, renderProps.event.title || preact.createElement(preact.Fragment, null, "\u00A0"))));
+            preact.createElement("div", { className: "fc-daygrid-events-dot", style: { borderColor: renderProps.borderColor || renderProps.backgroundColor } }),
+            renderProps.timeText && (preact.createElement("div", { className: "fc-events-time" }, renderProps.timeText)),
+            preact.createElement("div", { className: "fc-events-title" }, renderProps.event.title || preact.createElement(preact.Fragment, null, "\u00A0"))));
     }
 
     class TableCellMoreLink extends internal$1.BaseComponent {
@@ -183,7 +183,7 @@ FullCalendar.DayGrid = (function (exports, core, internal$1, preact) {
                         {};
                     return (preact.createElement(preact.Fragment, null, allSegs.map((seg) => {
                         let instanceId = seg.eventRange.instance.instanceId;
-                        return (preact.createElement("div", { className: "fc-daygrid-event-harness", key: instanceId, style: {
+                        return (preact.createElement("div", { className: "fc-daygrid-events-harness", key: instanceId, style: {
                                 visibility: isForcedInvisible[instanceId] ? 'hidden' : '',
                             } }, hasListItemDisplay(seg) ? (preact.createElement(TableListItemEvent, Object.assign({ seg: seg, isDragging: false, isSelected: instanceId === props.eventSelection, defaultDisplayEventEnd: false }, internal$1.getSegMeta(seg, props.todayRange)))) : (preact.createElement(TableBlockEvent, Object.assign({ seg: seg, isDragging: false, isResizing: false, isDateSelecting: false, isSelected: instanceId === props.eventSelection, defaultDisplayEventEnd: false }, internal$1.getSegMeta(seg, props.todayRange))))));
                     })));
@@ -548,7 +548,7 @@ FullCalendar.DayGrid = (function (exports, core, internal$1, preact) {
                         preact.createElement(preact.Fragment, null,
                             this.renderFillSegs(highlightSegsByCol[col], 'highlight'),
                             this.renderFillSegs(businessHoursByCol[col], 'non-business'),
-                            this.renderFillSegs(bgEventSegsByCol[col], 'bg-event'))), minHeight: props.cellMinHeight }));
+                            this.renderFillSegs(bgEventSegsByCol[col], 'bg-events'))), minHeight: props.cellMinHeight }));
                 })));
         }
         componentDidMount() {
@@ -608,7 +608,7 @@ FullCalendar.DayGrid = (function (exports, core, internal$1, preact) {
                     known bug: events that are force to be list-item but span multiple days still take up space in later columns
                     todo: in print view, for multi-day events, don't display title within non-start/end segs
                     */
-                    nodes.push(preact.createElement("div", { className: 'fc-daygrid-event-harness' + (isAbsolute ? ' fc-daygrid-event-harness-abs' : ''), key: generateSegKey(seg), ref: isMirror ? null : this.segHarnessRefs.createRef(generateSegUid(seg)), style: {
+                    nodes.push(preact.createElement("div", { className: 'fc-daygrid-events-harness' + (isAbsolute ? ' fc-daygrid-events-harness-abs' : ''), key: generateSegKey(seg), ref: isMirror ? null : this.segHarnessRefs.createRef(generateSegUid(seg)), style: {
                             visibility: isVisible ? '' : 'hidden',
                             marginTop: isAbsolute ? '' : placement.marginTop,
                             top: isAbsolute ? placement.absoluteTop : '',
@@ -633,7 +633,7 @@ FullCalendar.DayGrid = (function (exports, core, internal$1, preact) {
                         left: 0,
                         right: framePositions.rights[seg.firstCol] - framePositions.rights[seg.lastCol],
                     };
-                    nodes.push(preact.createElement("div", { key: internal$1.buildEventRangeKey(seg.eventRange), className: "fc-daygrid-bg-harness", style: leftRightCss }, fillType === 'bg-event' ?
+                    nodes.push(preact.createElement("div", { key: internal$1.buildEventRangeKey(seg.eventRange), className: "fc-daygrid-bg-harness", style: leftRightCss }, fillType === 'bg-events' ?
                         preact.createElement(internal$1.BgEvent, Object.assign({ seg: seg }, internal$1.getSegMeta(seg, todayRange))) :
                         internal$1.renderFill(fillType)));
                 }
@@ -663,7 +663,7 @@ FullCalendar.DayGrid = (function (exports, core, internal$1, preact) {
                 const newSegHeights = this.querySegHeights();
                 const limitByContentHeight = props.dayMaxEvents === true || props.dayMaxEventRows === true;
                 this.safeSetState({
-                    // HACK to prevent oscillations of events being shown/hidden from max-event-rows
+                    // HACK to prevent oscillations of events being shown/hidden from max-events-rows
                     // Essentially, once you compute an element's height, never null-out.
                     // TODO: always display all events, as visibility:hidden?
                     segHeights: Object.assign(Object.assign({}, oldSegHeights), newSegHeights),
@@ -829,7 +829,7 @@ FullCalendar.DayGrid = (function (exports, core, internal$1, preact) {
             let { props } = this;
             let { dayMaxEventRows, dayMaxEvents, expandRows } = props;
             let limitViaBalanced = dayMaxEvents === true || dayMaxEventRows === true;
-            // if rows can't expand to fill fixed height, can't do balanced-height event limit
+            // if rows can't expand to fill fixed height, can't do balanced-height events limit
             // TODO: best place to normalize these options?
             if (limitViaBalanced && !expandRows) {
                 limitViaBalanced = false;
@@ -984,7 +984,7 @@ FullCalendar.DayGrid = (function (exports, core, internal$1, preact) {
         return { start, end };
     }
 
-    var css_248z = ":root{--fc-daygrid-event-dot-width:8px}.fc-daygrid-day-events:after,.fc-daygrid-day-events:before,.fc-daygrid-day-frame:after,.fc-daygrid-day-frame:before,.fc-daygrid-event-harness:after,.fc-daygrid-event-harness:before{clear:both;content:\"\";display:table}.fc .fc-daygrid-body{position:relative;z-index:1}.fc .fc-daygrid-day.fc-day-today{background-color:var(--fc-today-bg-color)}.fc .fc-daygrid-day-frame{min-height:100%;position:relative}.fc .fc-daygrid-day-top{display:flex;flex-direction:row-reverse}.fc .fc-day-other .fc-daygrid-day-top{opacity:.3}.fc .fc-daygrid-day-number{padding:4px;position:relative;z-index:4}.fc .fc-daygrid-month-start{font-size:1.1em;font-weight:700}.fc .fc-daygrid-day-events{margin-top:1px}.fc .fc-daygrid-body-balanced .fc-daygrid-day-events{left:0;position:absolute;right:0}.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events{min-height:2em;position:relative}.fc .fc-daygrid-body-natural .fc-daygrid-day-events{margin-bottom:1em}.fc .fc-daygrid-event-harness{position:relative}.fc .fc-daygrid-event-harness-abs{left:0;position:absolute;right:0;top:0}.fc .fc-daygrid-bg-harness{bottom:0;position:absolute;top:0}.fc .fc-daygrid-day-bg .fc-non-business{z-index:1}.fc .fc-daygrid-day-bg .fc-bg-event{z-index:2}.fc .fc-daygrid-day-bg .fc-highlight{z-index:3}.fc .fc-daygrid-event{margin-top:1px;z-index:6}.fc .fc-daygrid-event.fc-event-mirror{z-index:7}.fc .fc-daygrid-day-bottom{font-size:.85em;margin:0 2px}.fc .fc-daygrid-day-bottom:after,.fc .fc-daygrid-day-bottom:before{clear:both;content:\"\";display:table}.fc .fc-daygrid-more-link{border-radius:3px;cursor:pointer;line-height:1;margin-top:1px;max-width:100%;overflow:hidden;padding:2px;position:relative;white-space:nowrap;z-index:4}.fc .fc-daygrid-more-link:hover{background-color:rgba(0,0,0,.1)}.fc .fc-daygrid-week-number{background-color:var(--fc-neutral-bg-color);color:var(--fc-neutral-text-color);min-width:1.5em;padding:2px;position:absolute;text-align:center;top:0;z-index:5}.fc .fc-more-popover .fc-popover-body{min-width:220px;padding:10px}.fc-direction-ltr .fc-daygrid-event.fc-event-start,.fc-direction-rtl .fc-daygrid-event.fc-event-end{margin-left:2px}.fc-direction-ltr .fc-daygrid-event.fc-event-end,.fc-direction-rtl .fc-daygrid-event.fc-event-start{margin-right:2px}.fc-direction-ltr .fc-daygrid-more-link{float:left}.fc-direction-ltr .fc-daygrid-week-number{border-radius:0 0 3px 0;left:0}.fc-direction-rtl .fc-daygrid-more-link{float:right}.fc-direction-rtl .fc-daygrid-week-number{border-radius:0 0 0 3px;right:0}.fc-liquid-hack .fc-daygrid-day-frame{position:static}.fc-daygrid-event{border-radius:3px;font-size:var(--fc-small-font-size);position:relative;white-space:nowrap}.fc-daygrid-block-event .fc-event-time{font-weight:700}.fc-daygrid-block-event .fc-event-time,.fc-daygrid-block-event .fc-event-title{padding:1px}.fc-daygrid-dot-event{align-items:center;display:flex;padding:2px 0}.fc-daygrid-dot-event .fc-event-title{flex-grow:1;flex-shrink:1;font-weight:700;min-width:0;overflow:hidden}.fc-daygrid-dot-event.fc-event-mirror,.fc-daygrid-dot-event:hover{background:rgba(0,0,0,.1)}.fc-daygrid-dot-event.fc-event-selected:before{bottom:-10px;top:-10px}.fc-daygrid-event-dot{border:calc(var(--fc-daygrid-event-dot-width)/2) solid var(--fc-event-border-color);border-radius:calc(var(--fc-daygrid-event-dot-width)/2);box-sizing:content-box;height:0;margin:0 4px;width:0}.fc-direction-ltr .fc-daygrid-event .fc-event-time{margin-right:3px}.fc-direction-rtl .fc-daygrid-event .fc-event-time{margin-left:3px}";
+    var css_248z = ":root{--fc-daygrid-events-dot-width:8px}.fc-daygrid-day-events:after,.fc-daygrid-day-events:before,.fc-daygrid-day-frame:after,.fc-daygrid-day-frame:before,.fc-daygrid-events-harness:after,.fc-daygrid-events-harness:before{clear:both;content:\"\";display:table}.fc .fc-daygrid-body{position:relative;z-index:1}.fc .fc-daygrid-day.fc-day-today{background-color:var(--fc-today-bg-color)}.fc .fc-daygrid-day-frame{min-height:100%;position:relative}.fc .fc-daygrid-day-top{display:flex;flex-direction:row-reverse}.fc .fc-day-other .fc-daygrid-day-top{opacity:.3}.fc .fc-daygrid-day-number{padding:4px;position:relative;z-index:4}.fc .fc-daygrid-month-start{font-size:1.1em;font-weight:700}.fc .fc-daygrid-day-events{margin-top:1px}.fc .fc-daygrid-body-balanced .fc-daygrid-day-events{left:0;position:absolute;right:0}.fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events{min-height:2em;position:relative}.fc .fc-daygrid-body-natural .fc-daygrid-day-events{margin-bottom:1em}.fc .fc-daygrid-events-harness{position:relative}.fc .fc-daygrid-events-harness-abs{left:0;position:absolute;right:0;top:0}.fc .fc-daygrid-bg-harness{bottom:0;position:absolute;top:0}.fc .fc-daygrid-day-bg .fc-non-business{z-index:1}.fc .fc-daygrid-day-bg .fc-bg-events{z-index:2}.fc .fc-daygrid-day-bg .fc-highlight{z-index:3}.fc .fc-daygrid-events{margin-top:1px;z-index:6}.fc .fc-daygrid-events.fc-events-mirror{z-index:7}.fc .fc-daygrid-day-bottom{font-size:.85em;margin:0 2px}.fc .fc-daygrid-day-bottom:after,.fc .fc-daygrid-day-bottom:before{clear:both;content:\"\";display:table}.fc .fc-daygrid-more-link{border-radius:3px;cursor:pointer;line-height:1;margin-top:1px;max-width:100%;overflow:hidden;padding:2px;position:relative;white-space:nowrap;z-index:4}.fc .fc-daygrid-more-link:hover{background-color:rgba(0,0,0,.1)}.fc .fc-daygrid-week-number{background-color:var(--fc-neutral-bg-color);color:var(--fc-neutral-text-color);min-width:1.5em;padding:2px;position:absolute;text-align:center;top:0;z-index:5}.fc .fc-more-popover .fc-popover-body{min-width:220px;padding:10px}.fc-direction-ltr .fc-daygrid-events.fc-events-start,.fc-direction-rtl .fc-daygrid-events.fc-events-end{margin-left:2px}.fc-direction-ltr .fc-daygrid-events.fc-events-end,.fc-direction-rtl .fc-daygrid-events.fc-events-start{margin-right:2px}.fc-direction-ltr .fc-daygrid-more-link{float:left}.fc-direction-ltr .fc-daygrid-week-number{border-radius:0 0 3px 0;left:0}.fc-direction-rtl .fc-daygrid-more-link{float:right}.fc-direction-rtl .fc-daygrid-week-number{border-radius:0 0 0 3px;right:0}.fc-liquid-hack .fc-daygrid-day-frame{position:static}.fc-daygrid-events{border-radius:3px;font-size:var(--fc-small-font-size);position:relative;white-space:nowrap}.fc-daygrid-block-events .fc-events-time{font-weight:700}.fc-daygrid-block-events .fc-events-time,.fc-daygrid-block-events .fc-events-title{padding:1px}.fc-daygrid-dot-events{align-items:center;display:flex;padding:2px 0}.fc-daygrid-dot-events .fc-events-title{flex-grow:1;flex-shrink:1;font-weight:700;min-width:0;overflow:hidden}.fc-daygrid-dot-events.fc-events-mirror,.fc-daygrid-dot-events:hover{background:rgba(0,0,0,.1)}.fc-daygrid-dot-events.fc-events-selected:before{bottom:-10px;top:-10px}.fc-daygrid-events-dot{border:calc(var(--fc-daygrid-events-dot-width)/2) solid var(--fc-events-border-color);border-radius:calc(var(--fc-daygrid-events-dot-width)/2);box-sizing:content-box;height:0;margin:0 4px;width:0}.fc-direction-ltr .fc-daygrid-events .fc-events-time{margin-right:3px}.fc-direction-rtl .fc-daygrid-events .fc-events-time{margin-left:3px}";
     internal$1.injectStyles(css_248z);
 
     var plugin = core.createPlugin({

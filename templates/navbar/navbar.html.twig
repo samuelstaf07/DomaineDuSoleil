@@ -1,5 +1,5 @@
 {% block body %}
-    <nav class="navbar navbar-expand-lg px-4 py-3 fixed-top" style="background: linear-gradient(to right, #006633, #95C11F);">
+    <nav class="navbar navbar-expand-lg px-lg-5 py-3 fixed-top" style="background: linear-gradient(to right, #006633, #95C11F);">
         <a class="navbar-brand align-items-center d-flex" href="{{ path('app_home') }}">
             <img src="{{ asset('img/DomaineduSoleilNoName.svg') }}" alt="Logo" class="me-2" height="50">
             <h2>Domaine Du Soleil</h2>
@@ -8,28 +8,47 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto flex gap-2">
+            <ul class="navbar-nav ms-auto flex gap-3 align-items-center">
+                <li class="nav-item">
+                    <a class="btn-black" href="{{ path('app_posts') }}">Nouveautés</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn-yellow" href="{{ path('app_events') }}">Événements</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn-lightGreen" href="{{ path('app_rentals') }}">Logements</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn-yellow" href="{{ path('app_cart') }}">
+                        <img src="{{ asset('styles/img/cart.svg') }}" alt="Accéder au panier">
+                    </a>
+                </li>
                 {% if app.user %}
                     <div class="dropdown">
-                        <button class="d-flex gap-2 align-items-center btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{{ asset('uploads/user.svg') }}" alt="" class="rounded-circle" style="height: 30px; width: 30px;">
+                        <button class="dropdown-toggle d-flex gap-2 align-items-center"
+                                type="button"
+                                id="userDropdown"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            <img src="{{ asset('uploads/user.svg') }}" alt="Avatar utilisateur" class="rounded-circle" width="32" height="32">
                             {{ app.user.firstname }} {{ app.user.lastname }}
                         </button>
-                        <ul class="dropdown-menu">
+
+                        <ul class="dropdown-menu gap-1" aria-labelledby="userDropdown">
                             {% if is_granted('ROLE_ADMIN') %}
                                 <li>
-                                    <a href="{{ path('app_admin') }}" class="dropdown-item text-center">
+                                    <a href="{{ path('app_admin') }}" class="dropdown-item text-danger">
                                         Administration
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
                             {% endif %}
-                            <li class="text-center">
-                                <a href="{{ path('app_logout') }}" class="m-2 btn-primary w-75">Déconnexion</a>
+                            <li>
+                                <a href="{{ path('app_logout') }}" class="dropdown-item btn-red text-center">Déconnexion</a>
                             </li>
-
                         </ul>
                     </div>
+
                 {% else %}
                     <li class="nav-item">
                         <a class="btn-green" href="{{ path('app_login') }}">Connexion</a>

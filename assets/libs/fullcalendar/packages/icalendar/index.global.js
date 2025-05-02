@@ -56,7 +56,7 @@ FullCalendar.ICalendar = (function (exports, core, internal, ICAL) {
             function getTimes(eventOrOccurrence) {
                 const startTime = eventOrOccurrence.startDate.toJSDate().getTime();
                 let endTime = eventOrOccurrence.endDate.toJSDate().getTime();
-                // If it is an all day event, the end date is set to 00:00 of the next day
+                // If it is an all day events, the end date is set to 00:00 of the next day
                 // So we need to make it be 23:59:59 to compare correctly with the given range
                 if (eventOrOccurrence.endDate.isDate && (endTime > startTime)) {
                     endTime -= 1;
@@ -78,7 +78,7 @@ FullCalendar.ICalendar = (function (exports, core, internal, ICAL) {
                     const exdate = exdateProp.getFirstValue();
                     exdates.push(exdate.toJSDate().getTime());
                 });
-                // Recurring event is handled differently
+                // Recurring events is handled differently
                 if (event.isRecurring()) {
                     const iterator = event.iterator();
                     let next;
@@ -108,7 +108,7 @@ FullCalendar.ICalendar = (function (exports, core, internal, ICAL) {
                     } while (next && (!this.maxIterations || i < this.maxIterations));
                     return;
                 }
-                // Non-recurring event:
+                // Non-recurring events:
                 const { startTime, endTime } = getTimes(event);
                 if (isEventWithinRange(startTime, endTime))
                     ret.events.push(event);
@@ -180,7 +180,7 @@ FullCalendar.ICalendar = (function (exports, core, internal, ICAL) {
                     ? iCalEvent.endDate.toString()
                     : null }));
         }
-        // recurring event instances
+        // recurring events instances
         for (let iCalOccurence of iCalRes.occurrences) {
             let iCalEvent = iCalOccurence.item;
             expanded.push(Object.assign(Object.assign({}, buildNonDateProps(iCalEvent)), { start: iCalOccurence.startDate.toString(), end: (specifiesEnd(iCalEvent) && iCalOccurence.endDate)

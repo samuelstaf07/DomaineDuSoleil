@@ -27,4 +27,14 @@ class PostsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findActivePosts(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.is_active = :isActive')
+            ->setParameter('isActive', true)
+            ->orderBy('p.created_at', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

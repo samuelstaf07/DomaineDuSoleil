@@ -86,7 +86,7 @@ var FullCalendar = (function (exports) {
         registerStylesRoot(document);
     }
 
-    var css_248z = ":root{--fc-small-font-size:.85em;--fc-page-bg-color:#fff;--fc-neutral-bg-color:hsla(0,0%,82%,.3);--fc-neutral-text-color:grey;--fc-border-color:#ddd;--fc-button-text-color:#fff;--fc-button-bg-color:#2c3e50;--fc-button-border-color:#2c3e50;--fc-button-hover-bg-color:#1e2b37;--fc-button-hover-border-color:#1a252f;--fc-button-active-bg-color:#1a252f;--fc-button-active-border-color:#151e27;--fc-event-bg-color:#3788d8;--fc-event-border-color:#3788d8;--fc-event-text-color:#fff;--fc-event-selected-overlay-color:rgba(0,0,0,.25);--fc-more-link-bg-color:#d0d0d0;--fc-more-link-text-color:inherit;--fc-event-resizer-thickness:8px;--fc-event-resizer-dot-total-width:8px;--fc-event-resizer-dot-border-width:1px;--fc-non-business-color:hsla(0,0%,84%,.3);--fc-bg-event-color:#8fdf82;--fc-bg-event-opacity:0.3;--fc-highlight-color:rgba(188,232,241,.3);--fc-today-bg-color:rgba(255,220,40,.15);--fc-now-indicator-color:red}.fc-not-allowed,.fc-not-allowed .fc-event{cursor:not-allowed}.fc{display:flex;flex-direction:column;font-size:1em}.fc,.fc *,.fc :after,.fc :before{box-sizing:border-box}.fc table{border-collapse:collapse;border-spacing:0;font-size:1em}.fc th{text-align:center}.fc td,.fc th{padding:0;vertical-align:top}.fc a[data-navlink]{cursor:pointer}.fc a[data-navlink]:hover{text-decoration:underline}.fc-direction-ltr{direction:ltr;text-align:left}.fc-direction-rtl{direction:rtl;text-align:right}.fc-theme-standard td,.fc-theme-standard th{border:1px solid var(--fc-border-color)}.fc-liquid-hack td,.fc-liquid-hack th{position:relative}@font-face{font-family:fcicons;font-style:normal;font-weight:400;src:url(\"data:application/x-font-ttf;charset=utf-8;base64,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\") format(\"truetype\")}.fc-icon{speak:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;display:inline-block;font-family:fcicons!important;font-style:normal;font-variant:normal;font-weight:400;height:1em;line-height:1;text-align:center;text-transform:none;-webkit-user-select:none;-moz-user-select:none;user-select:none;width:1em}.fc-icon-chevron-left:before{content:\"\\e900\"}.fc-icon-chevron-right:before{content:\"\\e901\"}.fc-icon-chevrons-left:before{content:\"\\e902\"}.fc-icon-chevrons-right:before{content:\"\\e903\"}.fc-icon-minus-square:before{content:\"\\e904\"}.fc-icon-plus-square:before{content:\"\\e905\"}.fc-icon-x:before{content:\"\\e906\"}.fc .fc-button{border-radius:0;font-family:inherit;font-size:inherit;line-height:inherit;margin:0;overflow:visible;text-transform:none}.fc .fc-button:focus{outline:1px dotted;outline:5px auto -webkit-focus-ring-color}.fc .fc-button{-webkit-appearance:button}.fc .fc-button:not(:disabled){cursor:pointer}.fc .fc-button{background-color:transparent;border:1px solid transparent;border-radius:.25em;display:inline-block;font-size:1em;font-weight:400;line-height:1.5;padding:.4em .65em;text-align:center;-webkit-user-select:none;-moz-user-select:none;user-select:none;vertical-align:middle}.fc .fc-button:hover{text-decoration:none}.fc .fc-button:focus{box-shadow:0 0 0 .2rem rgba(44,62,80,.25);outline:0}.fc .fc-button:disabled{opacity:.65}.fc .fc-button-primary{background-color:var(--fc-button-bg-color);border-color:var(--fc-button-border-color);color:var(--fc-button-text-color)}.fc .fc-button-primary:hover{background-color:var(--fc-button-hover-bg-color);border-color:var(--fc-button-hover-border-color);color:var(--fc-button-text-color)}.fc .fc-button-primary:disabled{background-color:var(--fc-button-bg-color);border-color:var(--fc-button-border-color);color:var(--fc-button-text-color)}.fc .fc-button-primary:focus{box-shadow:0 0 0 .2rem rgba(76,91,106,.5)}.fc .fc-button-primary:not(:disabled).fc-button-active,.fc .fc-button-primary:not(:disabled):active{background-color:var(--fc-button-active-bg-color);border-color:var(--fc-button-active-border-color);color:var(--fc-button-text-color)}.fc .fc-button-primary:not(:disabled).fc-button-active:focus,.fc .fc-button-primary:not(:disabled):active:focus{box-shadow:0 0 0 .2rem rgba(76,91,106,.5)}.fc .fc-button .fc-icon{font-size:1.5em;vertical-align:middle}.fc .fc-button-group{display:inline-flex;position:relative;vertical-align:middle}.fc .fc-button-group>.fc-button{flex:1 1 auto;position:relative}.fc .fc-button-group>.fc-button.fc-button-active,.fc .fc-button-group>.fc-button:active,.fc .fc-button-group>.fc-button:focus,.fc .fc-button-group>.fc-button:hover{z-index:1}.fc-direction-ltr .fc-button-group>.fc-button:not(:first-child){border-bottom-left-radius:0;border-top-left-radius:0;margin-left:-1px}.fc-direction-ltr .fc-button-group>.fc-button:not(:last-child){border-bottom-right-radius:0;border-top-right-radius:0}.fc-direction-rtl .fc-button-group>.fc-button:not(:first-child){border-bottom-right-radius:0;border-top-right-radius:0;margin-right:-1px}.fc-direction-rtl .fc-button-group>.fc-button:not(:last-child){border-bottom-left-radius:0;border-top-left-radius:0}.fc .fc-toolbar{align-items:center;display:flex;justify-content:space-between}.fc .fc-toolbar.fc-header-toolbar{margin-bottom:1.5em}.fc .fc-toolbar.fc-footer-toolbar{margin-top:1.5em}.fc .fc-toolbar-title{font-size:1.75em;margin:0}.fc-direction-ltr .fc-toolbar>*>:not(:first-child){margin-left:.75em}.fc-direction-rtl .fc-toolbar>*>:not(:first-child){margin-right:.75em}.fc-direction-rtl .fc-toolbar-ltr{flex-direction:row-reverse}.fc .fc-scroller{-webkit-overflow-scrolling:touch;position:relative}.fc .fc-scroller-liquid{height:100%}.fc .fc-scroller-liquid-absolute{bottom:0;left:0;position:absolute;right:0;top:0}.fc .fc-scroller-harness{direction:ltr;overflow:hidden;position:relative}.fc .fc-scroller-harness-liquid{height:100%}.fc-direction-rtl .fc-scroller-harness>.fc-scroller{direction:rtl}.fc-theme-standard .fc-scrollgrid{border:1px solid var(--fc-border-color)}.fc .fc-scrollgrid,.fc .fc-scrollgrid table{table-layout:fixed;width:100%}.fc .fc-scrollgrid table{border-left-style:hidden;border-right-style:hidden;border-top-style:hidden}.fc .fc-scrollgrid{border-bottom-width:0;border-collapse:separate;border-right-width:0}.fc .fc-scrollgrid-liquid{height:100%}.fc .fc-scrollgrid-section,.fc .fc-scrollgrid-section table,.fc .fc-scrollgrid-section>td{height:1px}.fc .fc-scrollgrid-section-liquid>td{height:100%}.fc .fc-scrollgrid-section>*{border-left-width:0;border-top-width:0}.fc .fc-scrollgrid-section-footer>*,.fc .fc-scrollgrid-section-header>*{border-bottom-width:0}.fc .fc-scrollgrid-section-body table,.fc .fc-scrollgrid-section-footer table{border-bottom-style:hidden}.fc .fc-scrollgrid-section-sticky>*{background:var(--fc-page-bg-color);position:sticky;z-index:3}.fc .fc-scrollgrid-section-header.fc-scrollgrid-section-sticky>*{top:0}.fc .fc-scrollgrid-section-footer.fc-scrollgrid-section-sticky>*{bottom:0}.fc .fc-scrollgrid-sticky-shim{height:1px;margin-bottom:-1px}.fc-sticky{position:sticky}.fc .fc-view-harness{flex-grow:1;position:relative}.fc .fc-view-harness-active>.fc-view{bottom:0;left:0;position:absolute;right:0;top:0}.fc .fc-col-header-cell-cushion{display:inline-block;padding:2px 4px}.fc .fc-bg-event,.fc .fc-highlight,.fc .fc-non-business{bottom:0;left:0;position:absolute;right:0;top:0}.fc .fc-non-business{background:var(--fc-non-business-color)}.fc .fc-bg-event{background:var(--fc-bg-event-color);opacity:var(--fc-bg-event-opacity)}.fc .fc-bg-event .fc-event-title{font-size:var(--fc-small-font-size);font-style:italic;margin:.5em}.fc .fc-highlight{background:var(--fc-highlight-color)}.fc .fc-cell-shaded,.fc .fc-day-disabled{background:var(--fc-neutral-bg-color)}a.fc-event,a.fc-event:hover{text-decoration:none}.fc-event.fc-event-draggable,.fc-event[href]{cursor:pointer}.fc-event .fc-event-main{position:relative;z-index:2}.fc-event-dragging:not(.fc-event-selected){opacity:.75}.fc-event-dragging.fc-event-selected{box-shadow:0 2px 7px rgba(0,0,0,.3)}.fc-event .fc-event-resizer{display:none;position:absolute;z-index:4}.fc-event-selected .fc-event-resizer,.fc-event:hover .fc-event-resizer{display:block}.fc-event-selected .fc-event-resizer{background:var(--fc-page-bg-color);border-color:inherit;border-radius:calc(var(--fc-event-resizer-dot-total-width)/2);border-style:solid;border-width:var(--fc-event-resizer-dot-border-width);height:var(--fc-event-resizer-dot-total-width);width:var(--fc-event-resizer-dot-total-width)}.fc-event-selected .fc-event-resizer:before{bottom:-20px;content:\"\";left:-20px;position:absolute;right:-20px;top:-20px}.fc-event-selected,.fc-event:focus{box-shadow:0 2px 5px rgba(0,0,0,.2)}.fc-event-selected:before,.fc-event:focus:before{bottom:0;content:\"\";left:0;position:absolute;right:0;top:0;z-index:3}.fc-event-selected:after,.fc-event:focus:after{background:var(--fc-event-selected-overlay-color);bottom:-1px;content:\"\";left:-1px;position:absolute;right:-1px;top:-1px;z-index:1}.fc-h-event{background-color:var(--fc-event-bg-color);border:1px solid var(--fc-event-border-color);display:block}.fc-h-event .fc-event-main{color:var(--fc-event-text-color)}.fc-h-event .fc-event-main-frame{display:flex}.fc-h-event .fc-event-time{max-width:100%;overflow:hidden}.fc-h-event .fc-event-title-container{flex-grow:1;flex-shrink:1;min-width:0}.fc-h-event .fc-event-title{display:inline-block;left:0;max-width:100%;overflow:hidden;right:0;vertical-align:top}.fc-h-event.fc-event-selected:before{bottom:-10px;top:-10px}.fc-direction-ltr .fc-daygrid-block-event:not(.fc-event-start),.fc-direction-rtl .fc-daygrid-block-event:not(.fc-event-end){border-bottom-left-radius:0;border-left-width:0;border-top-left-radius:0}.fc-direction-ltr .fc-daygrid-block-event:not(.fc-event-end),.fc-direction-rtl .fc-daygrid-block-event:not(.fc-event-start){border-bottom-right-radius:0;border-right-width:0;border-top-right-radius:0}.fc-h-event:not(.fc-event-selected) .fc-event-resizer{bottom:0;top:0;width:var(--fc-event-resizer-thickness)}.fc-direction-ltr .fc-h-event:not(.fc-event-selected) .fc-event-resizer-start,.fc-direction-rtl .fc-h-event:not(.fc-event-selected) .fc-event-resizer-end{cursor:w-resize;left:calc(var(--fc-event-resizer-thickness)*-.5)}.fc-direction-ltr .fc-h-event:not(.fc-event-selected) .fc-event-resizer-end,.fc-direction-rtl .fc-h-event:not(.fc-event-selected) .fc-event-resizer-start{cursor:e-resize;right:calc(var(--fc-event-resizer-thickness)*-.5)}.fc-h-event.fc-event-selected .fc-event-resizer{margin-top:calc(var(--fc-event-resizer-dot-total-width)*-.5);top:50%}.fc-direction-ltr .fc-h-event.fc-event-selected .fc-event-resizer-start,.fc-direction-rtl .fc-h-event.fc-event-selected .fc-event-resizer-end{left:calc(var(--fc-event-resizer-dot-total-width)*-.5)}.fc-direction-ltr .fc-h-event.fc-event-selected .fc-event-resizer-end,.fc-direction-rtl .fc-h-event.fc-event-selected .fc-event-resizer-start{right:calc(var(--fc-event-resizer-dot-total-width)*-.5)}.fc .fc-popover{box-shadow:0 2px 6px rgba(0,0,0,.15);position:absolute;z-index:9999}.fc .fc-popover-header{align-items:center;display:flex;flex-direction:row;justify-content:space-between;padding:3px 4px}.fc .fc-popover-title{margin:0 2px}.fc .fc-popover-close{cursor:pointer;font-size:1.1em;opacity:.65}.fc-theme-standard .fc-popover{background:var(--fc-page-bg-color);border:1px solid var(--fc-border-color)}.fc-theme-standard .fc-popover-header{background:var(--fc-neutral-bg-color)}";
+    var css_248z = ":root{--fc-small-font-size:.85em;--fc-page-bg-color:#fff;--fc-neutral-bg-color:hsla(0,0%,82%,.3);--fc-neutral-text-color:grey;--fc-border-color:#ddd;--fc-button-text-color:#fff;--fc-button-bg-color:#2c3e50;--fc-button-border-color:#2c3e50;--fc-button-hover-bg-color:#1e2b37;--fc-button-hover-border-color:#1a252f;--fc-button-active-bg-color:#1a252f;--fc-button-active-border-color:#151e27;--fc-events-bg-color:#3788d8;--fc-events-border-color:#3788d8;--fc-events-text-color:#fff;--fc-events-selected-overlay-color:rgba(0,0,0,.25);--fc-more-link-bg-color:#d0d0d0;--fc-more-link-text-color:inherit;--fc-events-resizer-thickness:8px;--fc-events-resizer-dot-total-width:8px;--fc-events-resizer-dot-border-width:1px;--fc-non-business-color:hsla(0,0%,84%,.3);--fc-bg-events-color:#8fdf82;--fc-bg-events-opacity:0.3;--fc-highlight-color:rgba(188,232,241,.3);--fc-today-bg-color:rgba(255,220,40,.15);--fc-now-indicator-color:red}.fc-not-allowed,.fc-not-allowed .fc-events{cursor:not-allowed}.fc{display:flex;flex-direction:column;font-size:1em}.fc,.fc *,.fc :after,.fc :before{box-sizing:border-box}.fc table{border-collapse:collapse;border-spacing:0;font-size:1em}.fc th{text-align:center}.fc td,.fc th{padding:0;vertical-align:top}.fc a[data-navlink]{cursor:pointer}.fc a[data-navlink]:hover{text-decoration:underline}.fc-direction-ltr{direction:ltr;text-align:left}.fc-direction-rtl{direction:rtl;text-align:right}.fc-theme-standard td,.fc-theme-standard th{border:1px solid var(--fc-border-color)}.fc-liquid-hack td,.fc-liquid-hack th{position:relative}@font-face{font-family:fcicons;font-style:normal;font-weight:400;src:url(\"data:application/x-font-ttf;charset=utf-8;base64,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\") format(\"truetype\")}.fc-icon{speak:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;display:inline-block;font-family:fcicons!important;font-style:normal;font-variant:normal;font-weight:400;height:1em;line-height:1;text-align:center;text-transform:none;-webkit-user-select:none;-moz-user-select:none;user-select:none;width:1em}.fc-icon-chevron-left:before{content:\"\\e900\"}.fc-icon-chevron-right:before{content:\"\\e901\"}.fc-icon-chevrons-left:before{content:\"\\e902\"}.fc-icon-chevrons-right:before{content:\"\\e903\"}.fc-icon-minus-square:before{content:\"\\e904\"}.fc-icon-plus-square:before{content:\"\\e905\"}.fc-icon-x:before{content:\"\\e906\"}.fc .fc-button{border-radius:0;font-family:inherit;font-size:inherit;line-height:inherit;margin:0;overflow:visible;text-transform:none}.fc .fc-button:focus{outline:1px dotted;outline:5px auto -webkit-focus-ring-color}.fc .fc-button{-webkit-appearance:button}.fc .fc-button:not(:disabled){cursor:pointer}.fc .fc-button{background-color:transparent;border:1px solid transparent;border-radius:.25em;display:inline-block;font-size:1em;font-weight:400;line-height:1.5;padding:.4em .65em;text-align:center;-webkit-user-select:none;-moz-user-select:none;user-select:none;vertical-align:middle}.fc .fc-button:hover{text-decoration:none}.fc .fc-button:focus{box-shadow:0 0 0 .2rem rgba(44,62,80,.25);outline:0}.fc .fc-button:disabled{opacity:.65}.fc .fc-button-primary{background-color:var(--fc-button-bg-color);border-color:var(--fc-button-border-color);color:var(--fc-button-text-color)}.fc .fc-button-primary:hover{background-color:var(--fc-button-hover-bg-color);border-color:var(--fc-button-hover-border-color);color:var(--fc-button-text-color)}.fc .fc-button-primary:disabled{background-color:var(--fc-button-bg-color);border-color:var(--fc-button-border-color);color:var(--fc-button-text-color)}.fc .fc-button-primary:focus{box-shadow:0 0 0 .2rem rgba(76,91,106,.5)}.fc .fc-button-primary:not(:disabled).fc-button-active,.fc .fc-button-primary:not(:disabled):active{background-color:var(--fc-button-active-bg-color);border-color:var(--fc-button-active-border-color);color:var(--fc-button-text-color)}.fc .fc-button-primary:not(:disabled).fc-button-active:focus,.fc .fc-button-primary:not(:disabled):active:focus{box-shadow:0 0 0 .2rem rgba(76,91,106,.5)}.fc .fc-button .fc-icon{font-size:1.5em;vertical-align:middle}.fc .fc-button-group{display:inline-flex;position:relative;vertical-align:middle}.fc .fc-button-group>.fc-button{flex:1 1 auto;position:relative}.fc .fc-button-group>.fc-button.fc-button-active,.fc .fc-button-group>.fc-button:active,.fc .fc-button-group>.fc-button:focus,.fc .fc-button-group>.fc-button:hover{z-index:1}.fc-direction-ltr .fc-button-group>.fc-button:not(:first-child){border-bottom-left-radius:0;border-top-left-radius:0;margin-left:-1px}.fc-direction-ltr .fc-button-group>.fc-button:not(:last-child){border-bottom-right-radius:0;border-top-right-radius:0}.fc-direction-rtl .fc-button-group>.fc-button:not(:first-child){border-bottom-right-radius:0;border-top-right-radius:0;margin-right:-1px}.fc-direction-rtl .fc-button-group>.fc-button:not(:last-child){border-bottom-left-radius:0;border-top-left-radius:0}.fc .fc-toolbar{align-items:center;display:flex;justify-content:space-between}.fc .fc-toolbar.fc-header-toolbar{margin-bottom:1.5em}.fc .fc-toolbar.fc-footer-toolbar{margin-top:1.5em}.fc .fc-toolbar-title{font-size:1.75em;margin:0}.fc-direction-ltr .fc-toolbar>*>:not(:first-child){margin-left:.75em}.fc-direction-rtl .fc-toolbar>*>:not(:first-child){margin-right:.75em}.fc-direction-rtl .fc-toolbar-ltr{flex-direction:row-reverse}.fc .fc-scroller{-webkit-overflow-scrolling:touch;position:relative}.fc .fc-scroller-liquid{height:100%}.fc .fc-scroller-liquid-absolute{bottom:0;left:0;position:absolute;right:0;top:0}.fc .fc-scroller-harness{direction:ltr;overflow:hidden;position:relative}.fc .fc-scroller-harness-liquid{height:100%}.fc-direction-rtl .fc-scroller-harness>.fc-scroller{direction:rtl}.fc-theme-standard .fc-scrollgrid{border:1px solid var(--fc-border-color)}.fc .fc-scrollgrid,.fc .fc-scrollgrid table{table-layout:fixed;width:100%}.fc .fc-scrollgrid table{border-left-style:hidden;border-right-style:hidden;border-top-style:hidden}.fc .fc-scrollgrid{border-bottom-width:0;border-collapse:separate;border-right-width:0}.fc .fc-scrollgrid-liquid{height:100%}.fc .fc-scrollgrid-section,.fc .fc-scrollgrid-section table,.fc .fc-scrollgrid-section>td{height:1px}.fc .fc-scrollgrid-section-liquid>td{height:100%}.fc .fc-scrollgrid-section>*{border-left-width:0;border-top-width:0}.fc .fc-scrollgrid-section-footer>*,.fc .fc-scrollgrid-section-header>*{border-bottom-width:0}.fc .fc-scrollgrid-section-body table,.fc .fc-scrollgrid-section-footer table{border-bottom-style:hidden}.fc .fc-scrollgrid-section-sticky>*{background:var(--fc-page-bg-color);position:sticky;z-index:3}.fc .fc-scrollgrid-section-header.fc-scrollgrid-section-sticky>*{top:0}.fc .fc-scrollgrid-section-footer.fc-scrollgrid-section-sticky>*{bottom:0}.fc .fc-scrollgrid-sticky-shim{height:1px;margin-bottom:-1px}.fc-sticky{position:sticky}.fc .fc-view-harness{flex-grow:1;position:relative}.fc .fc-view-harness-active>.fc-view{bottom:0;left:0;position:absolute;right:0;top:0}.fc .fc-col-header-cell-cushion{display:inline-block;padding:2px 4px}.fc .fc-bg-events,.fc .fc-highlight,.fc .fc-non-business{bottom:0;left:0;position:absolute;right:0;top:0}.fc .fc-non-business{background:var(--fc-non-business-color)}.fc .fc-bg-events{background:var(--fc-bg-events-color);opacity:var(--fc-bg-events-opacity)}.fc .fc-bg-events .fc-events-title{font-size:var(--fc-small-font-size);font-style:italic;margin:.5em}.fc .fc-highlight{background:var(--fc-highlight-color)}.fc .fc-cell-shaded,.fc .fc-day-disabled{background:var(--fc-neutral-bg-color)}a.fc-events,a.fc-events:hover{text-decoration:none}.fc-events.fc-events-draggable,.fc-events[href]{cursor:pointer}.fc-events .fc-events-main{position:relative;z-index:2}.fc-events-dragging:not(.fc-events-selected){opacity:.75}.fc-events-dragging.fc-events-selected{box-shadow:0 2px 7px rgba(0,0,0,.3)}.fc-events .fc-events-resizer{display:none;position:absolute;z-index:4}.fc-events-selected .fc-events-resizer,.fc-events:hover .fc-events-resizer{display:block}.fc-events-selected .fc-events-resizer{background:var(--fc-page-bg-color);border-color:inherit;border-radius:calc(var(--fc-events-resizer-dot-total-width)/2);border-style:solid;border-width:var(--fc-events-resizer-dot-border-width);height:var(--fc-events-resizer-dot-total-width);width:var(--fc-events-resizer-dot-total-width)}.fc-events-selected .fc-events-resizer:before{bottom:-20px;content:\"\";left:-20px;position:absolute;right:-20px;top:-20px}.fc-events-selected,.fc-events:focus{box-shadow:0 2px 5px rgba(0,0,0,.2)}.fc-events-selected:before,.fc-events:focus:before{bottom:0;content:\"\";left:0;position:absolute;right:0;top:0;z-index:3}.fc-events-selected:after,.fc-events:focus:after{background:var(--fc-events-selected-overlay-color);bottom:-1px;content:\"\";left:-1px;position:absolute;right:-1px;top:-1px;z-index:1}.fc-h-events{background-color:var(--fc-events-bg-color);border:1px solid var(--fc-events-border-color);display:block}.fc-h-events .fc-events-main{color:var(--fc-events-text-color)}.fc-h-events .fc-events-main-frame{display:flex}.fc-h-events .fc-events-time{max-width:100%;overflow:hidden}.fc-h-events .fc-events-title-container{flex-grow:1;flex-shrink:1;min-width:0}.fc-h-events .fc-events-title{display:inline-block;left:0;max-width:100%;overflow:hidden;right:0;vertical-align:top}.fc-h-events.fc-events-selected:before{bottom:-10px;top:-10px}.fc-direction-ltr .fc-daygrid-block-events:not(.fc-events-start),.fc-direction-rtl .fc-daygrid-block-events:not(.fc-events-end){border-bottom-left-radius:0;border-left-width:0;border-top-left-radius:0}.fc-direction-ltr .fc-daygrid-block-events:not(.fc-events-end),.fc-direction-rtl .fc-daygrid-block-events:not(.fc-events-start){border-bottom-right-radius:0;border-right-width:0;border-top-right-radius:0}.fc-h-events:not(.fc-events-selected) .fc-events-resizer{bottom:0;top:0;width:var(--fc-events-resizer-thickness)}.fc-direction-ltr .fc-h-events:not(.fc-events-selected) .fc-events-resizer-start,.fc-direction-rtl .fc-h-events:not(.fc-events-selected) .fc-events-resizer-end{cursor:w-resize;left:calc(var(--fc-events-resizer-thickness)*-.5)}.fc-direction-ltr .fc-h-events:not(.fc-events-selected) .fc-events-resizer-end,.fc-direction-rtl .fc-h-events:not(.fc-events-selected) .fc-events-resizer-start{cursor:e-resize;right:calc(var(--fc-events-resizer-thickness)*-.5)}.fc-h-events.fc-events-selected .fc-events-resizer{margin-top:calc(var(--fc-events-resizer-dot-total-width)*-.5);top:50%}.fc-direction-ltr .fc-h-events.fc-events-selected .fc-events-resizer-start,.fc-direction-rtl .fc-h-events.fc-events-selected .fc-events-resizer-end{left:calc(var(--fc-events-resizer-dot-total-width)*-.5)}.fc-direction-ltr .fc-h-events.fc-events-selected .fc-events-resizer-end,.fc-direction-rtl .fc-h-events.fc-events-selected .fc-events-resizer-start{right:calc(var(--fc-events-resizer-dot-total-width)*-.5)}.fc .fc-popover{box-shadow:0 2px 6px rgba(0,0,0,.15);position:absolute;z-index:9999}.fc .fc-popover-header{align-items:center;display:flex;flex-direction:row;justify-content:space-between;padding:3px 4px}.fc .fc-popover-title{margin:0 2px}.fc .fc-popover-close{cursor:pointer;font-size:1.1em;opacity:.65}.fc-theme-standard .fc-popover{background:var(--fc-page-bg-color);border:1px solid var(--fc-border-color)}.fc-theme-standard .fc-popover-header{background:var(--fc-neutral-bg-color)}";
     injectStyles(css_248z);
 
     function removeElement(el) {
@@ -182,7 +182,7 @@ var FullCalendar = (function (exports) {
         return 'fc-dom-' + guid$1;
     }
 
-    // Stops a mouse/touch event from doing it's native browser action
+    // Stops a mouse/touch events from doing it's native browser action
     function preventDefault(ev) {
         ev.preventDefault();
     }
@@ -264,7 +264,7 @@ var FullCalendar = (function (exports) {
     }
     /* FullCalendar-specific DOM Utilities
     ----------------------------------------------------------------------------------------------------------------------*/
-    // Make the mouse cursor express that an event is not allowed in the current area
+    // Make the mouse cursor express that an events is not allowed in the current area
     function disableCursor() {
         document.body.classList.add('fc-not-allowed');
     }
@@ -1823,7 +1823,7 @@ var FullCalendar = (function (exports) {
     }
     // retrieves events that have the same groupId as the instance specified by `instanceId`
     // or they are the same as the instance.
-    // why might instanceId not be in the store? an event from another calendar?
+    // why might instanceId not be in the store? an events from another calendar?
     function getRelevantEvents(eventStore, instanceId) {
         let instance = eventStore.instances[instanceId];
         if (instance) {
@@ -2351,7 +2351,7 @@ var FullCalendar = (function (exports) {
             let splitStates = {};
             if (interaction) {
                 let affectedStores = this._splitEventStore(interaction.affectedEvents, this._getKeysForEventDefs(interaction.affectedEvents));
-                // can't rely on defKeys because event data is mutated
+                // can't rely on defKeys because events data is mutated
                 let mutatedKeysByDefId = this._getKeysForEventDefs(interaction.mutatedEvents);
                 let mutatedStores = this._splitEventStore(interaction.mutatedEvents, mutatedKeysByDefId);
                 let populate = (key) => {
@@ -2418,7 +2418,7 @@ var FullCalendar = (function (exports) {
         ranges.sort(compareRanges);
         for (i = 0; i < ranges.length; i += 1) {
             dateRange = ranges[i];
-            // add the span of time before the event (if there is any)
+            // add the span of time before the events (if there is any)
             if (dateRange.start > start) { // compare millisecond time (skip any ambig logic)
                 invertedRanges.push({ start, end: dateRange.start });
             }
@@ -2426,7 +2426,7 @@ var FullCalendar = (function (exports) {
                 start = dateRange.end;
             }
         }
-        // add the span of time after the last event (if there is any)
+        // add the span of time after the last events (if there is any)
         if (start < constraintRange.end) { // compare millisecond time (skip any ambig logic)
             invertedRanges.push({ start, end: constraintRange.end });
         }
@@ -3240,10 +3240,10 @@ var FullCalendar = (function (exports) {
         isValidSegDownEl(el) {
             return !this.props.eventDrag && // HACK
                 !this.props.eventResize && // HACK
-                !elementClosest(el, '.fc-event-mirror');
+                !elementClosest(el, '.fc-events-mirror');
         }
         isValidDateDownEl(el) {
-            return !elementClosest(el, '.fc-event:not(.fc-bg-event)') &&
+            return !elementClosest(el, '.fc-events:not(.fc-bg-events)') &&
                 !elementClosest(el, '.fc-more-link') && // a "more.." link
                 !elementClosest(el, 'a[data-navlink]') && // a clickable nav link
                 !elementClosest(el, '.fc-popover'); // hack
@@ -3577,7 +3577,7 @@ var FullCalendar = (function (exports) {
         Object.assign(props, buildDateSpanApi(dateSpan, context.dateEnv));
         return props;
     }
-    // Given an event's allDay status and start date, return what its fallback end date should be.
+    // Given an events's allDay status and start date, return what its fallback end date should be.
     // TODO: rename to computeDefaultEventEnd
     function getDefaultEventEnd(allDay, marker, context) {
         let { dateEnv, options } = context;
@@ -3592,7 +3592,7 @@ var FullCalendar = (function (exports) {
         return end;
     }
 
-    // applies the mutation to ALL defs/instances within the event store
+    // applies the mutation to ALL defs/instances within the events store
     function applyMutationToEventStore(eventStore, eventConfigBase, mutation, context) {
         let eventConfigs = compileEventUis(eventStore.defs, eventConfigBase);
         let dest = createEmptyEventStore();
@@ -3611,7 +3611,7 @@ var FullCalendar = (function (exports) {
         let standardProps = mutation.standardProps || {};
         // if hasEnd has not been specified, guess a good value based on deltas.
         // if duration will change, there's no way the default duration will persist,
-        // and thus, we need to mark the event as having a real end
+        // and thus, we need to mark the events as having a real end
         if (standardProps.hasEnd == null &&
             eventConfig.durationEditable &&
             (mutation.startDelta || mutation.endDelta)) {
@@ -3662,7 +3662,7 @@ var FullCalendar = (function (exports) {
                 end: getDefaultEventEnd(eventDef.allDay, copy.range.start, context),
             };
         }
-        // in case event was all-day but the supplied deltas were not
+        // in case events was all-day but the supplied deltas were not
         // better util for this?
         if (eventDef.allDay) {
             copy.range = {
@@ -3707,15 +3707,15 @@ var FullCalendar = (function (exports) {
     }
 
     class EventImpl {
-        // instance will be null if expressing a recurring event that has no current instances,
-        // OR if trying to validate an incoming external event that has no dates assigned
+        // instance will be null if expressing a recurring events that has no current instances,
+        // OR if trying to validate an incoming external events that has no dates assigned
         constructor(context, def, instance) {
             this._context = context;
             this._def = def;
             this._instance = instance || null;
         }
         /*
-        TODO: make event struct more responsible for this
+        TODO: make events struct more responsible for this
         */
         setProp(name, val) {
             if (name in EVENT_DATE_REFINERS) {
@@ -3807,8 +3807,8 @@ var FullCalendar = (function (exports) {
             }
             if (this._instance) {
                 let instanceRange = this._instance.range;
-                // when computing the diff for an event being converted to all-day,
-                // compute diff off of the all-day values the way event-mutation does.
+                // when computing the diff for an events being converted to all-day,
+                // compute diff off of the all-day values the way events-mutation does.
                 if (options.allDay === true) {
                     instanceRange = computeAlignedDayRange(instanceRange);
                 }
@@ -3984,7 +3984,7 @@ var FullCalendar = (function (exports) {
         get backgroundColor() { return this._def.ui.backgroundColor; }
         get borderColor() { return this._def.ui.borderColor; }
         get textColor() { return this._def.ui.textColor; }
-        // NOTE: user can't modify these because Object.freeze was called in event-def parsing
+        // NOTE: user can't modify these because Object.freeze was called in events-def parsing
         get classNames() { return this._def.ui.classNames; }
         get extendedProps() { return this._def.extendedProps; }
         toPlainObject(settings = {}) {
@@ -4015,7 +4015,7 @@ var FullCalendar = (function (exports) {
             if (ui.display && ui.display !== 'auto') {
                 res.display = ui.display;
             }
-            // TODO: what about recurring-event properties???
+            // TODO: what about recurring-events properties???
             // TODO: include startEditable/durationEditable/constraint/overlap/allow
             if (settings.collapseColor && ui.backgroundColor && ui.backgroundColor === ui.borderColor) {
                 res.color = ui.backgroundColor;
@@ -4170,7 +4170,7 @@ var FullCalendar = (function (exports) {
             el.parentNode.fcSeg || // for the harness
             null;
     }
-    // event ui computation
+    // events ui computation
     function compileEventUis(eventDefs, eventUiBases) {
         return mapHash(eventDefs, (eventDef) => compileEventUi(eventDef, eventUiBases));
     }
@@ -4259,39 +4259,39 @@ var FullCalendar = (function (exports) {
         };
     }
     function getEventClassNames(props) {
-        let classNames = ['fc-event'];
+        let classNames = ['fc-events'];
         if (props.isMirror) {
-            classNames.push('fc-event-mirror');
+            classNames.push('fc-events-mirror');
         }
         if (props.isDraggable) {
-            classNames.push('fc-event-draggable');
+            classNames.push('fc-events-draggable');
         }
         if (props.isStartResizable || props.isEndResizable) {
-            classNames.push('fc-event-resizable');
+            classNames.push('fc-events-resizable');
         }
         if (props.isDragging) {
-            classNames.push('fc-event-dragging');
+            classNames.push('fc-events-dragging');
         }
         if (props.isResizing) {
-            classNames.push('fc-event-resizing');
+            classNames.push('fc-events-resizing');
         }
         if (props.isSelected) {
-            classNames.push('fc-event-selected');
+            classNames.push('fc-events-selected');
         }
         if (props.isStart) {
-            classNames.push('fc-event-start');
+            classNames.push('fc-events-start');
         }
         if (props.isEnd) {
-            classNames.push('fc-event-end');
+            classNames.push('fc-events-end');
         }
         if (props.isPast) {
-            classNames.push('fc-event-past');
+            classNames.push('fc-events-past');
         }
         if (props.isToday) {
-            classNames.push('fc-event-today');
+            classNames.push('fc-events-today');
         }
         if (props.isFuture) {
-            classNames.push('fc-event-future');
+            classNames.push('fc-events-future');
         }
         return classNames;
     }
@@ -5054,7 +5054,7 @@ var FullCalendar = (function (exports) {
     const interactionSettingsStore = {};
 
     /*
-    An abstraction for a dragging interaction originating on an event.
+    An abstraction for a dragging interaction originating on an events.
     Does higher-level things than PointerDragger, such as possibly:
     - a "mirror" that moves with the pointer
     - a minimum number of pixels or other criteria for a true drag to begin
@@ -5089,7 +5089,7 @@ var FullCalendar = (function (exports) {
 
     /*
     Information about what will happen when an external element is dragged-and-dropped
-    onto a calendar. Contains information for creating an event.
+    onto a calendar. Contains information for creating an events.
     */
     const DRAG_META_REFINERS = {
         startTime: createDuration,
@@ -5811,7 +5811,7 @@ var FullCalendar = (function (exports) {
     }
     function receiveRawEvents(eventStore, eventSource, fetchId, fetchRange, rawEvents, context) {
         if (eventSource && // not already removed
-            fetchId === eventSource.latestFetchId // TODO: wish this logic was always in event-sources
+            fetchId === eventSource.latestFetchId // TODO: wish this logic was always in events-sources
         ) {
             let subset = parseEvents(transformRawEvents(rawEvents, eventSource, context), eventSource, context);
             if (fetchRange) {
@@ -5975,14 +5975,14 @@ var FullCalendar = (function (exports) {
                 // intersect! evaluate
                 if (rangesIntersect(subjectRange, otherInstance.range)) {
                     let otherOverlap = otherConfigs[otherInstance.defId].overlap;
-                    // consider the other event's overlap. only do this if the subject event is a "real" event
+                    // consider the other events's overlap. only do this if the subject events is a "real" events
                     if (otherOverlap === false && interaction.isEvent) {
                         return false;
                     }
                     if (subjectConfig.overlap === false) {
                         return false;
                     }
-                    if (eventOverlapFunc && !eventOverlapFunc(new EventImpl(context, otherDefs[otherInstance.defId], otherInstance), // still event
+                    if (eventOverlapFunc && !eventOverlapFunc(new EventImpl(context, otherDefs[otherInstance.defId], otherInstance), // still events
                     new EventImpl(context, subjectDef, subjectInstance))) {
                         return false;
                     }
@@ -5998,7 +5998,7 @@ var FullCalendar = (function (exports) {
                 if (origDef) { // was previously in the calendar
                     eventApi = new EventImpl(context, origDef, origInstance);
                 }
-                else { // was an external event
+                else { // was an external events
                     eventApi = new EventImpl(context, subjectDef); // no instance, because had no dates
                 }
                 if (!subjectAllow(buildDateSpanApiWithContext(subjectDateSpan, context), eventApi)) {
@@ -6073,7 +6073,7 @@ var FullCalendar = (function (exports) {
         }
         return []; // if it's false
     }
-    // TODO: move to event-store file?
+    // TODO: move to events-store file?
     function eventStoreToRanges(eventStore) {
         let { instances } = eventStore;
         let ranges = [];
@@ -6681,16 +6681,16 @@ var FullCalendar = (function (exports) {
                     borderColor: ui.borderColor,
                     backgroundColor: ui.backgroundColor,
                 }, elAttrs: getSegAnchorAttrs(seg, context), defaultGenerator: renderInnerContent$1, timeText: timeText }), (InnerContent, eventContentArg) => (y(_, null,
-                y(InnerContent, { elTag: "div", elClasses: ['fc-event-main'], elStyle: { color: eventContentArg.textColor } }),
-                Boolean(eventContentArg.isStartResizable) && (y("div", { className: "fc-event-resizer fc-event-resizer-start" })),
-                Boolean(eventContentArg.isEndResizable) && (y("div", { className: "fc-event-resizer fc-event-resizer-end" }))))));
+                y(InnerContent, { elTag: "div", elClasses: ['fc-events-main'], elStyle: { color: eventContentArg.textColor } }),
+                Boolean(eventContentArg.isStartResizable) && (y("div", { className: "fc-events-resizer fc-events-resizer-start" })),
+                Boolean(eventContentArg.isEndResizable) && (y("div", { className: "fc-events-resizer fc-events-resizer-end" }))))));
         }
     }
     function renderInnerContent$1(innerProps) {
-        return (y("div", { className: "fc-event-main-frame" },
-            innerProps.timeText && (y("div", { className: "fc-event-time" }, innerProps.timeText)),
-            y("div", { className: "fc-event-title-container" },
-                y("div", { className: "fc-event-title fc-sticky" }, innerProps.event.title || y(_, null, "\u00A0")))));
+        return (y("div", { className: "fc-events-main-frame" },
+            innerProps.timeText && (y("div", { className: "fc-events-time" }, innerProps.timeText)),
+            y("div", { className: "fc-events-title-container" },
+                y("div", { className: "fc-events-title fc-sticky" }, innerProps.event.title || y(_, null, "\u00A0")))));
     }
 
     const NowIndicatorContainer = (props) => (y(ViewContextType.Consumer, null, (context) => {
@@ -6746,12 +6746,12 @@ var FullCalendar = (function (exports) {
         render() {
             let { props } = this;
             let { seg } = props;
-            return (y(EventContainer, { elTag: "div", elClasses: ['fc-bg-event'], elStyle: { backgroundColor: seg.eventRange.ui.backgroundColor }, defaultGenerator: renderInnerContent, seg: seg, timeText: "", isDragging: false, isResizing: false, isDateSelecting: false, isSelected: false, isPast: props.isPast, isFuture: props.isFuture, isToday: props.isToday, disableDragging: true, disableResizing: true }));
+            return (y(EventContainer, { elTag: "div", elClasses: ['fc-bg-events'], elStyle: { backgroundColor: seg.eventRange.ui.backgroundColor }, defaultGenerator: renderInnerContent, seg: seg, timeText: "", isDragging: false, isResizing: false, isDateSelecting: false, isSelected: false, isPast: props.isPast, isFuture: props.isFuture, isToday: props.isToday, disableDragging: true, disableResizing: true }));
         }
     }
     function renderInnerContent(props) {
         let { title } = props.event;
-        return title && (y("div", { className: "fc-event-title" }, props.event.title));
+        return title && (y("div", { className: "fc-events-title" }, props.event.title));
     }
     function renderFill(fillType) {
         return (y("div", { className: `fc-${fillType}` }));
@@ -7349,7 +7349,7 @@ var FullCalendar = (function (exports) {
                 eventSource = sourceInput.internalEventSource;
             }
             else if (typeof sourceInput === 'boolean') {
-                if (sourceInput) { // true. part of the first event source
+                if (sourceInput) { // true. part of the first events source
                     [eventSource] = hashValuesToArray(state.eventSources);
                 }
             }
@@ -8751,7 +8751,7 @@ var FullCalendar = (function (exports) {
         },
     });
     /*
-    BUG: if `event` was supplied, all previously-given `eventSources` will be wiped out
+    BUG: if `events` was supplied, all previously-given `eventSources` will be wiped out
     */
     function handleEventSources(inputs, context) {
         let unfoundSources = hashValuesToArray(context.getCurrentData().eventSources);
@@ -9524,7 +9524,7 @@ var FullCalendar = (function (exports) {
     }
 
     /*
-    Detects when the user clicks on an event within a DateComponent
+    Detects when the user clicks on an events within a DateComponent
     */
     class EventClicking extends Interaction {
         constructor(settings) {
@@ -9537,7 +9537,7 @@ var FullCalendar = (function (exports) {
                     component.isValidSegDownEl(ev.target)) {
                     // our way to simulate a link click for elements that can't be <a> tags
                     // grab before trigger fired in case trigger trashes DOM thru rerendering
-                    let hasUrlContainer = elementClosest(ev.target, '.fc-event-forced-url');
+                    let hasUrlContainer = elementClosest(ev.target, '.fc-events-forced-url');
                     let url = hasUrlContainer ? hasUrlContainer.querySelector('a[href]').href : '';
                     context.emitter.trigger('eventClick', {
                         el: segEl,
@@ -9550,19 +9550,19 @@ var FullCalendar = (function (exports) {
                     }
                 }
             };
-            this.destroy = listenBySelector(settings.el, 'click', '.fc-event', // on both fg and bg events
+            this.destroy = listenBySelector(settings.el, 'click', '.fc-events', // on both fg and bg events
             this.handleSegClick);
         }
     }
 
     /*
     Triggers events and adds/removes core classNames when the user's pointer
-    enters/leaves event-elements of a component.
+    enters/leaves events-elements of a component.
     */
     class EventHovering extends Interaction {
         constructor(settings) {
             super(settings);
-            // for simulating an eventMouseLeave when the event el is destroyed while mouse is over it
+            // for simulating an eventMouseLeave when the events el is destroyed while mouse is over it
             this.handleEventElRemove = (el) => {
                 if (el === this.currentSegEl) {
                     this.handleSegLeave(null, this.currentSegEl);
@@ -9580,7 +9580,7 @@ var FullCalendar = (function (exports) {
                     this.triggerEvent('eventMouseLeave', ev, segEl);
                 }
             };
-            this.removeHoverListeners = listenToHoverBySelector(settings.el, '.fc-event', // on both fg and bg events
+            this.removeHoverListeners = listenToHoverBySelector(settings.el, '.fc-events', // on both fg and bg events
             this.handleSegEnter, this.handleSegLeave);
         }
         destroy() {

@@ -27,4 +27,16 @@ class CommentsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findActiveCommentsByRental(int $rentalId): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.rentals = :rentalId')
+            ->setParameter('rentalId', $rentalId)
+            ->andWhere('c.is_active = :isActive')
+            ->setParameter('isActive', true)
+            ->orderBy('c.created_at', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

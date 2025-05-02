@@ -57,15 +57,15 @@ FullCalendar.List = (function (exports, core, internal$1, preact) {
             let { seg, timeHeaderId, eventHeaderId, dateHeaderId } = props;
             let timeFormat = options.eventTimeFormat || DEFAULT_TIME_FORMAT;
             return (preact.createElement(internal$1.EventContainer, Object.assign({}, props, { elTag: "tr", elClasses: [
-                    'fc-list-event',
-                    seg.eventRange.def.url && 'fc-event-forced-url',
+                    'fc-list-events',
+                    seg.eventRange.def.url && 'fc-events-forced-url',
                 ], defaultGenerator: () => renderEventInnerContent(seg, context) /* weird */, seg: seg, timeText: "", disableDragging: true, disableResizing: true }), (InnerContent, eventContentArg) => (preact.createElement(preact.Fragment, null,
                 buildTimeContent(seg, timeFormat, context, timeHeaderId, dateHeaderId),
-                preact.createElement("td", { "aria-hidden": true, className: "fc-list-event-graphic" },
-                    preact.createElement("span", { className: "fc-list-event-dot", style: {
+                preact.createElement("td", { "aria-hidden": true, className: "fc-list-events-graphic" },
+                    preact.createElement("span", { className: "fc-list-events-dot", style: {
                             borderColor: eventContentArg.borderColor || eventContentArg.backgroundColor,
                         } })),
-                preact.createElement(InnerContent, { elTag: "td", elClasses: ['fc-list-event-title'], elAttrs: { headers: `${eventHeaderId} ${dateHeaderId}` } })))));
+                preact.createElement(InnerContent, { elTag: "td", elClasses: ['fc-list-events-title'], elAttrs: { headers: `${eventHeaderId} ${dateHeaderId}` } })))));
         }
     }
     function renderEventInnerContent(seg, context) {
@@ -101,11 +101,11 @@ FullCalendar.List = (function (exports, core, internal$1, preact) {
                     text: context.options.allDayText,
                     view: context.viewApi,
                 };
-                return (preact.createElement(internal$1.ContentContainer, { elTag: "td", elClasses: ['fc-list-event-time'], elAttrs: {
+                return (preact.createElement(internal$1.ContentContainer, { elTag: "td", elClasses: ['fc-list-events-time'], elAttrs: {
                         headers: `${timeHeaderId} ${dateHeaderId}`,
                     }, renderProps: renderProps, generatorName: "allDayContent", customGenerator: options.allDayContent, defaultGenerator: renderAllDayInner, classNameGenerator: options.allDayClassNames, didMount: options.allDayDidMount, willUnmount: options.allDayWillUnmount }));
             }
-            return (preact.createElement("td", { className: "fc-list-event-time" }, timeText));
+            return (preact.createElement("td", { className: "fc-list-events-time" }, timeText));
         }
         return null;
     }
@@ -114,7 +114,7 @@ FullCalendar.List = (function (exports, core, internal$1, preact) {
     }
 
     /*
-    Responsible for the scroller, and forwarding event-related actions into the "grid".
+    Responsible for the scroller, and forwarding events-related actions into the "grid".
     */
     class ListView extends internal$1.DateComponent {
         constructor() {
@@ -279,7 +279,7 @@ FullCalendar.List = (function (exports, core, internal$1, preact) {
         return input === false ? null : internal$1.createFormatter(input);
     }
 
-    var css_248z = ":root{--fc-list-event-dot-width:10px;--fc-list-event-hover-bg-color:#f5f5f5}.fc-theme-standard .fc-list{border:1px solid var(--fc-border-color)}.fc .fc-list-empty{align-items:center;background-color:var(--fc-neutral-bg-color);display:flex;height:100%;justify-content:center}.fc .fc-list-empty-cushion{margin:5em 0}.fc .fc-list-table{border-style:hidden;width:100%}.fc .fc-list-table tr>*{border-left:0;border-right:0}.fc .fc-list-sticky .fc-list-day>*{background:var(--fc-page-bg-color);position:sticky;top:0}.fc .fc-list-table thead{left:-10000px;position:absolute}.fc .fc-list-table tbody>tr:first-child th{border-top:0}.fc .fc-list-table th{padding:0}.fc .fc-list-day-cushion,.fc .fc-list-table td{padding:8px 14px}.fc .fc-list-day-cushion:after{clear:both;content:\"\";display:table}.fc-theme-standard .fc-list-day-cushion{background-color:var(--fc-neutral-bg-color)}.fc-direction-ltr .fc-list-day-text,.fc-direction-rtl .fc-list-day-side-text{float:left}.fc-direction-ltr .fc-list-day-side-text,.fc-direction-rtl .fc-list-day-text{float:right}.fc-direction-ltr .fc-list-table .fc-list-event-graphic{padding-right:0}.fc-direction-rtl .fc-list-table .fc-list-event-graphic{padding-left:0}.fc .fc-list-event.fc-event-forced-url{cursor:pointer}.fc .fc-list-event:hover td{background-color:var(--fc-list-event-hover-bg-color)}.fc .fc-list-event-graphic,.fc .fc-list-event-time{white-space:nowrap;width:1px}.fc .fc-list-event-dot{border:calc(var(--fc-list-event-dot-width)/2) solid var(--fc-event-border-color);border-radius:calc(var(--fc-list-event-dot-width)/2);box-sizing:content-box;display:inline-block;height:0;width:0}.fc .fc-list-event-title a{color:inherit;text-decoration:none}.fc .fc-list-event.fc-event-forced-url:hover a{text-decoration:underline}";
+    var css_248z = ":root{--fc-list-events-dot-width:10px;--fc-list-events-hover-bg-color:#f5f5f5}.fc-theme-standard .fc-list{border:1px solid var(--fc-border-color)}.fc .fc-list-empty{align-items:center;background-color:var(--fc-neutral-bg-color);display:flex;height:100%;justify-content:center}.fc .fc-list-empty-cushion{margin:5em 0}.fc .fc-list-table{border-style:hidden;width:100%}.fc .fc-list-table tr>*{border-left:0;border-right:0}.fc .fc-list-sticky .fc-list-day>*{background:var(--fc-page-bg-color);position:sticky;top:0}.fc .fc-list-table thead{left:-10000px;position:absolute}.fc .fc-list-table tbody>tr:first-child th{border-top:0}.fc .fc-list-table th{padding:0}.fc .fc-list-day-cushion,.fc .fc-list-table td{padding:8px 14px}.fc .fc-list-day-cushion:after{clear:both;content:\"\";display:table}.fc-theme-standard .fc-list-day-cushion{background-color:var(--fc-neutral-bg-color)}.fc-direction-ltr .fc-list-day-text,.fc-direction-rtl .fc-list-day-side-text{float:left}.fc-direction-ltr .fc-list-day-side-text,.fc-direction-rtl .fc-list-day-text{float:right}.fc-direction-ltr .fc-list-table .fc-list-events-graphic{padding-right:0}.fc-direction-rtl .fc-list-table .fc-list-events-graphic{padding-left:0}.fc .fc-list-events.fc-events-forced-url{cursor:pointer}.fc .fc-list-events:hover td{background-color:var(--fc-list-events-hover-bg-color)}.fc .fc-list-events-graphic,.fc .fc-list-events-time{white-space:nowrap;width:1px}.fc .fc-list-events-dot{border:calc(var(--fc-list-events-dot-width)/2) solid var(--fc-events-border-color);border-radius:calc(var(--fc-list-events-dot-width)/2);box-sizing:content-box;display:inline-block;height:0;width:0}.fc .fc-list-events-title a{color:inherit;text-decoration:none}.fc .fc-list-events.fc-events-forced-url:hover a{text-decoration:underline}";
     internal$1.injectStyles(css_248z);
 
     var plugin = core.createPlugin({

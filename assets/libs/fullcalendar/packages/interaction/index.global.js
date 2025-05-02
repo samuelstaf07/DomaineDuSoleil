@@ -383,7 +383,7 @@ FullCalendar.Interaction = (function (exports, core, internal) {
                 mirrorEl.style.userSelect = 'none';
                 mirrorEl.style.webkitUserSelect = 'none';
                 mirrorEl.style.pointerEvents = 'none';
-                mirrorEl.classList.add('fc-event-dragging');
+                mirrorEl.classList.add('fc-events-dragging');
                 internal.applyStyle(mirrorEl, {
                     position: 'fixed',
                     zIndex: this.zIndex,
@@ -785,7 +785,7 @@ FullCalendar.Interaction = (function (exports, core, internal) {
         destroy() {
             this.pointer.destroy();
             // HACK: simulate a pointer-up to end the current drag
-            // TODO: fire 'dragend' directly and stop interaction. discourage use of pointerup event (b/c might not fire)
+            // TODO: fire 'dragend' directly and stop interaction. discourage use of pointerup events (b/c might not fire)
             this.onPointerUp({});
         }
         startDelay(ev) {
@@ -1253,7 +1253,7 @@ FullCalendar.Interaction = (function (exports, core, internal) {
                 this.relevantEvents = internal.getRelevantEvents(initialContext.getCurrentData().eventStore, eventInstanceId);
                 dragging.minDistance = ev.isTouch ? 0 : options.eventDragMinDistance;
                 dragging.delay =
-                    // only do a touch delay if touch and this event hasn't been selected yet
+                    // only do a touch delay if touch and this events hasn't been selected yet
                     (ev.isTouch && eventInstanceId !== component.props.eventSelection) ?
                         getComponentTouchDelay(component) :
                         null;
@@ -1265,25 +1265,25 @@ FullCalendar.Interaction = (function (exports, core, internal) {
                 }
                 mirror.revertDuration = options.dragRevertDuration;
                 let isValid = component.isValidSegDownEl(origTarget) &&
-                    !internal.elementClosest(origTarget, '.fc-event-resizer'); // NOT on a resizer
+                    !internal.elementClosest(origTarget, '.fc-events-resizer'); // NOT on a resizer
                 dragging.setIgnoreMove(!isValid);
                 // disable dragging for elements that are resizable (ie, selectable)
                 // but are not draggable
                 this.isDragging = isValid &&
-                    ev.subjectEl.classList.contains('fc-event-draggable');
+                    ev.subjectEl.classList.contains('fc-events-draggable');
             };
             this.handleDragStart = (ev) => {
                 let initialContext = this.component.context;
                 let eventRange = this.eventRange;
                 let eventInstanceId = eventRange.instance.instanceId;
                 if (ev.isTouch) {
-                    // need to select a different event?
+                    // need to select a different events?
                     if (eventInstanceId !== this.component.props.eventSelection) {
                         initialContext.dispatch({ type: 'SELECT_EVENT', eventInstanceId });
                     }
                 }
                 else {
-                    // if now using mouse, but was previous touch interaction, clear selected event
+                    // if now using mouse, but was previous touch interaction, clear selected events
                     initialContext.dispatch({ type: 'UNSELECT_EVENT' });
                 }
                 if (this.isDragging) {
@@ -1349,7 +1349,7 @@ FullCalendar.Interaction = (function (exports, core, internal) {
                     this.dragging.setMirrorNeedsRevert(!mutation);
                     // render the mirror if no already-rendered mirror
                     // TODO: wish we could somehow wait for dispatch to guarantee render
-                    this.dragging.setMirrorIsVisible(!hit || !this.subjectEl.getRootNode().querySelector('.fc-event-mirror'));
+                    this.dragging.setMirrorIsVisible(!hit || !this.subjectEl.getRootNode().querySelector('.fc-events-mirror'));
                     // assign states based on new hit
                     this.receivingContext = receivingContext;
                     this.validMutation = mutation;
@@ -1524,7 +1524,7 @@ FullCalendar.Interaction = (function (exports, core, internal) {
     }
     // TODO: test this in IE11
     // QUESTION: why do we need it on the resizable???
-    EventDragging.SELECTOR = '.fc-event-draggable, .fc-event-resizable';
+    EventDragging.SELECTOR = '.fc-events-draggable, .fc-events-resizable';
     function computeEventMutation(hit0, hit1, eventInstanceStart, massagers) {
         let dateSpan0 = hit0.dateSpan;
         let dateSpan1 = hit1.dateSpan;
@@ -1541,7 +1541,7 @@ FullCalendar.Interaction = (function (exports, core, internal) {
             }
             else {
                 // Moving from allDate->timed
-                // Doesn't matter where on the event the drag began, mutate the event's start-date to date1
+                // Doesn't matter where on the events the drag began, mutate the events's start-date to date1
                 date0 = eventInstanceStart;
             }
         }
@@ -1585,7 +1585,7 @@ FullCalendar.Interaction = (function (exports, core, internal) {
                 let seg = internal.getElSeg(segEl);
                 let eventRange = this.eventRange = seg.eventRange;
                 this.dragging.minDistance = component.context.options.eventDragMinDistance;
-                // if touch, need to be working with a selected event
+                // if touch, need to be working with a selected events
                 this.dragging.setIgnoreMove(!this.component.isValidSegDownEl(ev.origEvent.target) ||
                     (ev.isTouch && this.component.props.eventSelection !== eventRange.instance.instanceId));
             };
@@ -1622,7 +1622,7 @@ FullCalendar.Interaction = (function (exports, core, internal) {
                         && this.isHitComboAllowed
                         && !this.isHitComboAllowed(initialHit, hit);
                     if (!disallowed) {
-                        mutation = computeMutation(initialHit, hit, ev.subjectEl.classList.contains('fc-event-resizer-start'), eventInstance.range);
+                        mutation = computeMutation(initialHit, hit, ev.subjectEl.classList.contains('fc-events-resizer-start'), eventInstance.range);
                     }
                 }
                 if (mutation) {
@@ -1702,7 +1702,7 @@ FullCalendar.Interaction = (function (exports, core, internal) {
             };
             let { component } = settings;
             let dragging = this.dragging = new FeaturefulElementDragging(settings.el);
-            dragging.pointer.selector = '.fc-event-resizer';
+            dragging.pointer.selector = '.fc-events-resizer';
             dragging.touchScrollAllowed = false;
             dragging.autoScroller.isEnabled = component.context.options.dragScroll;
             let hitDragging = this.hitDragging = new HitDragging(this.dragging, internal.interactionSettingsToStore(settings));
@@ -1715,7 +1715,7 @@ FullCalendar.Interaction = (function (exports, core, internal) {
             this.dragging.destroy();
         }
         querySegEl(ev) {
-            return internal.elementClosest(ev.subjectEl, '.fc-event');
+            return internal.elementClosest(ev.subjectEl, '.fc-events');
         }
     }
     function computeMutation(hit0, hit1, isFromStart, instanceRange) {
@@ -1749,7 +1749,7 @@ FullCalendar.Interaction = (function (exports, core, internal) {
                 let unselectCancel = this.context.options.unselectCancel;
                 let downEl = internal.getEventTargetViaRoot(pev.origEvent);
                 this.matchesCancel = !!internal.elementClosest(downEl, unselectCancel);
-                this.matchesEvent = !!internal.elementClosest(downEl, EventDragging.SELECTOR); // interaction started on an event?
+                this.matchesEvent = !!internal.elementClosest(downEl, EventDragging.SELECTOR); // interaction started on an events?
             };
             this.onDocumentPointerUp = (pev) => {
                 let { context } = this;
@@ -1765,8 +1765,8 @@ FullCalendar.Interaction = (function (exports, core, internal) {
                             context.calendarApi.unselect(pev);
                         }
                     }
-                    if (calendarState.eventSelection && // an existing event selected?
-                        !this.matchesEvent // interaction DIDN'T start on an event
+                    if (calendarState.eventSelection && // an existing events selected?
+                        !this.matchesEvent // interaction DIDN'T start on an events
                     ) {
                         context.dispatch({ type: 'UNSELECT_EVENT' });
                     }
@@ -1844,7 +1844,7 @@ FullCalendar.Interaction = (function (exports, core, internal) {
                 this.displayDrag(receivingContext, interaction);
                 // show mirror if no already-rendered mirror element OR if we are shutting down the mirror (?)
                 // TODO: wish we could somehow wait for dispatch to guarantee render
-                dragging.setMirrorIsVisible(isFinal || !droppableEvent || !document.querySelector('.fc-event-mirror'));
+                dragging.setMirrorIsVisible(isFinal || !droppableEvent || !document.querySelector('.fc-events-mirror'));
                 if (!isInvalid) {
                     internal.enableCursor();
                 }
@@ -1877,7 +1877,7 @@ FullCalendar.Interaction = (function (exports, core, internal) {
                                 eventInstanceId: droppableEvent.instance.instanceId,
                             });
                         }
-                        // signal that an external event landed
+                        // signal that an external events landed
                         receivingContext.emitter.trigger('eventReceive', {
                             event: new internal.EventImpl(receivingContext, droppableEvent.def, droppableEvent.instance),
                             relatedEvents: [],
@@ -1936,7 +1936,7 @@ FullCalendar.Interaction = (function (exports, core, internal) {
             return true;
         }
     }
-    // Utils for computing event store from the DragMeta
+    // Utils for computing events store from the DragMeta
     // ----------------------------------------------------------------------------------------------------
     function computeEventForDateSpan(dateSpan, dragMeta, context) {
         let defProps = Object.assign({}, dragMeta.leftoverProps);
@@ -1964,7 +1964,7 @@ FullCalendar.Interaction = (function (exports, core, internal) {
         let str = getEmbeddedElData(el, 'event');
         let obj = str ?
             JSON.parse(str) :
-            { create: false }; // if no embedded data, assume no event creation
+            { create: false }; // if no embedded data, assume no events creation
         return internal.parseDragMeta(obj);
     }
     internal.config.dataAttrPrefix = '';
@@ -1976,7 +1976,7 @@ FullCalendar.Interaction = (function (exports, core, internal) {
 
     /*
     Makes an element (that is *external* to any calendar) draggable.
-    Can pass in data that determines how an event will be created when dropped onto a calendar.
+    Can pass in data that determines how an events will be created when dropped onto a calendar.
     Leverages FullCalendar's internal drag-n-drop functionality WITHOUT a third-party drag system.
     */
     class ExternalDraggable {
@@ -1996,8 +1996,8 @@ FullCalendar.Interaction = (function (exports, core, internal) {
             this.handleDragStart = (ev) => {
                 if (ev.isTouch &&
                     this.dragging.delay &&
-                    ev.subjectEl.classList.contains('fc-event')) {
-                    this.dragging.mirror.getMirrorEl().classList.add('fc-event-selected');
+                    ev.subjectEl.classList.contains('fc-events')) {
+                    this.dragging.mirror.getMirrorEl().classList.add('fc-events-selected');
                 }
             };
             this.settings = settings;
@@ -2104,7 +2104,7 @@ FullCalendar.Interaction = (function (exports, core, internal) {
                 dragging.pointer.selector = settings.itemSelector;
             }
             else if (containerEl === document) {
-                dragging.pointer.selector = '[data-event]';
+                dragging.pointer.selector = '[data-events]';
             }
             if (typeof settings.mirrorSelector === 'string') {
                 dragging.mirrorSelector = settings.mirrorSelector;

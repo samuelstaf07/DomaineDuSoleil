@@ -46,9 +46,29 @@ class Events
     #[ORM\Column(length: 255)]
     private ?string $location = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $title = null;
+
+    /**
+     * @var Collection<int, ReservationsEvents>
+     */
+    #[ORM\OneToMany(targetEntity: ReservationsEvents::class, mappedBy: 'event')]
+    private Collection $reservations;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
+    }
+
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function setReservations(Collection $reservations): void
+    {
+        $this->reservations = $reservations;
     }
 
     public function getId(): ?int
@@ -193,5 +213,37 @@ class Events
     {
         $now = new \DateTimeImmutable();
         return $this->date < $now;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): static
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+    public function getHomePageImage(): Images | null
+    {
+        foreach ($this->getImages() as $image) {
+            if ($image->isHomePage() === true) {
+                return $image;
+            }
+        }
+
+        return null;
+    }
+
+    public function getRemainingPlaces(): int
+    {
+        $reservedPlaces = 0;
+        foreach ($this->reservations as $reservation) {
+            $reservedPlaces += $reservation->getNbPlaces();
+        }
+
+        return $this->nb_places - $reservedPlaces;
     }
 }

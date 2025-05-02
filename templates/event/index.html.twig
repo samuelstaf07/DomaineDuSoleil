@@ -2,57 +2,53 @@
 
 {% block title %}Tous les événements{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('libs/jquery/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('libs/magnific-popup/dist/jquery.magnific-popup.min.js') }}"></script>
+    <script src="{{ asset('js/events.js') }}"></script>
+{% endblock %}
+
 {% block body %}
-    <header class="bg-darkGreen contentMargin d-flex justify-content-center flex-column align-items-center">
-        <h2 class="text-center color-white">Tous les événements</h2>
-        <div class="mt-5 w-75">
-            <div class="row justify-content-center">
-                {% for event in events %}
-                    <div class="col-sm-6 mb-4 px-3">
-                        <div class="card event-card h-100 border-0 rounded-4">
-                            <div class="row g-0 h-100">
-                                <div class="col-md-5 h-100">
-                                    <img src="{{ asset('img/imageAccueil.jpg') }}" class="img-fluid rounded-start-4 h-100 w-100 object-fit-cover" alt="Tir à l'arc">
-                                </div>
-                                <div class="col-md-7 d-flex flex-column">
-                                    <div class="card-body flex-grow-1">
-                                        <h5 class="card-title">
-                                            {% set words = event.content|split(' ') %}
-                                            {% if words|length <= 5 %}
-                                                {{ event.content }}
-                                            {% else %}
-                                                {{ words|slice(0, 5)|join(' ') ~ '...' }}
-                                            {% endif %}
-                                        </h5>
-                                        <p class="card-text">
-                                            <i class="fas fa-user-friends"></i>
-                                            {% if event.ageRequirement == 0%}
-                                                Pour tout le monde !
-                                            {% else %}
-                                                À partir de {{ event.ageRequirement }} ans
-                                            {% endif %}
-                                            <br>
-                                            <i class="fas fa-map-marker-alt"></i>{{ event.location }}<br>
-                                            <i class="fas fa-calendar-alt"></i> le {{ event.date|date('d/m/Y') }}<br>
-                                            <i class="fas fa-ticket-alt"></i> {{ event.nbPlaces }} places
-                                        </p>
-                                    </div>
-                                    <div class="card-footer bg-transparent border-0">
-                                        {% if event.isPast() %}
-                                            <p class="alert alert-warning">Événement déja passé.</p>
-                                        {% else %}
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <a href="#" class="btn-yellow">Voir plus</a>
-                                                <span class="price h3">{{ event.price|number_format(2, ',', '') }}€/pers</span>
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <div class="contentMargin popup-gallery d-flex flex-column align-items-center gap-5 mb-4">
+        <h3 class="myTitle fs-2">{{ event.title|capitalize }}</h3>
+        <header class="w-75 d-flex gap-3">
+            <a class="col-md-6" href="{{ asset('styles/img/' ~ event.getHomePageImage().getSrc()) }}" title="{{ event.getHomePageImage().getAlt() }}">
+                <img class="img-fluid rounded-4 w-100 h-100" src="{{ asset('styles/img/' ~ event.getHomePageImage().getSrc()) }}" alt="{{ event.getHomePageImage().getAlt() }}">
+            </a>
+            <div class="col-md-6">
+                <p class="bg-lightGreen rounded-4 p-2">{{ event.content|capitalize }}</p>
+
+                {{ form_start(form, {'attr': {'class': 'bg-LightGrey rounded-4 p-2 d-flex justify-content-between p-3', 'data-turbo': 'false'}}) }}
+                <div class="w-50">
+                    <p>{{ event.nbPlaces }} places <span class="color-yellow">({{ event.getRemainingPlaces() }} places restantes)</span></p>
+                    <div class="input-group mb-3 w-75">
+                        {{ form_widget(form.nb_places, {'attr': {'min': 0, 'max': event.getRemainingPlaces(), 'placeholder': 'Nombre de place souhaité', 'aria-label': 'Nombre de place souhaité', 'aria-describedby': 'basic-addon2'}}) }}
+                        <span class="input-group-text" id="basic-addon2">places</span>
                     </div>
-                {% endfor %}
+                </div>
+                <div class="w-50 d-flex align-items-end flex-column">
+                    <h4><span class="color-lightGreen">{{ event.price|number_format(2, ',', '') }}€</span>/personne</h4>
+                    <button type="submit" class="btn-yellow w-50 text-center">Ajouter au panier</button>
+                </div>
+                {{ form_end(form) }}
             </div>
-        </div>
-    </header>
+        </header>
+
+        <section id="galleryRental" class="d-flex flex-column align-items-center gap-3 py-4 px-5 rounded-4 bg-lightGreen">
+            {% set images = event.getImages() %}
+            {% if images|length > 1 %}
+                <h3>Gallerie photo de l'événement</h3>
+                <div class="d-flex popup-gallery w-75 justify-content-center gap-3">
+                    {% for image in images %}
+                        {% if not image.isHomePage %}
+                            <a href="{{ asset('styles/img/' ~ image.getSrc()) }}" title="{{ image.getAlt() }}">
+                                <img src="{{ asset('styles/img/' ~ image.getSrc()) }}" alt="{{ image.getAlt() }}" class="img-fluid rounded-4 smallImage">
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </section>
+    </div>
 {% endblock %}

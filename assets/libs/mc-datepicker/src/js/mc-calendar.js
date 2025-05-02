@@ -37,7 +37,7 @@ const MCDatepicker = (() => {
 		const instance = createInstance(MCDatepicker, calendarNodes, instanceOptions);
 		// push fresh created instance to instances array
 		datepickers.push(instance);
-		// add event listener to the linked input
+		// add events listener to the linked input
 		applyOnFocusListener(instance);
 
 		return instance;

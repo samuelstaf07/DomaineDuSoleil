@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Toutes les nouveautés{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('libs/jquery/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('js/posts.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="contentMargin d-flex flex-column align-items-center gap-4 pb-4">
+        <h2 class="text-center">Toutes les nouveautés</h2>
+        <div class="d-flex justify-content-center w-75">
+            <ul class="list-group w-75 rounded-4">
+                {% for post in posts %}
+                    <li class="postsItems d-none list-group-item d-flex align-items-center px-2">
+                        <div class="d-flex justify-content-between align-items-center w-100">
+                            <div class="d-flex align-items-center">
+                                <small class="text-muted me-3 font-weight-bold">{{ post.createdAt|date('d/m/Y') }}</small>
+                                <h6 class="m-0 text-truncate" style="max-width: 500px;">
+                                    {% set words = post.title|split(' ') %}
+                                    {% if words|length > 5 %}
+                                        {{ words|slice(0, 5)|join(' ') }}...
+                                    {% else %}
+                                        {{ post.title }}
+                                    {% endif %}
+                                </h6>
+                            </div>
+                            <a href="{{ path('app_post', {id:post.id}) }}" class="btn-sm btn-yellow">Voir plus</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <button class="voir-plus btn-lightGreen">Voir plus de poste</button>
+    </div>
+{% endblock %}

@@ -15,9 +15,10 @@ class EventsFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
 
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 19; $i++) {
             $event = new Events();
-            $event->setContent($faker->text(200));
+            $event->setContent($faker->paragraphs(5, true));
+            $event->setTitle($faker->sentence(10));
             $event->setLocation($faker->words(5, true));
             $event->setPrice($faker->randomFloat(2, 10, 200));
             $event->setDate(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('now', '+1 year')));

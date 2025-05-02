@@ -12,6 +12,7 @@
     --myDarkGreen: #006633;
     --myYellow: #F7D844;
     --myBlack: #212429;
+    --myRed: #CE1104;
 }
 
 body{
@@ -250,8 +251,23 @@ h2{
     opacity: 1;
 }
 
-.dropdown button, .dropdown button:hover{
-    background-color: var(--myDarkGreen);
+.dropdown button, .dropdown button:hover, .dropdown .show{
+    background: var(--myLightGrey);
+    color: var(--myWhite);
+    border: none;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    padding: 0.75rem;
+    font-weight: 500;
+}
+
+.dropdown button:active{
+    filter: brightness(90%);
+}
+
+.dropdown img{
+    height: 1rem;
+    width: 1rem;
 }
 
 .smallImage{
@@ -265,7 +281,9 @@ h2{
 .btn-signup,
 .btn-yellow,
 .btn-outline-yellow,
-.btn-black{
+.btn-black,
+.btn-lightGreen,
+.btn-red{
     border: none;
     border-radius: 0.75rem;
     text-decoration: none;
@@ -283,8 +301,20 @@ h2{
 }
 .btn-green:active{
     background-color: color-mix(in srgb, var(--myWhite), black 10%) !important;
-    border: none !important;
     color: var(--myDarkGreen) !important;
+}
+
+.btn-red{
+    background-color: var(--myRed);
+    color: var(--myWhite);
+}
+.btn-red:hover{
+    background-color: color-mix(in srgb, var(--myWhite), black 10%);
+    color: var(--myRed)
+}
+.btn-red:active{
+    background-color: color-mix(in srgb, var(--myWhite), black 10%) !important;
+    color: var(--myRed) !important;
 }
 
 .btn-outline-green{
@@ -298,7 +328,6 @@ h2{
 }
 .btn-outline-green:active{
     background-color: color-mix(in srgb, var(--myWhite), black 10%) !important;
-    border: none !important;
     color: var(--myDarkGreen) !important;
 }
 
@@ -312,7 +341,6 @@ h2{
 }
 .btn-signup:active{
     background-color: color-mix(in srgb, var(--myWhite), black 10%) !important;
-    border: none !important;
     color: var(--myLightGrey) !important;
 }
 
@@ -326,7 +354,6 @@ h2{
 }
 .btn-yellow:active{
     background-color: color-mix(in srgb, var(--myLightGrey), black 10%) !important;
-    border: none;
     color: var(--myYellow);
 }
 
@@ -341,7 +368,6 @@ h2{
 }
 .btn-outline-yellow:active{
     background-color: color-mix(in srgb, var(--myLightGrey), black 10%);
-    border: none !important;
     color: var(--myYellow) !important;
 }
 
@@ -355,7 +381,19 @@ h2{
 }
 .btn-black:active{
     background-color: color-mix(in srgb, var(--myWhite), black 10%);
-    border: none !important;
+    color: var(--myBlack) !important;
+}
+
+.btn-lightGreen{
+    background-color: var(--myBlack);
+    color: var(--myLightGreen);
+}
+.btn-lightGreen:hover{
+    background-color: var(--myLightGreen);
+    color: var(--myBlack);
+}
+.btn-lightGreen:active{
+    background-color: color-mix(in srgb, var(--myLightGreen), black 10%);
     color: var(--myBlack) !important;
 }
 
@@ -366,6 +404,10 @@ h2{
 
 .color-white{
     color: var(--myWhite);
+}
+
+.color-yellow{
+    color: var(--myYellow);
 }
 
 .bg-Yellow{
@@ -435,6 +477,20 @@ h2{
 
 .disabled{
     pointer-events: none;
-    opacity: 50%;
+    opacity: 80%;
     cursor: default;
+}
+
+#dates input{
+    cursor: pointer;
+}
+
+#dates input::placeholder{
+    color: var(--myWhite);
+}
+
+.iconImage{
+    height: 75px;
+    width: 75px;
+    object-fit: cover;
 }

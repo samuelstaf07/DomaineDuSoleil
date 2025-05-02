@@ -24,6 +24,7 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
         $image = new Images();
         $image->setId(1)->setAlt('mon image')->setSrc('source');
+        $image->setIsHomePage(0);
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var string $plainPassword */
