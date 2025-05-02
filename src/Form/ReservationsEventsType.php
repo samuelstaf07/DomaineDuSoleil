@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Positive;
 
@@ -26,6 +27,10 @@ class ReservationsEventsType extends AbstractType
                     ]),
                     new Positive([
                         'message' => 'Le nombre de places doit être positif.',
+                    ]),
+                    new LessThanOrEqual([
+                        'value' => 20,
+                        'message' => 'Le nombre de places ne peut pas dépasser 20.',
                     ]),
                 ],
             ])

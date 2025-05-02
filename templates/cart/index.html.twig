@@ -3,7 +3,7 @@
 {% block title %}Tous les événements{% endblock %}
 
 {% block body %}
-    <div class="contentMargin d-flex justify-content-center flex-column align-items-center">
+    <div class="contentMargin d-flex justify-content-center flex-column align-items-center gap-3">
         <h3>Panier</h3>
 
         {% if cartElements %}
@@ -16,29 +16,31 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Nom</th>
-                        <th>Date de début</th>
-                        <th>Date de fin</th>
-                        <th>Prix par jour</th>
-                        <th>Prix total</th>
+                        <th class="text-center">Image</th>
+                        <th class="text-center">Nom</th>
+                        <th class="text-center">Date de début</th>
+                        <th class="text-center">Date de fin</th>
+                        <th class="text-center">Prix par jour</th>
+                        <th class="text-center">Prix total</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for elem in rentals %}
                         <tr>
-                            <td class="align-middle">{{ elem.rental.id }}</td>
-                            <td class="align-middle"><a href="{{ path('app_rental', {id: elem.rental.id }) }}">{{ elem.rental.title }}</a></td>
-                            <td class="align-middle">{{ elem.dateStart|date("d/m/Y") }}</td>
-                            <td class="align-middle">{{ elem.dateEnd|date("d/m/Y") }}</td>
-                            <td class="align-middle">
+                            <td class="align-middle text-center">
+                                <img src="{{ asset('styles/img/' ~ elem.image.getSrc()) }}" alt="{{ asset('styles/img/' ~ elem.image.getAlt()) }}" class="iconImage rounded-4">
+                            </td>
+                            <td class="align-middle text-center"><a href="{{ path('app_rental', {id: elem.rental.id }) }}">{{ elem.rental.title|capitalize }}</a></td>
+                            <td class="align-middle text-center">{{ elem.dateStart|date("d/m/Y") }}</td>
+                            <td class="align-middle text-center">{{ elem.dateEnd|date("d/m/Y") }}</td>
+                            <td class="align-middle text-center">
                                 {% if elem.rental.isOnPromotion %}
                                     {{ (elem.rental.pricePerDay * 0.9)|round(2, 'floor')|number_format(2, ',', '') }}€
                                 {% else %}
                                     {{ elem.rental.pricePerDay|round(2, 'floor')|number_format(2, ',', '') }}€
                                 {% endif %}
                             </td>
-                            <td class="align-middle">
+                            <td class="align-middle text-center">
                                 {% set days = elem.dateEnd.diff(elem.dateStart).days + 1 %}
                                 {% if elem.rental.isOnPromotion %}
                                     {% set dailyPrice = (elem.rental.pricePerDay * 0.9)|round(2, 'floor') %}
@@ -47,6 +49,9 @@
                                 {% endif %}
 
                                 {{ (days * dailyPrice)|number_format(2, ',', '') }}€
+                            </td>
+                            <td class="align-middle text-center">
+                                <a href="{{ path('app_delete_element', {id: elem.id}) }}" class="btn btn-red">Supprimer</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -60,28 +65,29 @@
                 <table class="table align-middle-table">
                     <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Image</th>
-                        <th>Nom</th>
-                        <th>Nombre de places</th>
-                        <th>Prix par personne</th>
-                        <th>Prix total</th>
+                        <th class="text-center">Image</th>
+                        <th class="text-center">Nom</th>
+                        <th class="text-center">Nombre de places</th>
+                        <th class="text-center">Prix par personne</th>
+                        <th class="text-center">Prix total</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for elem in events %}
                         <tr>
-                            <td class="align-middle">{{ elem.event.id }}</td>
-                            <td class="align-middle">
+                            <td class="align-middle text-center">
                                 <img src="{{ asset('styles/img/' ~ elem.image.getSrc()) }}" alt="{{ asset('styles/img/' ~ elem.image.getAlt()) }}" class="iconImage rounded-4">
                             </td>
-                            <td class="align-middle"><a href="{{ path('app_event', {id:elem.event.id }) }}">{{ elem.event.title }}</a></td>
-                            <td class="align-middle">{{ elem.nbPlaces }}</td>
-                            <td class="align-middle">
+                            <td class="align-middle text-center"><a href="{{ path('app_event', {id:elem.event.id }) }}">{{ elem.event.title|capitalize }}</a></td>
+                            <td class="align-middle text-center">{{ elem.nbPlaces }}</td>
+                            <td class="align-middle text-center">
                                 {{ elem.event.price|number_format(2, ',', '') }}€
                             </td>
-                            <td class="align-middle">
+                            <td class="align-middle text-center">
                                 {{ (elem.event.price * elem.nbPlaces)|number_format(2, ',', '') }}€
+                            </td>
+                            <td class="align-middle text-center">
+                                <a href="{{ path('app_delete_element', {id: elem.id}) }}" class="btn btn-red">Supprimer</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -112,6 +118,8 @@
             <a href="{{ path('app_reset_cart') }}" class="btn btn-red">Vider le panier</a>
         {% else %}
             <p class="alert alert-secondary m-3">Panier vide.</p>
+            <a href="{{ path('app_events') }}" class="btn btn-yellow">Voir tous les événements</a>
+            <a href="{{ path('app_rentals') }}" class="btn btn-green">Voir tous les Logements</a>
         {% endif %}
     </div>
 {% endblock %}

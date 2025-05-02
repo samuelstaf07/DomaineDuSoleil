@@ -12,6 +12,17 @@
 {% block body %}
     <div class="contentMargin popup-gallery d-flex flex-column align-items-center gap-5 mb-4">
         <h3 class="myTitle fs-2">{{ event.title|capitalize }}</h3>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} alert-dismissible fade show mt-3" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+
         <header class="w-75 d-flex gap-3">
             <a class="col-md-6" href="{{ asset('styles/img/' ~ event.getHomePageImage().getSrc()) }}" title="{{ event.getHomePageImage().getAlt() }}">
                 <img class="img-fluid rounded-4 w-100 h-100" src="{{ asset('styles/img/' ~ event.getHomePageImage().getSrc()) }}" alt="{{ event.getHomePageImage().getAlt() }}">
@@ -23,7 +34,8 @@
                 <div class="w-50">
                     <p>{{ event.nbPlaces }} places <span class="color-yellow">({{ event.getRemainingPlaces() }} places restantes)</span></p>
                     <div class="input-group mb-3 w-75">
-                        {{ form_widget(form.nb_places, {'attr': {'min': 0, 'max': event.getRemainingPlaces(), 'placeholder': 'Nombre de place souhaité', 'aria-label': 'Nombre de place souhaité', 'aria-describedby': 'basic-addon2'}}) }}
+                        {% set maxPlaces = event.getRemainingPlaces() < 20 ? event.getRemainingPlaces() : 20 %}
+                        {{ form_widget(form.nb_places, {'attr': {'min': 0, 'max': maxPlaces, 'placeholder': 'Nombre de place souhaité', 'aria-label': 'Nombre de place souhaité', 'aria-describedby': 'basic-addon2'}}) }}
                         <span class="input-group-text" id="basic-addon2">places</span>
                     </div>
                 </div>
@@ -35,7 +47,7 @@
             </div>
         </header>
 
-        <section id="galleryRental" class="d-flex flex-column align-items-center gap-3 py-4 px-5 rounded-4 bg-lightGreen">
+        <section id="galleryEvent" class="d-flex flex-column align-items-center gap-3 py-4 px-5 rounded-4 bg-lightGreen">
             {% set images = event.getImages() %}
             {% if images|length > 1 %}
                 <h3>Gallerie photo de l'événement</h3>

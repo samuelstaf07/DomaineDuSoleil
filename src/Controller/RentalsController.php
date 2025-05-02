@@ -25,10 +25,18 @@ final class RentalsController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \Exception
+     */
     #[Route('/rental/{id}', name: 'app_rental')]
     public function rental(
-        $id, SessionInterface $session, RentalsRepository $rentalsRepository, CommentsRepository $commentsRepository, Request $request, EntityManagerInterface $entityManager ): Response {
-
+        $id,
+        SessionInterface $session,
+        RentalsRepository $rentalsRepository,
+        CommentsRepository $commentsRepository,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response {
         $rental = $rentalsRepository->find($id);
         $reservedDates = [];
 
@@ -41,21 +49,77 @@ final class RentalsController extends AbstractController
                 ];
             }
 
+            $cart = $session->get('myCart', []);
+            foreach ($cart as $item) {
+                if ($item['type'] === 'rental' && $item['rental']->getId() === $rental->getId()) {
+                    $reservedDates[] = [
+                        'title' => 'Réservation utilisateur',
+                        'start' => $item['dateStart']->format('Y-m-d'),
+                        'end' => $item['dateEnd']->format('Y-m-d'),
+                    ];
+                }
+            }
+
             $reservation = new ReservationsRentals();
             $reservation->setRentals($rental);
 
-            $form = $this->createForm(ReservationsRentalsType::class, $reservation, [
-                'csrf_protection' => true,
-            ]);
+            $form = $this->createForm(ReservationsRentalsType::class, $reservation);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+                $dateStart = $reservation->getDateStart();
+                $dateEnd = $reservation->getDateEnd();
+
+                if ($dateStart > $dateEnd) {
+                    $this->addFlash('danger', 'La date de fin ne peut pas être antérieure à la date de début.');
+                    return $this->render('rental/index.html.twig', [
+                        'rental' => $rental,
+                        'reservedDates' => $reservedDates,
+                        'comments' => $commentsRepository->findActiveCommentsByRental($rental->getId()),
+                        'form' => $form->createView(),
+                    ]);
+                }
+
+                $userDates = [];
+                $allDatesUser = new \DatePeriod($dateStart, new \DateInterval('P1D'), (clone $dateEnd)->modify('+1 day'));
+                foreach ($allDatesUser as $date) {
+                    $userDates[] = $date->format('d-m-Y');
+                }
+
+                $reservedAllDates = [];
+                foreach ($reservedDates as $date) {
+                    $start = new \DateTimeImmutable($date['start']);
+                    $end = new \DateTimeImmutable($date['end']);
+                    $rangePeriod = new \DatePeriod($start, new \DateInterval('P1D'), (clone $end)->modify('+1 day'));
+                    foreach ($rangePeriod as $dt) {
+                        $reservedAllDates[] = $dt->format('d-m-Y');
+                    }
+                }
+
+                $check = false;
+                foreach ($userDates as $date) {
+                    if (in_array($date, $reservedAllDates)) {
+                        $check = true;
+                        break;
+                    }
+                }
+
+                if ($check) {
+                    $this->addFlash('danger', 'Les dates sélectionnées sont déjà réservées.');
+                    return $this->render('rental/index.html.twig', [
+                        'rental' => $rental,
+                        'reservedDates' => $reservedDates,
+                        'comments' => $commentsRepository->findActiveCommentsByRental($rental->getId()),
+                        'form' => $form->createView(),
+                    ]);
+                }
+
                 $session->set('newReservationRental', [
-                   'rental' => $rental,
-                   'type' => 'rental',
-                   'image' => $rental->getHomePageImage(),
-                   'dateStart' => $reservation->getDateStart(),
-                   'dateEnd' => $reservation->getDateEnd(),
+                    'rental' => $rental,
+                    'type' => 'rental',
+                    'image' => $rental->getHomePageImage(),
+                    'dateStart' => $dateStart,
+                    'dateEnd' => $dateEnd,
                 ]);
 
                 return $this->redirectToRoute('app_cart');
@@ -67,9 +131,10 @@ final class RentalsController extends AbstractController
                 'comments' => $commentsRepository->findActiveCommentsByRental($rental->getId()),
                 'form' => $form->createView(),
             ]);
-        } else {
-            return $this->redirectToRoute('app_home');
         }
+
+        return $this->redirectToRoute('app_home');
     }
+
 
 }
