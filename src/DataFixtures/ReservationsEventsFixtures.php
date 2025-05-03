@@ -17,42 +17,21 @@ class ReservationsEventsFixtures extends Fixture implements DependentFixtureInte
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_BE');
-
-        // Récupérer tous les Bills existants
         $bills = $manager->getRepository(Bills::class)->findAll();
         $users = $manager->getRepository(Users::class)->findAll();
         $events = $manager->getRepository(Events::class)->findAll();
 
-        if (empty($bills) || empty($users) || empty($events)) {
-            throw new \Exception('Assurez-vous que des Bills, Users et Events existent avant de charger les ReservationsEvents.');
-        }
+        for ($i = 0; $i < 30; $i++) {
+            $reservationEvent = new ReservationsEvents();
+            $reservationEvent->setBill($faker->randomElement($bills));
+            $reservationEvent->setUser($faker->randomElement($users));
+            $reservationEvent->setEvent($faker->randomElement($events));
+            $reservationEvent->setDateReservation(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 year', 'now')));
+            $reservationEvent->setIsActive($faker->boolean(80));
+            $reservationEvent->setNbPlaces($faker->numberBetween(1, 5));
+            $reservationEvent->setTotalDeposit($faker->randomFloat(2, 10, 100));
 
-        $numBills = count($bills);
-
-        for ($i = 0; $i < 200; $i++) {
-            $reservation = new ReservationsEvents();
-
-            // Assigner une facture unique si possible
-            if ($numBills > 0) {
-                $billIndex = $i % $numBills; // Permet de réutiliser les factures si moins de factures que de réservations
-                $reservation->setBillId($bills[$billIndex]);
-            } else {
-                throw new \Exception('Pas de Bills disponibles pour lier aux ReservationsEvents.');
-            }
-
-            $reservation->setUserId($faker->randomElement($users));
-            $event = $faker->randomElement($events);
-            $reservation->setEventId($event);
-            $reservation->setDateReservation(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 year', 'now')));
-            $reservation->setDateStart(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 year', 'now')));
-            $reservation->setIsActive($faker->boolean(80));
-
-            // Générer un nombre de réservations entre 1 et 5
-            $nbPlaces = $faker->numberBetween(1, 5);
-
-            $reservation->setNbPlaces($nbPlaces);
-
-            $manager->persist($reservation);
+            $manager->persist($reservationEvent);
         }
 
         $manager->flush();

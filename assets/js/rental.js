@@ -150,8 +150,8 @@ $(document).ready(function() {
             message.classList.remove('d-none');
         }
 
-        if(!addToCart.classList.contains('disabled')){
-            addToCart.classList.add('disabled');
+        if(!addToCart.classList.contains('disabledItem')){
+            addToCart.classList.add('disabledItem');
         }
     }
 
@@ -163,8 +163,8 @@ $(document).ready(function() {
             message.classList.add('d-none');
         }
 
-        if(addToCart.classList.contains('disabled')){
-            addToCart.classList.remove('disabled');
+        if(addToCart.classList.contains('disabledItem')){
+            addToCart.classList.remove('disabledItem');
         }
     }
 

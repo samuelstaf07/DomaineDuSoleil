@@ -28,14 +28,46 @@ final class EventController extends AbstractController
         if($event->isActive()){
 
             $reservation = new ReservationsEvents();
-            $reservation->setEventId($event);
+            $reservation->setEvent($event);
 
             $form = $this->createForm(ReservationsEventsType::class, $reservation);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+                $cart = $session->get('myCart', []);
+                $totalPlaceCart = 0;
+
+                foreach ($cart as $elemCart) {
+                    if (
+                        $elemCart['type'] === 'event' &&
+                        isset($elemCart['eventId']) &&
+                        $elemCart['eventId'] === $event->getId()
+                    ) {
+                        $totalPlaceCart += $elemCart['nbPlaces'];
+                    }
+                }
+
+                $reservationsTotal = $totalPlaceCart + $reservation->getNbPlaces();
+
+                if ($reservationsTotal > 20) {
+                    $this->addFlash('danger', 'Vous ne pouvez pas avoir plus de 20 places pour cet événement !');
+                    return $this->render('event/index.html.twig', [
+                        'event' => $event,
+                        'form' => $form->createView(),
+                    ]);
+                }
+
+                if($reservationsTotal > $event->getRemainingPlaces()){
+                    $this->addFlash('danger', 'Pas assez de places pour la demande.');
+                    return $this->render('event/index.html.twig', [
+                        'event' => $event,
+                        'form' => $form->createView(),
+                    ]);
+                }
                 $session->set('newReservationEvent', [
-                    'event' => $event,
+                    'eventId' => $event->getId(),
+                    'eventTitle' => $event->getTitle(),
+                    'eventPrice' => $event->getPrice(),
                     'type' => 'event',
                     'image' => $event->getHomePageImage(),
                     'nbPlaces' => $reservation->getNbPlaces(),

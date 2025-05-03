@@ -51,7 +51,7 @@ final class RentalsController extends AbstractController
 
             $cart = $session->get('myCart', []);
             foreach ($cart as $item) {
-                if ($item['type'] === 'rental' && $item['rental']->getId() === $rental->getId()) {
+                if ($item['type'] === 'rental' && $rentalsRepository->find($item['rentalId'])->getId() === $rental->getId()) {
                     $reservedDates[] = [
                         'title' => 'Réservation utilisateur',
                         'start' => $item['dateStart']->format('Y-m-d'),
@@ -115,7 +115,10 @@ final class RentalsController extends AbstractController
                 }
 
                 $session->set('newReservationRental', [
-                    'rental' => $rental,
+                    'rentalId' => $rental->getId(),
+                    'rentalTitle' => $rental->getTitle(),
+                    'rentalPricePerDay' => $rental->getPricePerDay(),
+                    'rentalIsOnPromotion' => $rental->isOnPromotion(),
                     'type' => 'rental',
                     'image' => $rental->getHomePageImage(),
                     'dateStart' => $dateStart,

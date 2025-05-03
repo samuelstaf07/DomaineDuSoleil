@@ -2,8 +2,42 @@
 
 {% block title %}{{ post.title }}{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('libs/jquery/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('libs/magnific-popup/dist/jquery.magnific-popup.min.js') }}"></script>
+    <script src="{{ asset('js/post.js') }}"></script>
+{% endblock %}
+
 {% block body %}
-    <div class="contentMargin d-flex flex-column align-items-center gap-4 pb-4">
-        <h2>{{ post.title }}</h2>
+    <div class="contentMargin popup-gallery d-flex flex-column align-items-center gap-4 pb-4">
+
+        <header class="d-flex flex-column align-items-center gap-3">
+            <h2>{{ post.title }}</h2>
+            <div class="w-75 d-flex gap-3">
+                <a class="col-md-6 w-50 h-100" href="{{ asset('styles/img/' ~ post.getHomePageImage().getSrc()) }}" title="{{ post.getHomePageImage().getAlt() }}">
+                    <img class="img-fluid rounded-4 w-100 h-100" src="{{ asset('styles/img/' ~ post.getHomePageImage().getSrc()) }}" alt="{{ post.getHomePageImage().getAlt() }}">
+                </a>
+                <div class="w-50 h-100 bg-lightGreen rounded-4 p-2">
+                    <p>{{ post.content }}</p>
+                </div>
+            </div>
+        </header>
+
+        {% set images = post.getImages() %}
+        {% if images|length > 1 %}
+            <section id="galleryPost" class="d-flex flex-column align-items-center gap-3 py-4 px-5 rounded-4 bg-lightGreen">
+                <h3>Gallerie photo du poste</h3>
+                <div class="d-flex popup-gallery w-75 justify-content-center gap-3">
+                    {% for image in images %}
+                        {% if not image.isHomePage %}
+                            <a href="{{ asset('styles/img/' ~ image.getSrc()) }}" title="{{ image.getAlt() }}">
+                                <img src="{{ asset('styles/img/' ~ image.getSrc()) }}" alt="{{ image.getAlt() }}" class="img-fluid rounded-4 smallImage">
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
     </div>
 {% endblock %}

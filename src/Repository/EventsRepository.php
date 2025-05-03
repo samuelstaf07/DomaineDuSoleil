@@ -46,7 +46,7 @@ class EventsRepository extends ServiceEntityRepository
             ->andWhere('e.is_active = :isActive')
             ->setParameter('isActive', true)
             ->orderBy('e.created_at', 'DESC')
-            ->setMaxResults(5)
+            ->setMaxResults(3)
             ->getQuery()
             ->getResult();
     }

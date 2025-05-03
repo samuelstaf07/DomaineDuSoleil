@@ -40,8 +40,6 @@ class RegistrationController extends AbstractController
                 ->setUpdatedAt(new \DateTimeImmutable())
                 ->setCreatedAt(new \DateTimeImmutable())
                 ->setImage($image)
-                ->setLastname('Doe')
-                ->setFirstname('John')
             ;
 
             if ($usersRepository->count([]) === 0) {

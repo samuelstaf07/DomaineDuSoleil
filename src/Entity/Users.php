@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UsersRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -62,6 +64,17 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Images $image = null;
+
+    /**
+     * @var Collection<int, Bills>
+     */
+    #[ORM\OneToMany(targetEntity: Bills::class, mappedBy: 'user')]
+    private Collection $bills;
+
+    public function __construct()
+    {
+        $this->bills = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -254,6 +267,36 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsEmailAuthentificated(bool $is_email_authentificated): static
     {
         $this->is_email_authentificated = $is_email_authentificated;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Bills>
+     */
+    public function getBills(): Collection
+    {
+        return $this->bills;
+    }
+
+    public function addBill(Bills $bill): static
+    {
+        if (!$this->bills->contains($bill)) {
+            $this->bills->add($bill);
+            $bill->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBill(Bills $bill): static
+    {
+        if ($this->bills->removeElement($bill)) {
+            // set the owning side to null (unless already changed)
+            if ($bill->getUser() === $this) {
+                $bill->setUser(null);
+            }
+        }
 
         return $this;
     }

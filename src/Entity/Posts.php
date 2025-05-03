@@ -144,4 +144,14 @@ class Posts
 
         return $this;
     }
+    public function getHomePageImage(): Images | null
+    {
+        foreach ($this->getImages() as $image) {
+            if ($image->isHomePage() === true) {
+                return $image;
+            }
+        }
+
+        return null;
+    }
 }

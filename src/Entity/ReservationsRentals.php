@@ -14,7 +14,7 @@ class ReservationsRentals
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Bills $bill = null;
 
@@ -40,10 +40,10 @@ class ReservationsRentals
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $date_end = null;
 
-    #[ORM\Column(type: Types::SMALLINT)]
-    private ?int $status_reservation = null;
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private ?bool $status_reservation = null;
 
-    #[ORM\ManyToOne(inversedBy: 'reservations')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Rentals $rentals = null;
 
@@ -59,12 +59,12 @@ class ReservationsRentals
         return $this;
     }
 
-    public function getBillId(): ?Bills
+    public function getBill(): ?Bills
     {
         return $this->bill;
     }
 
-    public function setBillId(Bills $bill): static
+    public function setBill(Bills $bill): static
     {
         $this->bill = $bill;
 
@@ -155,12 +155,12 @@ class ReservationsRentals
         return $this;
     }
 
-    public function getStatusReservation(): ?int
+    public function getStatusReservation(): ?bool
     {
         return $this->status_reservation;
     }
 
-    public function setStatusReservation(int $status_reservation): static
+    public function setStatusReservation(bool $status_reservation): static
     {
         $this->status_reservation = $status_reservation;
 

@@ -28,7 +28,7 @@ class PostsFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 20; $i++) {
             $post = new Posts();
             $post->setTitle($faker->sentence(5));
-            $post->setContent($faker->text(300));
+            $post->setContent($faker->paragraphs(7, true));
             $post->setUserId($faker->randomElement($users));
             $post->setCreatedAt(new DateTimeImmutable());
             $post->setIsActive($faker->boolean(80));
@@ -36,7 +36,7 @@ class PostsFixtures extends Fixture implements DependentFixtureInterface
             $numberOfImages = $faker->numberBetween(1, 3);
             for ($j = 0; $j < $numberOfImages; $j++) {
                 $image = new Images();
-                if($i == 0){
+                if($j == 0){
                     $image->setIsHomePage(true);
                 }else{
                     $image->setIsHomePage(false);

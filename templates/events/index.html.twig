@@ -22,27 +22,43 @@
                                     <img src="{{ asset('img/imageAccueil.jpg') }}" class="img-fluid rounded-start-4 h-100 w-100 object-fit-cover" alt="Tir à l'arc">
                                 </div>
                                 <div class="col-md-7 d-flex flex-column">
-                                    <div class="card-body flex-grow-1 d-flex flex-column">
-                                        <h5 class="card-title">
+                                    <div class="card-body d-flex flex-column">
+                                        <h4 class="card-title">
                                             {% set words = event.content|split(' ') %}
                                             {% if words|length <= 5 %}
                                                 {{ event.content }}
                                             {% else %}
                                                 {{ words|slice(0, 5)|join(' ') ~ '...' }}
                                             {% endif %}
-                                        </h5>
-                                        <p class="card-text mt-2">
-                                            <i class="fas fa-user-friends"></i>
-                                            {% if event.ageRequirement == 0 %}
-                                                Pour tout le monde !
-                                            {% else %}
-                                                À partir de {{ event.ageRequirement }} ans
-                                            {% endif %}
-                                            <br>
-                                            <i class="fas fa-map-marker-alt"></i> {{ event.location }}<br>
-                                            <i class="fas fa-calendar-alt"></i> le {{ event.date|date('d/m/Y') }}<br>
-                                            <i class="fas fa-ticket-alt"></i> {{ event.nbPlaces }} places
-                                        </p>
+                                        </h4>
+
+                                        <ul class="d-flex flex-column list-unstyled gap-1">
+                                            <li>
+                                                {% if event.ageRequirement == 0 %}
+                                                    <span class="fw-bold">Pour tout le monde !</span>
+                                                {% else %}
+                                                    À partir de <span class="fw-bold">{{ event.ageRequirement }} ans</span>
+                                                {% endif %}
+                                            </li>
+                                            <li>
+                                                <img src="{{ asset('styles/img/location.svg') }}" alt="Location de l'événement">
+                                                <span class="fw-bold">{{ event.location }}</span>
+                                            </li>
+                                            <li>
+                                                <img src="{{ asset('styles/img/calendar.svg') }}" alt="Date de l'événement">
+                                                le {{ event.date|date('d/m/Y') }}
+                                            </li>
+                                            <li>
+                                                {{ event.nbPlaces }} places
+                                                <span class="color-darkGreen fw-bold">
+                                                {% if event.getRemainingPlaces() <= 0 %}
+                                                    <span class="color-red">(Complet !)</span>
+                                                {% else %}
+                                                    ({{ event.getRemainingPlaces() }} places restantes)
+                                                {% endif %}
+                                            </span>
+                                            </li>
+                                        </ul>
                                         <div class="mt-auto">
                                             {% if event.isPast() %}
                                                 <p class="alert alert-warning">Événement déjà passé.</p>
@@ -53,12 +69,12 @@
                                                 </div>
                                             {% endif %}
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 {% endfor %}
             </div>
         </div>

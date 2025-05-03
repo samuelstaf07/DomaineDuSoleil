@@ -30,26 +30,36 @@
             <div class="col-md-6">
                 <p class="bg-lightGreen rounded-4 p-2">{{ event.content|capitalize }}</p>
 
-                {{ form_start(form, {'attr': {'class': 'bg-LightGrey rounded-4 p-2 d-flex justify-content-between p-3', 'data-turbo': 'false'}}) }}
-                <div class="w-50">
-                    <p>{{ event.nbPlaces }} places <span class="color-yellow">({{ event.getRemainingPlaces() }} places restantes)</span></p>
-                    <div class="input-group mb-3 w-75">
-                        {% set maxPlaces = event.getRemainingPlaces() < 20 ? event.getRemainingPlaces() : 20 %}
-                        {{ form_widget(form.nb_places, {'attr': {'min': 0, 'max': maxPlaces, 'placeholder': 'Nombre de place souhaité', 'aria-label': 'Nombre de place souhaité', 'aria-describedby': 'basic-addon2'}}) }}
-                        <span class="input-group-text" id="basic-addon2">places</span>
+                {% if event.getRemainingPlaces() <= 0 %}
+                    <div class="bg-LightGrey rounded-4 p-2 d-flex flex-column justify-content-between p-3">
+                        <div class="d-flex justify-content-between">
+                            <p>{{ event.nbPlaces }} places</p>
+                            <h4><span class="color-lightGreen">{{ event.price|number_format(2, ',', '') }}€</span>/personne</h4>
+                        </div>
+                        <p class="alert alert-danger text-center fw-bold">Complet</p>
                     </div>
-                </div>
-                <div class="w-50 d-flex align-items-end flex-column">
-                    <h4><span class="color-lightGreen">{{ event.price|number_format(2, ',', '') }}€</span>/personne</h4>
-                    <button type="submit" class="btn-yellow w-50 text-center">Ajouter au panier</button>
-                </div>
-                {{ form_end(form) }}
+                {% else %}
+                    {{ form_start(form, {'attr': {'class': 'bg-LightGrey rounded-4 p-2 d-flex justify-content-between p-3', 'data-turbo': 'false'}}) }}
+                    <div class="w-50">
+                        <p>{{ event.nbPlaces }} places <span class="color-yellow">({{ event.getRemainingPlaces() }} places restantes)</span></p>
+                        <div class="input-group mb-3 w-75">
+                            {% set maxPlaces = event.getRemainingPlaces() < 20 ? event.getRemainingPlaces() : 20 %}
+                            {{ form_widget(form.nb_places, {'attr': {'min': 0, 'max': maxPlaces, 'placeholder': 'Nombre de place souhaité', 'aria-label': 'Nombre de place souhaité', 'aria-describedby': 'basic-addon2'}}) }}
+                            <span class="input-group-text" id="basic-addon2">places</span>
+                        </div>
+                    </div>
+                    <div class="w-50 d-flex align-items-end flex-column">
+                        <h4><span class="color-lightGreen">{{ event.price|number_format(2, ',', '') }}€</span>/personne</h4>
+                        <button type="submit" class="btn-yellow w-50 text-center">Ajouter au panier</button>
+                    </div>
+                    {{ form_end(form) }}
+                {% endif %}
             </div>
         </header>
 
-        <section id="galleryEvent" class="d-flex flex-column align-items-center gap-3 py-4 px-5 rounded-4 bg-lightGreen">
-            {% set images = event.getImages() %}
-            {% if images|length > 1 %}
+        {% set images = event.getImages() %}
+        {% if images|length > 1 %}
+            <section id="galleryEvent" class="d-flex flex-column align-items-center gap-3 py-4 px-5 rounded-4 bg-lightGreen">
                 <h3>Gallerie photo de l'événement</h3>
                 <div class="d-flex popup-gallery w-75 justify-content-center gap-3">
                     {% for image in images %}
@@ -60,7 +70,7 @@
                         {% endif %}
                     {% endfor %}
                 </div>
-            {% endif %}
-        </section>
+            </section>
+        {% endif %}
     </div>
 {% endblock %}

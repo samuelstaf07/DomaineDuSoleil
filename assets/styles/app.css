@@ -281,8 +281,11 @@ h2{
 .btn-signup,
 .btn-yellow,
 .btn-outline-yellow,
+.btn-outline-grey,
 .btn-black,
 .btn-lightGreen,
+.btn-lightGreen2,
+.btn-green-border,
 .btn-red{
     border: none;
     border-radius: 0.75rem;
@@ -300,6 +303,20 @@ h2{
     color: var(--myDarkGreen)
 }
 .btn-green:active{
+    background-color: color-mix(in srgb, var(--myWhite), black 10%) !important;
+    color: var(--myDarkGreen) !important;
+}
+
+.btn-green-border{
+    border: 1px solid var(--myDarkGreen);
+    background-color: var(--myDarkGreen);
+    color: var(--myWhite);
+}
+.btn-green-border:hover{
+    background-color: color-mix(in srgb, var(--myWhite), black 10%);
+    color: var(--myDarkGreen)
+}
+.btn-green-border:active{
     background-color: color-mix(in srgb, var(--myWhite), black 10%) !important;
     color: var(--myDarkGreen) !important;
 }
@@ -331,6 +348,19 @@ h2{
     color: var(--myDarkGreen) !important;
 }
 
+.btn-outline-grey{
+    background: var(--myWhite);
+    color: var(--myLightGrey);
+}
+.btn-outline-grey:hover{
+    background-color: var(--myLightGrey);
+    color: var(--myWhite)
+}
+.btn-outline-grey:active{
+    background-color: color-mix(in srgb, var(--myWhite), black 10%) !important;
+    color: var(--myLightGrey) !important;
+}
+
 .btn-signup{
     background-color: var(--myLightGrey);
     color: var(--myWhite);
@@ -350,7 +380,13 @@ h2{
 }
 .btn-yellow:hover{
     background-color: var(--myLightGrey);
-    color: var(--myYellow)
+    color: var(--myYellow);
+}
+.btn-yellow:hover svg{
+    fill: var(--myYellow);
+}
+.btn-yellow svg{
+    fill: var(--myLightGrey);
 }
 .btn-yellow:active{
     background-color: color-mix(in srgb, var(--myLightGrey), black 10%) !important;
@@ -398,6 +434,24 @@ h2{
 }
 
 .bg-lightGreen{
+    color: var(--myLightGreen);
+    background: var(--myBlack);
+}
+
+.btn-lightGreen2{
+    color: var(--myBlack);
+    background-color: var(--myLightGreen);
+}
+.btn-lightGreen2:hover{
+    color: var(--myLightGreen);
+    background-color: var(--myBlack);
+}
+.btn-lightGreen2:active{
+    color: color-mix(in srgb, var(--myLightGreen), black 10%);
+    background-color: var(--myBlack) !important;
+}
+
+.bg-lightGreen{
     background: var(--myLightGreen);
     color: var(--myBlack);
 }
@@ -408,6 +462,14 @@ h2{
 
 .color-yellow{
     color: var(--myYellow);
+}
+
+.color-darkGreen{
+    color: var(--myDarkGreen);
+}
+
+.color-red{
+    color: var(--myRed);
 }
 
 .bg-Yellow{
@@ -475,7 +537,7 @@ h2{
     box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.5);
 }
 
-.disabled{
+.disabledItem{
     pointer-events: none;
     filter: opacity(50%);
     cursor: default;
@@ -490,7 +552,7 @@ h2{
 }
 
 .iconImage{
-    height: 75px;
+    height: 50px;
     width: 75px;
     object-fit: cover;
 }

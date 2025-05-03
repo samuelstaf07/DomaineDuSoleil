@@ -26,4 +26,28 @@ final class HomeController extends AbstractController
             'events' => $events,
         ]);
     }
+
+    #[Route('/policyAndPrivacy', name: 'app_policyandprivacy')]
+    public function policyAndPrivacy(RentalsRepository $rentalsRepository, PostsRepository $postsRepository, EventsRepository $eventsRepository): Response
+    {
+        return $this->render('policyandprivacy/index.html.twig');
+    }
+
+    #[Route('/generalConditions', name: 'app_generalconditions')]
+    public function generalConditions(RentalsRepository $rentalsRepository, PostsRepository $postsRepository, EventsRepository $eventsRepository): Response
+    {
+        return $this->render('generalConditions/index.html.twig');
+    }
+
+    #[Route('/legalNotices', name: 'app_legalnotices')]
+    public function legalNotices(RentalsRepository $rentalsRepository, PostsRepository $postsRepository, EventsRepository $eventsRepository): Response
+    {
+        return $this->render('legalnotices/index.html.twig');
+    }
+
+    #[Route('/informations', name: 'app_informations')]
+    public function informations(RentalsRepository $rentalsRepository, PostsRepository $postsRepository, EventsRepository $eventsRepository): Response
+    {
+        return $this->render('informations/index.html.twig');
+    }
 }

@@ -86,6 +86,8 @@
                                     <option value="nbsimplebed_desc">Nombre de lits simples (descendant)</option>
                                     <option value="nbdoublebed_asc">Nombre de lits doubles (ascendant)</option>
                                     <option value="nbdoublebed_desc">Nombre de lits doubles (descendant)</option>
+                                    <option value="averagerate_asc">Avis des utilisateurs (ascendant)</option>
+                                    <option value="averagerate_desc">Avis des utilisateurs (descendant)</option>
                                 </select>
                             </div>
                         </div>
@@ -96,6 +98,7 @@
         </div>
         <div class="row w-75" id="logementsContainer">
             {% for item in rentals %}
+                {% set averageData = item.getAverageRateAndCommentCount() %}
                 <div class="col-4 my-3 logement"
                      data-prix="{% if item.isOnPromotion %}{{ (item.pricePerDay * 0.9)|number_format(2, '.', '') }}{% else %}{{ item.pricePerDay }}{% endif %}"
                      data-nbpersonne="{{ item.nbSimpleBed + (2 * item.nbDoubleBed) }}"
@@ -107,11 +110,11 @@
                      data-fridge="{{ item.hasFridge ? 'true' : 'false' }}"
                      data-heating="{{ item.hasHeating ? 'true' : 'false' }}"
                      data-pets="{{ item.petsAccepted ? 'true' : 'false' }}"
-                     data-isonpromotion="{{ item.isOnPromotion ? 'true' : 'false' }}">
+                     data-isonpromotion="{{ item.isOnPromotion ? 'true' : 'false' }}"
+                     data-averageRate="{{ averageData.averageRate }}">
                 <div class="rentalDiscount rounded-4 bg-white">
                         <div class="imageTop rounded-top-4">
                             <div class="rate d-flex gap-2 align-items-center">
-                                {% set averageData = item.getAverageRateAndCommentCount() %}
                                 {{ averageData.averageRate }}/5
                                 ({{ averageData.commentCount }})
                                 <div class="d-flex gap-1 align-items-center">

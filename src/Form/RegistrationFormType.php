@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
@@ -20,6 +21,49 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('firstname', TextType::class, [
+                'label' => 'Prénom',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le prénom est obligatoire.',
+                    ]),
+                    new Length([
+                        'min' => 2,
+                        'max' => 50,
+                        'minMessage' => 'Le prénom doit contenir au moins {{ limit }} caractères.',
+                        'maxMessage' => 'Le prénom ne peut pas dépasser {{ limit }} caractères.',
+                    ]),
+                    new Regex([
+                        'pattern' => '/^[\p{L}\' -]+$/u',
+                        'message' => 'Le prénom ne doit contenir que des lettres, espaces, apostrophes ou tirets.',
+                    ]),
+                ],
+                'attr' => [
+                    'placeholder' => 'Entrez votre prénom',
+                ],
+            ])
+
+            ->add('lastname', TextType::class, [
+                'label' => 'Nom',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le nom est obligatoire.',
+                    ]),
+                    new Length([
+                        'min' => 2,
+                        'max' => 50,
+                        'minMessage' => 'Le nom doit contenir au moins {{ limit }} caractères.',
+                        'maxMessage' => 'Le nom ne peut pas dépasser {{ limit }} caractères.',
+                    ]),
+                    new Regex([
+                        'pattern' => '/^[\p{L}\' -]+$/u',
+                        'message' => 'Le nom ne doit contenir que des lettres, espaces, apostrophes ou tirets.',
+                    ]),
+                ],
+                'attr' => [
+                    'placeholder' => 'Entrez votre nom',
+                ],
+            ])
             ->add('email', EmailType::class, [
                 'constraints' => [
                     new NotBlank([
@@ -43,10 +87,11 @@ class RegistrationFormType extends AbstractType
                 'label' => 'J\'accepte les termes et conditions',
             ])
             ->add('plainPassword', PasswordType::class, [
+                'label' => 'Mot de passe',
                 'mapped' => false,
                 'attr' => [
                     'autocomplete' => 'new-password',
-                    'placeholder' => 'Créez un mot de passe',
+                    'placeholder' => 'Entrez votre mot de passe',
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -72,6 +117,19 @@ class RegistrationFormType extends AbstractType
                     new Regex([
                         'pattern' => '/[\W_]/',
                         'message' => 'Votre mot de passe doit contenir au moins un caractère spécial (par exemple: @, #, $, %).',
+                    ]),
+                ],
+            ])
+            ->add('confirmPassword', PasswordType::class, [
+                'mapped' => false,
+                'label' => 'Confirmez le mot de passe',
+                'attr' => [
+                    'autocomplete' => 'new-password',
+                    'placeholder' => 'Répétez le mot de passe',
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez confirmer votre mot de passe.',
                     ]),
                 ],
             ])

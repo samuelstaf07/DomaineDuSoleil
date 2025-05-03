@@ -2,11 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Rentals;
-use App\Repository\CommentsRepository;
+use App\Entity\Bills;
+use App\Entity\ReservationsEvents;
+use App\Entity\ReservationsRentals;
 use App\Repository\EventsRepository;
-use App\Repository\PostsRepository;
 use App\Repository\RentalsRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -58,7 +59,7 @@ final class CartController extends AbstractController
         return $this->redirectToRoute('app_cart');
     }
 
-    #[Route('/cart/delElement/{id}', name: 'app_delete_element')]
+    #[Route('/cart/delElement/{id}', name: 'app_delete_element_cart')]
     public function delElement(int $id, SessionInterface $session): Response
     {
         $cart = $session->get('myCart', []);
@@ -70,6 +71,99 @@ final class CartController extends AbstractController
         $session->set('myCart', array_values($cart));
 
         return $this->redirectToRoute('app_cart');
+    }
+
+    #[Route('/cart/confirmCart', name: 'app_confirm_cart')]
+    public function confirmCart(SessionInterface $session, EntityManagerInterface $entityManager, RentalsRepository $rentalsRepository, EventsRepository $eventsRepository): Response
+    {
+
+        if($this->getUser()){
+            $cart = $session->get('myCart', []);
+
+            if (empty($cart)) {
+                $this->addFlash('warning', 'Votre panier est vide.');
+                return $this->redirectToRoute('app_cart');
+            }
+
+            $newBill = new Bills();
+            $totalPriceBill = 0;
+
+            foreach ($cart as $reservation){
+
+                if($reservation['type'] == "rental"){
+                    $reservationRental = new ReservationsRentals();
+                    $rental = $rentalsRepository->find($reservation['rentalId']);
+                    $nbDay = $reservation['dateStart']->diff($reservation['dateEnd'])->days + 1;
+
+                    //Il faut demander à l'utilisateur s'il souhaites avoir la caution de nettoyage
+                    $cleaningDeposit = true;
+
+                    if ($rental->isOnPromotion()) {
+                        $pricePerDay = floor($rental->getPricePerDay() * 0.9 * 100) / 100;
+                    } else {
+                        $pricePerDay = floor($rental->getPricePerDay() * 100) / 100;
+                    }
+
+                    $totalPrice = floor($nbDay * $pricePerDay * 100) / 100;
+                    $cleaningDeposit === true ? $priceCleaningDeposit = 50 : $priceCleaningDeposit = 0;
+                    $totalPriceBill += $totalPrice + $priceCleaningDeposit;
+
+                    $reservationRental->setBill($newBill);
+                    $reservationRental->setUser($this->getUser());
+                    $reservationRental->setRentals($rental);
+                    $reservationRental->setHasCleaningDeposit($cleaningDeposit);
+                    $reservationRental->setTotalDepositReturned($totalPrice + $priceCleaningDeposit);
+
+                    //Status à 0 = pas payé, 1 = payé par l'utilisateur, 2 = en cours de vérification, 3 = remboursé, 4 =  refusé
+                    $reservationRental->setStatusBaseDeposit(1);
+                    $reservationRental->setDateReservation(new \DateTimeImmutable('now'));
+                    $reservationRental->setDateStart($reservation['dateStart']);
+                    $reservationRental->setDateEnd($reservation['dateEnd']);
+                    $reservationRental->setStatusReservation(1);
+
+                    $entityManager->persist($reservationRental);
+
+                    foreach ($rental->getImages() as $image) {
+                        $entityManager->persist($image);
+                    }
+                    $entityManager->persist($rental);
+
+                }else if($reservation['type'] == "event"){
+                    $reservationEvent = new ReservationsEvents();
+                    $event = $eventsRepository->find($reservation['eventId']);
+                    $totalPrice = ($event->getPrice() * $reservation['nbPlaces']);
+                    $totalPriceBill += $totalPrice;
+
+                    $reservationEvent->setEvent($event);
+                    $reservationEvent->setNbPlaces($reservation['nbPlaces']);
+                    $reservationEvent->setIsActive(1);
+                    $reservationEvent->setUser($this->getUser());
+                    $reservationEvent->setBill($newBill);
+                    $reservationEvent->setDateReservation(new \DateTimeImmutable('now'));
+                    $reservationEvent->setTotalDeposit($totalPrice);
+
+                    $entityManager->persist($reservationEvent);
+                }
+            }
+
+            $newBill->setContent('test');
+            $newBill->setDate(new \DateTimeImmutable());
+            $newBill->setTotalPrice($totalPriceBill);
+            $newBill->setStatus(1);
+            $newBill->setUser($this->getUser());
+
+
+            $entityManager->persist($newBill);
+            $entityManager->flush();
+
+            $session->remove('myCart');
+
+            $this->addFlash('success','Merci pour votre commande ! 😊');
+            return $this->redirectToRoute('app_cart');
+        }else{
+            $this->addFlash('danger','Vous devez être connecté pour pouvoir passer une commande.');
+            return $this->redirectToRoute('app_cart');
+        }
     }
 
 }

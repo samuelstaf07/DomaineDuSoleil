@@ -25,9 +25,9 @@ $(document).ready(function() {
         filtres[this.dataset.filtre] = !filtres[this.dataset.filtre];
 
         if (filtres[this.dataset.filtre]) {
-            $(this).removeClass('btn-outline-success').addClass('btn-success');
+            $(this).removeClass('btn-outline-green').addClass('btn-green-border');
         } else {
-            $(this).removeClass('btn-success').addClass('btn-outline-success');
+            $(this).removeClass('btn-green-border').addClass('btn-outline-green');
         }
 
         afficherLocations(nbLogement);
@@ -37,8 +37,8 @@ $(document).ready(function() {
     $('.filter-reset').click(function() {
         filtres = Object.assign({}, filtreBase);
         $('.filtre').each(function() {
-            if (this.classList.contains('btn-success')) {
-                $(this).removeClass('btn-success').addClass('btn-outline-success');
+            if (this.classList.contains('btn-green-border')) {
+                $(this).removeClass('btn-green-border').addClass('btn-outline-green');
             }
         });
 
@@ -124,7 +124,7 @@ $(document).ready(function() {
                 let bValue = $(b).data(filtres.triPar.split('_')[0]);
                 let ordre = filtres.triPar.split('_')[1]; // Récupère "asc" ou "desc"
 
-                if (filtres.triPar.startsWith('prix') || filtres.triPar.startsWith('nbpersonne') || filtres.triPar.startsWith('nbsimplebed') || filtres.triPar.startsWith('nbdoublebed')) {
+                if (filtres.triPar.startsWith('prix') || filtres.triPar.startsWith('averagerate') || filtres.triPar.startsWith('nbpersonne') || filtres.triPar.startsWith('nbsimplebed') || filtres.triPar.startsWith('nbdoublebed')) {
                     if (ordre === 'asc') {
                         return parseFloat(aValue) - parseFloat(bValue);
                     } else {

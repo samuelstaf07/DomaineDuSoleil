@@ -14,7 +14,7 @@ class ReservationsEvents
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?bills $bill = null;
 
@@ -29,61 +29,53 @@ class ReservationsEvents
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $date_reservation = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    private ?\DateTimeImmutable $date_start = null;
-
     #[ORM\Column]
     private ?bool $is_active = null;
 
     #[ORM\Column]
     private ?int $nb_places = null;
 
+    #[ORM\Column]
+    private ?float $totalDeposit = null;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(int $id): static
+    public function setId(?int $id): void
     {
         $this->id = $id;
-
-        return $this;
     }
 
-    public function getBillId(): ?bills
+    public function getBill(): ?bills
     {
         return $this->bill;
     }
 
-    public function setBillId(bills $bill): static
+    public function setBill(?bills $bill): void
     {
         $this->bill = $bill;
-
-        return $this;
     }
 
-    public function getUserId(): ?users
+    public function getUser(): ?users
     {
         return $this->user;
     }
 
-    public function setUserId(?users $user): static
+    public function setUser(?users $user): void
     {
         $this->user = $user;
-
-        return $this;
     }
 
-    public function getEventId(): ?events
+    public function getEvent(): ?events
     {
         return $this->event;
     }
 
-    public function setEventId(?events $event): static
+    public function setEvent(?events $event): void
     {
         $this->event = $event;
-
-        return $this;
     }
 
     public function getDateReservation(): ?\DateTimeImmutable
@@ -91,35 +83,19 @@ class ReservationsEvents
         return $this->date_reservation;
     }
 
-    public function setDateReservation(\DateTimeImmutable $date_reservation): static
+    public function setDateReservation(?\DateTimeImmutable $date_reservation): void
     {
         $this->date_reservation = $date_reservation;
-
-        return $this;
     }
 
-    public function getDateStart(): ?\DateTimeImmutable
-    {
-        return $this->date_start;
-    }
-
-    public function setDateStart(\DateTimeImmutable $date_start): static
-    {
-        $this->date_start = $date_start;
-
-        return $this;
-    }
-
-    public function isActive(): ?bool
+    public function getIsActive(): ?bool
     {
         return $this->is_active;
     }
 
-    public function setIsActive(bool $is_active): static
+    public function setIsActive(?bool $is_active): void
     {
         $this->is_active = $is_active;
-
-        return $this;
     }
 
     public function getNbPlaces(): ?int
@@ -127,9 +103,19 @@ class ReservationsEvents
         return $this->nb_places;
     }
 
-    public function setNbPlaces(int $nb_places): static
+    public function setNbPlaces(?int $nb_places): void
     {
         $this->nb_places = $nb_places;
+    }
+
+    public function getTotalDeposit(): ?float
+    {
+        return $this->totalDeposit;
+    }
+
+    public function setTotalDeposit(float $totalDeposit): static
+    {
+        $this->totalDeposit = $totalDeposit;
 
         return $this;
     }

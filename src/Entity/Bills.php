@@ -26,6 +26,10 @@ class Bills
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $status = null;
 
+    #[ORM\ManyToOne(inversedBy: 'bills')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?users $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -82,6 +86,18 @@ class Bills
     public function setStatus(int $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getUser(): ?users
+    {
+        return $this->user;
+    }
+
+    public function setUser(?users $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

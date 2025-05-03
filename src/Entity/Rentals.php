@@ -55,7 +55,7 @@ class Rentals
     /**
      * @var Collection<int, Images>
      */
-    #[ORM\OneToMany(targetEntity: Images::class, mappedBy: 'rentals')]
+    #[ORM\OneToMany(targetEntity: Images::class, mappedBy: 'rentals', cascade: ['persist'])]
     private Collection $Images;
 
     /**
@@ -70,7 +70,7 @@ class Rentals
     /**
      * @var Collection<int, ReservationsRentals>
      */
-    #[ORM\OneToMany(targetEntity: ReservationsRentals::class, mappedBy: 'rentals')]
+    #[ORM\OneToMany(targetEntity: ReservationsRentals::class, mappedBy: 'rentals', cascade: ['persist'])]
     private Collection $reservations;
 
     public function __construct()
