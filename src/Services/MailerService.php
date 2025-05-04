@@ -36,26 +36,26 @@ class MailerService
         $email = (new Email())
             ->from('no-reply@domainedusoleil.com')
             ->to($to)
-            ->subject('Bienvenue sur MonApp !')
+            ->subject('Bienvenue au Domaine Du Soleil !')
             ->html($body);
 
         $this->mailer->send($email);
     }
+
     /**
-     * Notification de connexion
      * @throws LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface
      */
-    public function sendLoginNotificationEmail(string $to, string $username, \DateTimeInterface $loginTime): void
+    public function sendEmailConfirmation(string $to, string $username, string $signedUrl): void
     {
-        $body = $this->twig->render('emails/register.html.twig', [
+        $body = $this->twig->render('emails/email_confirmation.html.twig', [
             'username' => $username,
-            'loginTime' => $loginTime,
+            'confirmationUrl' => $signedUrl,
         ]);
 
         $email = (new Email())
             ->from('no-reply@domainedusoleil.com')
             ->to($to)
-            ->subject('Nouvelle connexion à votre compte')
+            ->subject('Confirmez votre adresse email')
             ->html($body);
 
         $this->mailer->send($email);

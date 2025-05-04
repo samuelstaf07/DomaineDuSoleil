@@ -7,6 +7,15 @@
         <div class="bg-lightGreen w-50 p-5 rounded-4 d-flex flex-column gap-4 justify-content-center mb-5">
             <h1 class="text-center">Inscription</h1>
 
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible fade show mt-3" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
             {{ form_errors(registrationForm) }}
 
             {{ form_start(registrationForm) }}

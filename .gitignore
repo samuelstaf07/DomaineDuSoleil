@@ -1,4 +1,7 @@
 ###> symfony/framework-bundle ###
+/config/secrets/*
+!/config/secrets/.gitignore
+/bin/mailpit.exe
 /.env.local
 /.env.local.php
 /.env.*.local
