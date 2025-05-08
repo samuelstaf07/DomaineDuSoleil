@@ -2,13 +2,6 @@
 
 {% block title %}S'inscrire{% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('libs/jquery/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('libs/mc-datepicker/dist/mc-calendar.min.js') }}"></script>
-    <script src="{{ asset('js/register.js') }}"></script>
-{% endblock %}
-
 {% block body %}
     <div class="contentMargin d-flex justify-content-center">
         <div class="bg-lightGreen w-50 p-5 rounded-4 d-flex flex-column gap-4 justify-content-center mb-5">
@@ -20,7 +13,7 @@
             {{ form_row(registrationForm.firstname) }}
             {{ form_row(registrationForm.lastname) }}
             {{ form_row(registrationForm.email) }}
-            {{ form_row(registrationForm.birth_date, {'id': 'birthDate'}) }}
+            {{ form_row(registrationForm.birth_date, {'id': 'dateBirthRegister', 'type': 'text'}) }}
             {{ form_row(registrationForm.plainPassword) }}
             {{ form_row(registrationForm.agreeTerms) }}
 
@@ -30,4 +23,7 @@
             {{ form_end(registrationForm) }}
         </div>
     </div>
+    <script src="{{ asset('libs/jquery/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('libs/mc-datepicker/dist/mc-calendar.min.js') }}"></script>
+    <script src="{{ asset('js/register.js') }}"></script>
 {% endblock %}

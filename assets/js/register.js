@@ -1,12 +1,10 @@
-document.addEventListener('DOMContentLoaded', () => {
+$(document).ready(function() {
     const todayRegister = new Date();
     const eighteenYearsAgo = new Date();
     eighteenYearsAgo.setFullYear(todayRegister.getFullYear() - 18);
 
-    document.getElementById('birthDate').setAttribute('type', 'text');
-
     const dateBirth = MCDatepicker.create({
-        el: '#birthDate',
+        el: '#dateBirthRegister',
         dateFormat: 'yyyy-mm-dd',
         autoClose: true,
         closeOnBlur: true,
@@ -21,4 +19,4 @@ document.addEventListener('DOMContentLoaded', () => {
             theme_color: '#006633',
         },
     });
-});
+})

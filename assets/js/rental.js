@@ -1,7 +1,4 @@
 $(document).ready(function() {
-    document.getElementById('reservations_rentals_date_start').setAttribute('type', 'text');
-    document.getElementById('reservations_rentals_date_end').setAttribute('type', 'text');
-
     $('.popup-gallery').magnificPopup({
         delegate: 'a:not(.not-image)' +
             ':not(.fc-daygrid-day-number)' +

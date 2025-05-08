@@ -1,0 +1,32 @@
+<turbo-frame id="account-section">
+    {% if success is defined and success %}
+        <div class="alert alert-success">Modifications enregistrées.</div>
+    {% endif %}
+
+    <div class="d-flex flex-column bg-lightGreen gap-4 p-4 rounded-4 align-items-center justify-content-center p-4">
+        <h4>Modification de votre compte</h4>
+        <div>
+
+            {{ form_errors(form) }}
+            {{ form_start(form, {
+                'action': path('app_account_section', {'section': 'modify'}),
+                'method': 'POST',
+                'attr': {
+                    'data-turbo-frame': '_top'
+                }
+            }) }}
+
+            {{ form_row(form.firstname) }}
+            {{ form_row(form.lastname) }}
+            {{ form_row(form.birth_date, {'id': 'birthDate'}) }}
+
+            <button type="submit" class="btn-yellow form-control">Enregistrer</button>
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+
+    <script src="{{ asset('libs/jquery/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('libs/mc-datepicker/dist/mc-calendar.min.js') }}"></script>
+    <script src="{{ asset('js/userModify.js') }}"></script>
+</turbo-frame>

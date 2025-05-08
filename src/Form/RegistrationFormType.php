@@ -80,6 +80,9 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('birth_date',  DateType::class, [
                 'required' => true,
+                'attr' => [
+                    'placeholder' => 'Entrez votre date de naissance',
+                ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
