@@ -30,18 +30,25 @@
                                 id="userDropdown"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                            <img src="{{ asset('uploads/user.svg') }}" alt="Avatar utilisateur" class="rounded-circle" width="32" height="32">
+                            {% if app.user.image.src == "null" %}
+                                <svg class="rounded-circle" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="#F8F9FA" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"/></svg>
+                            {% else %}
+                                <img class="rounded-circle" src="{{ asset('uploads/' ~ app.user.image.src) }}" alt="{{ app.user.image.alt }}" style="object-fit: cover; height: 25px; width: 25px">
+                            {% endif %}
                             {{ app.user.firstname }} {{ app.user.lastname }}
                         </button>
 
-                        <ul class="dropdown-menu gap-1" aria-labelledby="userDropdown">
+                        <ul class="dropdown-menu gap-4" aria-labelledby="userDropdown">
+                            <li class="mb-2">
+                                <a href="{{ path('app_account') }}" class="dropdown-item color-white rounded-3 text-center">Mon compte</a>
+                            </li>
                             {% if is_granted('ROLE_ADMIN') %}
-                                <li>
-                                    <a href="{{ path('app_admin') }}" class="dropdown-item text-danger">
+                                <li class="mb-2">
+                                    <a href="{{ path('app_admin') }}" class="dropdown-item color-white rounded-3 text-center">
                                         Administration
                                     </a>
                                 </li>
-                                <li><hr class="dropdown-divider"></li>
+                                <li class="mb-2"><hr class="dropdown-divider"></li>
                             {% endif %}
                             <li>
                                 <a href="{{ path('app_logout') }}" class="dropdown-item btn-red text-center">Déconnexion</a>
@@ -50,14 +57,26 @@
                     </div>
 
                 {% else %}
-                    <li class="nav-item">
+                    <li class="nav-item mb-2">
                         <a class="btn-green" href="{{ path('app_login') }}">Connexion</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item mb-2">
                         <a class="btn-outline-grey" href="{{ path('app_register') }}">Inscription</a>
                     </li>
                 {% endif %}
             </ul>
         </div>
     </nav>
+
+    <div id="fixed-alert-container">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} alert-dismissible fade show mt-3 w-75 mx-auto" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
 {% endblock %}

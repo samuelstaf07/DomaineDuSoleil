@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
@@ -19,13 +20,13 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager, UsersRepository $usersRepository, MailerService $mailerService, VerifyEmailHelperInterface $verifyEmailHelper): Response
+    public function register(SessionInterface$session, Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, UsersRepository $usersRepository, MailerService $mailerService, VerifyEmailHelperInterface $verifyEmailHelper): Response
     {
         $user = new Users();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
         $image = new Images();
-        $image->setId(1)->setAlt('mon image')->setSrc('source');
+        $image->setId(1)->setAlt('Image de profil de l\'utilisateur')->setSrc('null');
         $image->setIsHomePage(0);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -41,6 +42,7 @@ class RegistrationController extends AbstractController
                 ->setIsEmailAuthentificated(false)
                 ->setUpdatedAt(new \DateTimeImmutable())
                 ->setCreatedAt(new \DateTimeImmutable())
+                ->setBirthDate($user->getBirthDate())
                 ->setImage($image)
             ;
 
@@ -66,7 +68,7 @@ class RegistrationController extends AbstractController
                 $signatureComponents->getSignedUrl()
             );
 
-            $this->addFlash('success', 'Un email de confirmation vous a été envoyé.');
+            $this->addFlash('success', 'Un email de confirmation vous a été envoyé. Vous pouvez vous connecter mais vous serez limité.');
 
             return $this->redirectToRoute('app_login');
         }

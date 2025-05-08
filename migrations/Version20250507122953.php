@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250504114045 extends AbstractMigration
+final class Version20250507122953 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -21,7 +21,7 @@ final class Version20250504114045 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql(<<<'SQL'
-            CREATE TABLE bills (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, content LONGTEXT NOT NULL, date DATE NOT NULL COMMENT '(DC2Type:date_immutable)', total_price DOUBLE PRECISION NOT NULL, status SMALLINT NOT NULL, INDEX IDX_22775DD0A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
+            CREATE TABLE bills (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, date DATE NOT NULL COMMENT '(DC2Type:date_immutable)', total_price DOUBLE PRECISION NOT NULL, status SMALLINT NOT NULL, INDEX IDX_22775DD0A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE comments (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, rentals_id INT NOT NULL, content LONGTEXT NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime_immutable)', rating INT NOT NULL, is_active TINYINT(1) NOT NULL, INDEX IDX_5F9E962AA76ED395 (user_id), INDEX IDX_5F9E962AA564EA6A (rentals_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
@@ -42,10 +42,10 @@ final class Version20250504114045 extends AbstractMigration
             CREATE TABLE reservations_events (id INT AUTO_INCREMENT NOT NULL, bill_id INT NOT NULL, user_id INT NOT NULL, event_id INT NOT NULL, date_reservation DATE NOT NULL COMMENT '(DC2Type:date_immutable)', is_active TINYINT(1) NOT NULL, nb_places INT NOT NULL, total_deposit DOUBLE PRECISION NOT NULL, INDEX IDX_63F87C551A8C12F5 (bill_id), INDEX IDX_63F87C55A76ED395 (user_id), INDEX IDX_63F87C5571F7E88B (event_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE reservations_rentals (id INT AUTO_INCREMENT NOT NULL, bill_id INT NOT NULL, user_id INT NOT NULL, rentals_id INT NOT NULL, has_cleaning_deposit TINYINT(1) NOT NULL, total_deposit_returned DOUBLE PRECISION NOT NULL, status_base_deposit SMALLINT NOT NULL, date_reservation DATE NOT NULL COMMENT '(DC2Type:date_immutable)', date_start DATE NOT NULL COMMENT '(DC2Type:date_immutable)', date_end DATE NOT NULL COMMENT '(DC2Type:date_immutable)', status_reservation TINYINT(1) NOT NULL, INDEX IDX_B894A9961A8C12F5 (bill_id), INDEX IDX_B894A996A76ED395 (user_id), INDEX IDX_B894A996A564EA6A (rentals_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
+            CREATE TABLE reservations_rentals (id INT AUTO_INCREMENT NOT NULL, bill_id INT NOT NULL, user_id INT NOT NULL, rentals_id INT NOT NULL, has_cleaning_deposit TINYINT(1) NOT NULL, total_deposit_returned DOUBLE PRECISION NOT NULL, status_base_deposit SMALLINT NOT NULL, date_reservation DATE NOT NULL COMMENT '(DC2Type:date_immutable)', date_start DATE NOT NULL COMMENT '(DC2Type:date_immutable)', date_end DATE NOT NULL COMMENT '(DC2Type:date_immutable)', status_reservation TINYINT(1) NOT NULL, total_price DOUBLE PRECISION NOT NULL, INDEX IDX_B894A9961A8C12F5 (bill_id), INDEX IDX_B894A996A76ED395 (user_id), INDEX IDX_B894A996A564EA6A (rentals_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE users (id INT AUTO_INCREMENT NOT NULL, image_id INT DEFAULT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, firstname VARCHAR(255) NOT NULL, lastname VARCHAR(255) NOT NULL, nb_points INT NOT NULL, account_number VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime_immutable)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime_immutable)', last_log_at DATETIME NOT NULL COMMENT '(DC2Type:datetime_immutable)', is_active TINYINT(1) NOT NULL, is_email_authentificated TINYINT(1) NOT NULL, UNIQUE INDEX UNIQ_1483A5E93DA5256D (image_id), UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
+            CREATE TABLE users (id INT AUTO_INCREMENT NOT NULL, image_id INT DEFAULT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, firstname VARCHAR(255) NOT NULL, lastname VARCHAR(255) NOT NULL, nb_points INT NOT NULL, account_number VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime_immutable)', updated_at DATETIME NOT NULL COMMENT '(DC2Type:datetime_immutable)', last_log_at DATETIME NOT NULL COMMENT '(DC2Type:datetime_immutable)', is_active TINYINT(1) NOT NULL, is_email_authentificated TINYINT(1) NOT NULL, birth_date DATE NOT NULL COMMENT '(DC2Type:date_immutable)', UNIQUE INDEX UNIQ_1483A5E93DA5256D (image_id), UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE messenger_messages (id BIGINT AUTO_INCREMENT NOT NULL, body LONGTEXT NOT NULL, headers LONGTEXT NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime_immutable)', available_at DATETIME NOT NULL COMMENT '(DC2Type:datetime_immutable)', delivered_at DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime_immutable)', INDEX IDX_75EA56E0FB7336F0 (queue_name), INDEX IDX_75EA56E0E3BD61CE (available_at), INDEX IDX_75EA56E016BA31DB (delivered_at), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB

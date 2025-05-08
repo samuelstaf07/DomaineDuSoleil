@@ -14,148 +14,149 @@
 
     <script>
         window.reservedDates = {{ reservedDates|json_encode|raw }};
+        console.log({{ reservedDates|json_encode|raw }});
     </script>
 
     <div class="contentMargin popup-gallery d-flex flex-column align-items-center gap-5">
         <h3 class="myTitle fs-2">{{ rental.title|capitalize }}</h3>
 
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label }} alert-dismissible fade show mt-3" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
-                </div>
-            {% endfor %}
-        {% endfor %}
-
-
-        <header class="w-75 d-flex gap-3">
-            <a class="col-md-6" href="{{ asset('styles/img/' ~ rental.getHomePageImage().getSrc()) }}" title="{{ rental.getHomePageImage().getAlt() }}">
-                <img class="img-fluid rounded-4 w-100 h-100" src="{{ asset('styles/img/' ~ rental.getHomePageImage().getSrc()) }}" alt="{{ rental.getHomePageImage().getAlt() }}">
-            </a>
-            <div class="col-md-6">
-                <p class="bg-lightGreen rounded-4 p-2">{{ rental.content|capitalize }}</p>
-                <div class="bg-LightGrey rounded-4 p-2">
-                    <div class="d-flex gap-1 justify-content-between align-items-start">
-                        <p class="fs-4">Conseillé pour <span class="color-lightGreen">{{ rental.nbSimpleBed + (2 * rental.nbDoubleBed) }} personne{% if (rental.nbSimpleBed + (2 * rental.nbDoubleBed))>1 %}s{% endif %} <span class="fw-bold">maximum</span></span></p>
-                        {% if rental.isOnPromotion %}
-                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><path fill="#EB4034" fill-rule="evenodd" d="M9.744 2.072L7.818.917L5.892 2.072l-2.237.198l-.88 2.066l-1.693 1.475L1.585 8l-.503 2.189l1.693 1.475l.88 2.066l2.237.198l1.926 1.155l1.926-1.155l2.237-.198l.88-2.066l1.694-1.475L14.05 8l.504-2.189l-1.694-1.475l-.88-2.066zM5.5 6.5a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0M6 5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m-.146 5.854l5-5l-.708-.708l-5 5zM9.5 10a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0m.5-1.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3" clip-rule="evenodd"/></svg>
-                        {% endif %}
-                    </div>
-
-                    <div class="d-flex">
-                        <div class="d-flex flex-column gap-1 w-50">
-                            <div class="d-flex gap-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#F8F9FA" d="M21 10.78V8c0-1.65-1.35-3-3-3h-4c-.77 0-1.47.3-2 .78c-.53-.48-1.23-.78-2-.78H6C4.35 5 3 6.35 3 8v2.78c-.61.55-1 1.34-1 2.22v6h2v-2h16v2h2v-6c0-.88-.39-1.67-1-2.22M14 7h4c.55 0 1 .45 1 1v2h-6V8c0-.55.45-1 1-1M5 8c0-.55.45-1 1-1h4c.55 0 1 .45 1 1v2H5z"/></svg>
-                                <p class="textPromotion m-0">{{ rental.nbDoubleBed }} lit double</p>
-                            </div>
-                            <div class="d-flex gap-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#F8F9FA" d="M19 10V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3a2 2 0 0 0-2 2v5h1.33L5 19h1l.67-2h10.66l.67 2h1l.67-2H21v-5a2 2 0 0 0-2-2m-2 0H7V7h10Z"/></svg>
-                                <p class="textPromotion m-0">{{ rental.nbSimpleBed }} lits simples</p>
-                            </div>
-                            <div class="d-flex flex-column gap-2">
-                                <div class="d-flex align-items-center gap-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="{% if rental.hasShower %}#95C11F{% else %}#EB4034{% endif %}" d="M8 18q-.425 0-.712-.288T7 17t.288-.712T8 16t.713.288T9 17t-.288.713T8 18m4 0q-.425 0-.712-.288T11 17t.288-.712T12 16t.713.288T13 17t-.288.713T12 18m4 0q-.425 0-.712-.288T15 17t.288-.712T16 16t.713.288T17 17t-.288.713T16 18M6 14q-.425 0-.712-.288T5 13v-1q0-2.65 1.7-4.6T11 5.1V4q0-.425.288-.713T12 3t.713.288T13 4v1.1q2.6.35 4.3 2.3T19 12v1q0 .425-.288.713T18 14zm2 7q-.425 0-.712-.288T7 20t.288-.712T8 19t.713.288T9 20t-.288.713T8 21m4 0q-.425 0-.712-.288T11 20t.288-.712T12 19t.713.288T13 20t-.288.713T12 21m4 0q-.425 0-.712-.288T15 20t.288-.712T16 19t.713.288T17 20t-.288.713T16 21"/></svg>
-                                    {% if rental.hasShower %}
-                                        <span>Possède une douche</span>
-                                    {% else %}
-                                        <span>Ne possède pas de douche</span>
-                                    {% endif %}
-                                </div>
-                                <div class="d-flex align-items-center gap-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 256 256"><path fill="{% if rental.hasToilet %}#95C11F{% else %}#EB4034{% endif %}" d="M60 88h136a4 4 0 0 0 4-4V40a16 16 0 0 0-16-16H72a16 16 0 0 0-16 16v44a4 4 0 0 0 4 4m28-40h15.73a8.18 8.18 0 0 1 8.27 7.47a8 8 0 0 1-8 8.53H88.27A8.18 8.18 0 0 1 80 56.53A8 8 0 0 1 88 48m136 64.06a8 8 0 0 0-8-8.06H40a8 8 0 0 0-8 8.06a96.1 96.1 0 0 0 51.68 85.08l-3.47 24.27a16.43 16.43 0 0 0 1.63 10A16 16 0 0 0 96 240h63.66a16.52 16.52 0 0 0 9.72-3a16 16 0 0 0 6.46-15.23l-3.52-24.6A96.1 96.1 0 0 0 224 112.06M96 224l2.93-20.5a96.15 96.15 0 0 0 58.14 0L160 224Z"/></svg>
-                                    {% if rental.hasToilet %}
-                                        <span>Possède des toilettes</span>
-                                    {% else %}
-                                        <span>Ne possède pas de toilette</span>
-                                    {% endif %}
-                                </div>
-                                <div class="d-flex align-items-center gap-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="33,75" height="30" viewBox="0 0 576 512"><path fill="{% if rental.hasKitchen %}#95C11F{% else %}#EB4034{% endif %}" d="M240 144a96 96 0 1 0-192 0a96 96 0 1 0 192 0m44.4 32c-14.5 64.1-71.9 112-140.4 112C64.5 288 0 223.5 0 144S64.5 0 144 0c68.5 0 125.9 47.9 140.4 112h71.8c8.8-9.8 21.6-16 35.8-16h104c26.5 0 48 21.5 48 48s-21.5 48-48 48H392c-14.2 0-27-6.2-35.8-16zM144 80a64 64 0 1 1 0 128a64 64 0 1 1 0-128m256 160c13.3 0 24 10.7 24 24v8h96c13.3 0 24 10.7 24 24s-10.7 24-24 24H280c-13.3 0-24-10.7-24-24s10.7-24 24-24h96v-8c0-13.3 10.7-24 24-24M288 464V352h224v112c0 26.5-21.5 48-48 48H336c-26.5 0-48-21.5-48-48M48 320h128c26.5 0 48 21.5 48 48s-21.5 48-48 48h-16c0 17.7-14.3 32-32 32H64c-17.7 0-32-14.3-32-32v-80c0-8.8 7.2-16 16-16m128 64c8.8 0 16-7.2 16-16s-7.2-16-16-16h-16v32zM24 464h176c13.3 0 24 10.7 24 24s-10.7 24-24 24H24c-13.3 0-24-10.7-24-24s10.7-24 24-24"/></svg>
-                                    {% if rental.hasKitchen %}
-                                        <span>Possède une cuisine</span>
-                                    {% else %}
-                                        <span>Ne possède pas de cuisine</span>
-                                    {% endif %}
-                                </div>
-                                <div class="d-flex align-items-center gap-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="{% if rental.hasFridge %}#95C11F{% else %}#EB4034{% endif %}" fill-rule="evenodd" d="M5.172 3.172C4 4.343 4 6.229 4 10v.75h16V10c0-3.771 0-5.657-1.172-6.828S15.771 2 12 2S6.343 2 5.172 3.172M17 6.25a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0V7a.75.75 0 0 1 .75-.75m-13 6V13c0 3.771 0 5.657 1.172 6.828a3.1 3.1 0 0 0 1.078.697V22c0 .414.336.75.75.75h1a.75.75 0 0 0 .75-.75v-1.047C9.645 21 10.712 21 12 21s2.355 0 3.25-.047V22c0 .414.336.75.75.75h1a.75.75 0 0 0 .75-.75v-1.475a3.1 3.1 0 0 0 1.078-.697C20 18.657 20 16.771 20 13v-.75zm13 1a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 1 .75-.75" clip-rule="evenodd"/></svg>
-                                    {% if rental.hasFridge %}
-                                        <span>Possède un frigo</span>
-                                    {% else %}
-                                        <span>Ne possède pas de frigo</span>
-                                    {% endif %}
-                                </div>
-                                <div class="d-flex align-items-center gap-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="{% if rental.hasHeating %}#95C11F{% else %}#EB4034{% endif %}" fill-rule="evenodd" d="M20.4 21.75a1.35 1.35 0 0 0 1.35-1.35V3.6a1.35 1.35 0 0 0-1.35-1.35H3.6A1.35 1.35 0 0 0 2.25 3.6v16.8c0 .746.604 1.35 1.35 1.35zM7.424 12.48c.829.995 1.015 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 0 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.83-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 1 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862m8.924 2.736c.091-.82-.095-1.741-.924-2.736c-1.086-1.303-1.4-2.63-1.262-3.862c.133-1.198.686-2.241 1.214-3.034a.75.75 0 0 1 1.249.832c-.472.708-.877 1.515-.972 2.368c-.092.82.095 1.741.924 2.736c1.086 1.303 1.4 2.631 1.262 3.862c-.134 1.198-.686 2.242-1.214 3.034a.75.75 0 1 1-1.249-.832c.472-.707.877-1.515.972-2.368m-4.924-2.736c.829.995 1.016 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 1 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.829-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 0 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862" clip-rule="evenodd"/></svg>
-                                    {% if rental.hasHeating %}
-                                        <span>Possède du chauffage</span>
-                                    {% else %}
-                                        <span>Ne possède pas de chauffage</span>
-                                    {% endif %}
-                                </div>
-                                <div class="d-flex align-items-center gap-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="{% if rental.petsAccepted %}#95C11F{% else %}#EB4034{% endif %}" d="M8.35 3c1.18-.17 2.43 1.12 2.79 2.9c.36 1.77-.29 3.35-1.47 3.53c-1.17.18-2.43-1.11-2.8-2.89c-.37-1.77.3-3.35 1.48-3.54m7.15 0c1.19.19 1.85 1.77 1.5 3.54c-.38 1.78-1.63 3.07-2.81 2.89c-1.19-.18-1.84-1.76-1.47-3.53c.36-1.78 1.61-3.07 2.78-2.9M3 7.6c1.14-.49 2.69.4 3.5 1.95c.76 1.58.5 3.24-.63 3.73s-2.67-.39-3.46-1.96S1.9 8.08 3 7.6m18 0c1.1.48 1.38 2.15.59 3.72s-2.33 2.45-3.46 1.96s-1.39-2.15-.63-3.73C18.31 8 19.86 7.11 21 7.6m-1.67 10.78c.04.94-.68 1.98-1.54 2.37c-1.79.82-3.91-.88-5.9-.88s-4.13 1.77-5.89.88c-1-.49-1.69-1.79-1.56-2.87c.18-1.49 1.97-2.29 3.03-3.38c1.41-1.41 2.41-4.06 4.42-4.06c2 0 3.06 2.61 4.41 4.06c1.11 1.22 2.96 2.25 3.03 3.88"/></svg>
-                                    {% if rental.petsAccepted %}
-                                        <span>Animaux acceptés</span>
-                                    {% else %}
-                                        <span>Animaux non-acceptés</span>
-                                    {% endif %}
-                                </div>
-                            </div>
+        <header class="w-75 d-flex flex-column gap-3 align-items-center">
+            <div class="d-flex gap-3">
+                <a class="col-md-6" href="{{ asset('styles/img/' ~ rental.getHomePageImage().getSrc()) }}" title="{{ rental.getHomePageImage().getAlt() }}">
+                    <img class="img-fluid rounded-4 w-100 h-100" src="{{ asset('styles/img/' ~ rental.getHomePageImage().getSrc()) }}" alt="{{ rental.getHomePageImage().getAlt() }}">
+                </a>
+                <div class="col-md-6">
+                    <p class="bg-lightGreen rounded-4 p-2">{{ rental.content|capitalize }}</p>
+                    <div class="bg-LightGrey rounded-4 p-2">
+                        <div class="d-flex gap-1 justify-content-between align-items-start">
+                            <p class="fs-4">Conseillé pour <span class="color-lightGreen">{{ rental.nbSimpleBed + (2 * rental.nbDoubleBed) }} personne{% if (rental.nbSimpleBed + (2 * rental.nbDoubleBed))>1 %}s{% endif %} <span class="fw-bold">maximum</span></span></p>
+                            {% if rental.isOnPromotion %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 16 16"><path fill="#EB4034" fill-rule="evenodd" d="M9.744 2.072L7.818.917L5.892 2.072l-2.237.198l-.88 2.066l-1.693 1.475L1.585 8l-.503 2.189l1.693 1.475l.88 2.066l2.237.198l1.926 1.155l1.926-1.155l2.237-.198l.88-2.066l1.694-1.475L14.05 8l.504-2.189l-1.694-1.475l-.88-2.066zM5.5 6.5a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0M6 5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m-.146 5.854l5-5l-.708-.708l-5 5zM9.5 10a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0m.5-1.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3" clip-rule="evenodd"/></svg>
+                            {% endif %}
                         </div>
-                        <div class="w-50 d-flex flex-column justify-content-end align-items-end gap-3 p-4">
-                            <div class="rate d-flex gap-2 align-items-center">
-                                {% set averageData = rental.getAverageRateAndCommentCount() %}
-                                {{ averageData.averageRate }}/5
-                                ({{ averageData.commentCount }})
-                                <div class="d-flex gap-1 align-items-center">
-                                    {% if averageData.commentCount > 0 %}
 
-                                        {% set fullStars = (averageData.averageRate // 1) %}
-                                        {% set decimalPart = averageData.averageRate - fullStars %}
-
-                                        {% if decimalPart <= 0.25 %}
-                                            {% set hasHalfStar = false %}
-                                        {% elseif decimalPart > 0.25 and decimalPart < 0.75 %}
-                                            {% set hasHalfStar = true %}
+                        <div class="d-flex">
+                            <div class="d-flex flex-column gap-1 w-50">
+                                <div class="d-flex gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#F8F9FA" d="M21 10.78V8c0-1.65-1.35-3-3-3h-4c-.77 0-1.47.3-2 .78c-.53-.48-1.23-.78-2-.78H6C4.35 5 3 6.35 3 8v2.78c-.61.55-1 1.34-1 2.22v6h2v-2h16v2h2v-6c0-.88-.39-1.67-1-2.22M14 7h4c.55 0 1 .45 1 1v2h-6V8c0-.55.45-1 1-1M5 8c0-.55.45-1 1-1h4c.55 0 1 .45 1 1v2H5z"/></svg>
+                                    <p class="textPromotion m-0">{{ rental.nbDoubleBed }} lit double</p>
+                                </div>
+                                <div class="d-flex gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#F8F9FA" d="M19 10V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3a2 2 0 0 0-2 2v5h1.33L5 19h1l.67-2h10.66l.67 2h1l.67-2H21v-5a2 2 0 0 0-2-2m-2 0H7V7h10Z"/></svg>
+                                    <p class="textPromotion m-0">{{ rental.nbSimpleBed }} lits simples</p>
+                                </div>
+                                <div class="d-flex flex-column gap-2">
+                                    <div class="d-flex align-items-center gap-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="{% if rental.hasShower %}#95C11F{% else %}#EB4034{% endif %}" d="M8 18q-.425 0-.712-.288T7 17t.288-.712T8 16t.713.288T9 17t-.288.713T8 18m4 0q-.425 0-.712-.288T11 17t.288-.712T12 16t.713.288T13 17t-.288.713T12 18m4 0q-.425 0-.712-.288T15 17t.288-.712T16 16t.713.288T17 17t-.288.713T16 18M6 14q-.425 0-.712-.288T5 13v-1q0-2.65 1.7-4.6T11 5.1V4q0-.425.288-.713T12 3t.713.288T13 4v1.1q2.6.35 4.3 2.3T19 12v1q0 .425-.288.713T18 14zm2 7q-.425 0-.712-.288T7 20t.288-.712T8 19t.713.288T9 20t-.288.713T8 21m4 0q-.425 0-.712-.288T11 20t.288-.712T12 19t.713.288T13 20t-.288.713T12 21m4 0q-.425 0-.712-.288T15 20t.288-.712T16 19t.713.288T17 20t-.288.713T16 21"/></svg>
+                                        {% if rental.hasShower %}
+                                            <span>Possède une douche</span>
                                         {% else %}
-                                            {% set hasHalfStar = false %}
-                                            {% set fullStars = fullStars + 1 %}
+                                            <span>Ne possède pas de douche</span>
                                         {% endif %}
-
-                                        {% set emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0) %}
-
-                                        {% if fullStars > 0 %}
-                                            {% for i in 1..fullStars %}
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none"><path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"/><path fill="#F7D844" d="M10.92 2.868a1.25 1.25 0 0 1 2.16 0l2.795 4.798l5.428 1.176a1.25 1.25 0 0 1 .667 2.054l-3.7 4.141l.56 5.525a1.25 1.25 0 0 1-1.748 1.27L12 19.592l-5.082 2.24a1.25 1.25 0 0 1-1.748-1.27l.56-5.525l-3.7-4.14a1.25 1.25 0 0 1 .667-2.055l5.428-1.176z"/></g></svg>
-                                            {% endfor %}
+                                    </div>
+                                    <div class="d-flex align-items-center gap-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 256 256"><path fill="{% if rental.hasToilet %}#95C11F{% else %}#EB4034{% endif %}" d="M60 88h136a4 4 0 0 0 4-4V40a16 16 0 0 0-16-16H72a16 16 0 0 0-16 16v44a4 4 0 0 0 4 4m28-40h15.73a8.18 8.18 0 0 1 8.27 7.47a8 8 0 0 1-8 8.53H88.27A8.18 8.18 0 0 1 80 56.53A8 8 0 0 1 88 48m136 64.06a8 8 0 0 0-8-8.06H40a8 8 0 0 0-8 8.06a96.1 96.1 0 0 0 51.68 85.08l-3.47 24.27a16.43 16.43 0 0 0 1.63 10A16 16 0 0 0 96 240h63.66a16.52 16.52 0 0 0 9.72-3a16 16 0 0 0 6.46-15.23l-3.52-24.6A96.1 96.1 0 0 0 224 112.06M96 224l2.93-20.5a96.15 96.15 0 0 0 58.14 0L160 224Z"/></svg>
+                                        {% if rental.hasToilet %}
+                                            <span>Possède des toilettes</span>
+                                        {% else %}
+                                            <span>Ne possède pas de toilette</span>
                                         {% endif %}
-
-                                        {% if hasHalfStar %}
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 12 12"><path fill="#F7D844" d="m6 9.428l-2.223 1.169a.8.8 0 0 1-1.16-.844l.424-2.476l-1.799-1.753a.8.8 0 0 1 .444-1.365l2.486-.36l1.111-2.253A.79.79 0 0 1 6 1.1a.79.79 0 0 1 .718.446L7.83 3.798l2.486.361a.8.8 0 0 1 .443 1.365L8.96 7.277l.425 2.476a.8.8 0 0 1-1.16.844zm0-7.075v6.049a.8.8 0 0 1 .373.092l1.958 1.029l-.374-2.18a.8.8 0 0 1 .23-.708L9.771 5.09l-2.189-.318a.8.8 0 0 1-.602-.438L6 2.352z"/></svg>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="33,75" height="30" viewBox="0 0 576 512"><path fill="{% if rental.hasKitchen %}#95C11F{% else %}#EB4034{% endif %}" d="M240 144a96 96 0 1 0-192 0a96 96 0 1 0 192 0m44.4 32c-14.5 64.1-71.9 112-140.4 112C64.5 288 0 223.5 0 144S64.5 0 144 0c68.5 0 125.9 47.9 140.4 112h71.8c8.8-9.8 21.6-16 35.8-16h104c26.5 0 48 21.5 48 48s-21.5 48-48 48H392c-14.2 0-27-6.2-35.8-16zM144 80a64 64 0 1 1 0 128a64 64 0 1 1 0-128m256 160c13.3 0 24 10.7 24 24v8h96c13.3 0 24 10.7 24 24s-10.7 24-24 24H280c-13.3 0-24-10.7-24-24s10.7-24 24-24h96v-8c0-13.3 10.7-24 24-24M288 464V352h224v112c0 26.5-21.5 48-48 48H336c-26.5 0-48-21.5-48-48M48 320h128c26.5 0 48 21.5 48 48s-21.5 48-48 48h-16c0 17.7-14.3 32-32 32H64c-17.7 0-32-14.3-32-32v-80c0-8.8 7.2-16 16-16m128 64c8.8 0 16-7.2 16-16s-7.2-16-16-16h-16v32zM24 464h176c13.3 0 24 10.7 24 24s-10.7 24-24 24H24c-13.3 0-24-10.7-24-24s10.7-24 24-24"/></svg>
+                                        {% if rental.hasKitchen %}
+                                            <span>Possède une cuisine</span>
+                                        {% else %}
+                                            <span>Ne possède pas de cuisine</span>
                                         {% endif %}
+                                    </div>
+                                    <div class="d-flex align-items-center gap-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="{% if rental.hasFridge %}#95C11F{% else %}#EB4034{% endif %}" fill-rule="evenodd" d="M5.172 3.172C4 4.343 4 6.229 4 10v.75h16V10c0-3.771 0-5.657-1.172-6.828S15.771 2 12 2S6.343 2 5.172 3.172M17 6.25a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0V7a.75.75 0 0 1 .75-.75m-13 6V13c0 3.771 0 5.657 1.172 6.828a3.1 3.1 0 0 0 1.078.697V22c0 .414.336.75.75.75h1a.75.75 0 0 0 .75-.75v-1.047C9.645 21 10.712 21 12 21s2.355 0 3.25-.047V22c0 .414.336.75.75.75h1a.75.75 0 0 0 .75-.75v-1.475a3.1 3.1 0 0 0 1.078-.697C20 18.657 20 16.771 20 13v-.75zm13 1a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 1 .75-.75" clip-rule="evenodd"/></svg>
+                                        {% if rental.hasFridge %}
+                                            <span>Possède un frigo</span>
+                                        {% else %}
+                                            <span>Ne possède pas de frigo</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="d-flex align-items-center gap-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="{% if rental.hasHeating %}#95C11F{% else %}#EB4034{% endif %}" fill-rule="evenodd" d="M20.4 21.75a1.35 1.35 0 0 0 1.35-1.35V3.6a1.35 1.35 0 0 0-1.35-1.35H3.6A1.35 1.35 0 0 0 2.25 3.6v16.8c0 .746.604 1.35 1.35 1.35zM7.424 12.48c.829.995 1.015 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 0 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.83-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 1 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862m8.924 2.736c.091-.82-.095-1.741-.924-2.736c-1.086-1.303-1.4-2.63-1.262-3.862c.133-1.198.686-2.241 1.214-3.034a.75.75 0 0 1 1.249.832c-.472.708-.877 1.515-.972 2.368c-.092.82.095 1.741.924 2.736c1.086 1.303 1.4 2.631 1.262 3.862c-.134 1.198-.686 2.242-1.214 3.034a.75.75 0 1 1-1.249-.832c.472-.707.877-1.515.972-2.368m-4.924-2.736c.829.995 1.016 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 1 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.829-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 0 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862" clip-rule="evenodd"/></svg>
+                                        {% if rental.hasHeating %}
+                                            <span>Possède du chauffage</span>
+                                        {% else %}
+                                            <span>Ne possède pas de chauffage</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="d-flex align-items-center gap-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="{% if rental.petsAccepted %}#95C11F{% else %}#EB4034{% endif %}" d="M8.35 3c1.18-.17 2.43 1.12 2.79 2.9c.36 1.77-.29 3.35-1.47 3.53c-1.17.18-2.43-1.11-2.8-2.89c-.37-1.77.3-3.35 1.48-3.54m7.15 0c1.19.19 1.85 1.77 1.5 3.54c-.38 1.78-1.63 3.07-2.81 2.89c-1.19-.18-1.84-1.76-1.47-3.53c.36-1.78 1.61-3.07 2.78-2.9M3 7.6c1.14-.49 2.69.4 3.5 1.95c.76 1.58.5 3.24-.63 3.73s-2.67-.39-3.46-1.96S1.9 8.08 3 7.6m18 0c1.1.48 1.38 2.15.59 3.72s-2.33 2.45-3.46 1.96s-1.39-2.15-.63-3.73C18.31 8 19.86 7.11 21 7.6m-1.67 10.78c.04.94-.68 1.98-1.54 2.37c-1.79.82-3.91-.88-5.9-.88s-4.13 1.77-5.89.88c-1-.49-1.69-1.79-1.56-2.87c.18-1.49 1.97-2.29 3.03-3.38c1.41-1.41 2.41-4.06 4.42-4.06c2 0 3.06 2.61 4.41 4.06c1.11 1.22 2.96 2.25 3.03 3.88"/></svg>
+                                        {% if rental.petsAccepted %}
+                                            <span>Animaux acceptés</span>
+                                        {% else %}
+                                            <span>Animaux non-acceptés</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-50 d-flex flex-column justify-content-end align-items-end gap-3 p-4">
+                                <div class="rate d-flex gap-2 align-items-center">
+                                    {% set averageData = rental.getAverageRateAndCommentCount() %}
+                                    {{ averageData.averageRate }}/5
+                                    ({{ averageData.commentCount }})
+                                    <div class="d-flex gap-1 align-items-center">
+                                        {% if averageData.commentCount > 0 %}
 
-                                        {% if averageData.averageRate <= 4 %}
-                                            {% for i in 1..emptyStars %}
+                                            {% set fullStars = (averageData.averageRate // 1) %}
+                                            {% set decimalPart = averageData.averageRate - fullStars %}
+
+                                            {% if decimalPart <= 0.25 %}
+                                                {% set hasHalfStar = false %}
+                                            {% elseif decimalPart > 0.25 and decimalPart < 0.75 %}
+                                                {% set hasHalfStar = true %}
+                                            {% else %}
+                                                {% set hasHalfStar = false %}
+                                                {% set fullStars = fullStars + 1 %}
+                                            {% endif %}
+
+                                            {% set emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0) %}
+
+                                            {% if fullStars > 0 %}
+                                                {% for i in 1..fullStars %}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none"><path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"/><path fill="#F7D844" d="M10.92 2.868a1.25 1.25 0 0 1 2.16 0l2.795 4.798l5.428 1.176a1.25 1.25 0 0 1 .667 2.054l-3.7 4.141l.56 5.525a1.25 1.25 0 0 1-1.748 1.27L12 19.592l-5.082 2.24a1.25 1.25 0 0 1-1.748-1.27l.56-5.525l-3.7-4.14a1.25 1.25 0 0 1 .667-2.055l5.428-1.176z"/></g></svg>
+                                                {% endfor %}
+                                            {% endif %}
+
+                                            {% if hasHalfStar %}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 12 12"><path fill="#F7D844" d="m6 9.428l-2.223 1.169a.8.8 0 0 1-1.16-.844l.424-2.476l-1.799-1.753a.8.8 0 0 1 .444-1.365l2.486-.36l1.111-2.253A.79.79 0 0 1 6 1.1a.79.79 0 0 1 .718.446L7.83 3.798l2.486.361a.8.8 0 0 1 .443 1.365L8.96 7.277l.425 2.476a.8.8 0 0 1-1.16.844zm0-7.075v6.049a.8.8 0 0 1 .373.092l1.958 1.029l-.374-2.18a.8.8 0 0 1 .23-.708L9.771 5.09l-2.189-.318a.8.8 0 0 1-.602-.438L6 2.352z"/></svg>
+                                            {% endif %}
+
+                                            {% if averageData.averageRate <= 4 %}
+                                                {% for i in 1..emptyStars %}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="#F7D844" d="M7.194 2.102a.9.9 0 0 1 1.614 0l1.521 3.082l3.401.494a.9.9 0 0 1 .5 1.535l-2.462 2.4l.581 3.387a.9.9 0 0 1-1.306.948L8.001 12.35l-3.042 1.6A.9.9 0 0 1 3.653 13l.58-3.387l-2.46-2.399a.9.9 0 0 1 .499-1.535l3.4-.494zM8 2.726L6.546 5.673a.9.9 0 0 1-.677.493l-3.253.472L4.97 8.933a.9.9 0 0 1 .258.796l-.555 3.24l2.91-1.53a.9.9 0 0 1 .837 0l2.91 1.53l-.556-3.24a.9.9 0 0 1 .258-.796l2.354-2.295l-3.253-.472a.9.9 0 0 1-.677-.493z"/></svg>
+                                                {% endfor %}
+                                            {% endif %}
+
+                                        {% else %}
+
+                                            {% for i in 1..5 %}
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="#F7D844" d="M7.194 2.102a.9.9 0 0 1 1.614 0l1.521 3.082l3.401.494a.9.9 0 0 1 .5 1.535l-2.462 2.4l.581 3.387a.9.9 0 0 1-1.306.948L8.001 12.35l-3.042 1.6A.9.9 0 0 1 3.653 13l.58-3.387l-2.46-2.399a.9.9 0 0 1 .499-1.535l3.4-.494zM8 2.726L6.546 5.673a.9.9 0 0 1-.677.493l-3.253.472L4.97 8.933a.9.9 0 0 1 .258.796l-.555 3.24l2.91-1.53a.9.9 0 0 1 .837 0l2.91 1.53l-.556-3.24a.9.9 0 0 1 .258-.796l2.354-2.295l-3.253-.472a.9.9 0 0 1-.677-.493z"/></svg>
                                             {% endfor %}
+
                                         {% endif %}
-
-                                    {% else %}
-
-                                        {% for i in 1..5 %}
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="#F7D844" d="M7.194 2.102a.9.9 0 0 1 1.614 0l1.521 3.082l3.401.494a.9.9 0 0 1 .5 1.535l-2.462 2.4l.581 3.387a.9.9 0 0 1-1.306.948L8.001 12.35l-3.042 1.6A.9.9 0 0 1 3.653 13l.58-3.387l-2.46-2.399a.9.9 0 0 1 .499-1.535l3.4-.494zM8 2.726L6.546 5.673a.9.9 0 0 1-.677.493l-3.253.472L4.97 8.933a.9.9 0 0 1 .258.796l-.555 3.24l2.91-1.53a.9.9 0 0 1 .837 0l2.91 1.53l-.556-3.24a.9.9 0 0 1 .258-.796l2.354-2.295l-3.253-.472a.9.9 0 0 1-.677-.493z"/></svg>
-                                        {% endfor %}
-
-                                    {% endif %}
+                                    </div>
                                 </div>
+                                <div class="pricePromotion d-flex flex-column align-items-start">
+                                    {% if rental.isOnPromotion %}
+                                        <span class="color-lightGreen">
+                                            {{ (rental.pricePerDay * 0.9)|round(2, 'floor')|number_format(2, ',', '') }}€
+                                        </span>
+                                    {% endif %}
+                                    <p>
+                                        <span {% if rental.isOnPromotion %} class="strike" {% endif %}>
+                                            {{ rental.pricePerDay|number_format(2, ',', '') }}€
+                                        </span>/nuit
+                                    </p>
+                                </div>
+                                <a href="#dates" class="btn-yellow not-image">Réserver içi</a>
                             </div>
-                            <div class="pricePromotion d-flex flex-column align-items-start">
-                                {% if rental.isOnPromotion %}<span class="color-lightGreen">{{ (rental.pricePerDay * 0.9)|number_format(2, ',', '') }}€</span>{% endif %}
-                                <p><span {% if rental.isOnPromotion %} class="strike" {% endif %}>{{ rental.pricePerDay|number_format(2, ',', '') }}€</span>/nuit</p>
-                            </div>
-                            <a href="#dates" class="btn-yellow not-image">Réserver içi</a>
                         </div>
                     </div>
                 </div>
@@ -238,7 +239,7 @@
                                 {% if comment.user.image.src == "null" %}
                                     <svg class="rounded-circle" xmlns="http://www.w3.org/2000/svg" width="75" height="75" viewBox="0 0 24 24"><path fill="#F8F9FA" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"/></svg>
                                 {% else %}
-                                    <img class="rounded-circle" src="{{ asset('upload/' ~ comment.user.image.src) }}" alt="{{ comment.user.image.alt }}">
+                                    <img class="rounded-circle" src="{{ asset('uploads/' ~ comment.user.image.src) }}" alt="{{ comment.user.image.alt }}" style="object-fit: cover; height: 75px; width: 75px">
                                 {% endif %}
                             </div>
                             <div class="d-flex flex-column w-100">

@@ -24,10 +24,6 @@ final class RentalsController extends AbstractController
             'rentals' => $rentalsRepository->findAllRentalsActive(),
         ]);
     }
-
-    /**
-     * @throws \Exception
-     */
     #[Route('/rental/{id}', name: 'app_rental')]
     public function rental(
         $id,
@@ -41,7 +37,9 @@ final class RentalsController extends AbstractController
         $reservedDates = [];
 
         if ($rental->isActive()) {
+
             foreach ($rental->getUpcomingReservations() as $reservation) {
+                dump($reservation);
                 $reservedDates[] = [
                     'title' => 'Réservé',
                     'start' => $reservation->getDateStart()->format('Y-m-d'),

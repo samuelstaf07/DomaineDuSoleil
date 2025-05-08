@@ -14,7 +14,7 @@ class Comments
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: Users::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Users $user = null;
 

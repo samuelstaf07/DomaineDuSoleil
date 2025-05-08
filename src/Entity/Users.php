@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UsersRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -70,6 +71,9 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Bills::class, mappedBy: 'user')]
     private Collection $bills;
+
+    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    private ?\DateTimeImmutable $birth_date = null;
 
     public function __construct()
     {
@@ -297,6 +301,18 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
                 $bill->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBirthDate(): ?\DateTimeImmutable
+    {
+        return $this->birth_date;
+    }
+
+    public function setBirthDate(\DateTimeImmutable $birth_date): static
+    {
+        $this->birth_date = $birth_date;
 
         return $this;
     }

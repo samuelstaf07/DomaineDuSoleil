@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification de votre compte{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('libs/jquery/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('libs/mc-datepicker/dist/mc-calendar.min.js') }}"></script>
+    <script src="{{ asset('js/userModify.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="contentMargin d-flex flex-column align-items-center justify-content-center">
+        <div class="d-flex flex-column bg-lightGreen gap-4 p-4 rounded-4 w-50 align-items-center justify-content-center p-4">
+            <h4>Modification de votre compte</h4>
+            <div class="w-50">
+
+                {{ form_errors(form) }}
+                {{ form_start(form) }}
+                {{ form_row(form.firstname) }}
+                {{ form_row(form.lastname) }}
+                {{ form_row(form.birth_date, {'id': 'birthDate'}) }}
+
+                <button type="submit" class="btn-yellow form-control">Enregistrer</button>
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -77,7 +77,7 @@ final class CartController extends AbstractController
     public function confirmCart(SessionInterface $session, EntityManagerInterface $entityManager, RentalsRepository $rentalsRepository, EventsRepository $eventsRepository): Response
     {
 
-        if($this->getUser()){
+        if($this->getUser() && $this->getUser()->isEmailAuthentificated()){
             $cart = $session->get('myCart', []);
 
             if (empty($cart)) {
@@ -112,7 +112,13 @@ final class CartController extends AbstractController
                     $reservationRental->setUser($this->getUser());
                     $reservationRental->setRentals($rental);
                     $reservationRental->setHasCleaningDeposit($cleaningDeposit);
-                    $reservationRental->setTotalDepositReturned($totalPrice + $priceCleaningDeposit);
+                    $reservationRental->setTotalPrice($totalPrice + $priceCleaningDeposit);
+
+                    if($reservationRental->hasCleaningDeposit()){
+                        $reservationRental->setTotalDepositReturned(50);
+                    }else{
+                        $reservationRental->setTotalDepositReturned(0);
+                    }
 
                     //Status à 0 = pas payé, 1 = payé par l'utilisateur, 2 = en cours de vérification, 3 = remboursé, 4 =  refusé
                     $reservationRental->setStatusBaseDeposit(1);
@@ -146,19 +152,22 @@ final class CartController extends AbstractController
                 }
             }
 
-            $newBill->setContent('test');
             $newBill->setDate(new \DateTimeImmutable());
             $newBill->setTotalPrice($totalPriceBill);
             $newBill->setStatus(1);
             $newBill->setUser($this->getUser());
 
+            $this->getUser()->setNbPoints($this->getUser()->getNbPoints() + ((int) ($totalPriceBill / 100)));
 
             $entityManager->persist($newBill);
             $entityManager->flush();
 
             $session->remove('myCart');
 
-            $this->addFlash('success','Merci pour votre commande ! 😊');
+            $this->addFlash('success','Votre paiement est validé. Nous sommes impatients de vous retrouver au Domaine Du Soleil ! 😊');
+            return $this->redirectToRoute('app_cart');
+        }else if($this->getUser() && !$this->getUser()->isEmailAuthentificated()){
+            $this->addFlash('danger','Vous devez avoir une adresse mail vérifiée pour pouvoir passer une commande.');
             return $this->redirectToRoute('app_cart');
         }else{
             $this->addFlash('danger','Vous devez être connecté pour pouvoir passer une commande.');

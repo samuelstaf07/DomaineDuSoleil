@@ -13,47 +13,64 @@
     <div class="contentMargin popup-gallery d-flex flex-column align-items-center gap-5 mb-4">
         <h3 class="myTitle fs-2">{{ event.title|capitalize }}</h3>
 
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label }} alert-dismissible fade show mt-3" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+        <header class="w-75 d-flex flex-column gap-3 align-items-center">
+            <div class="d-flex gap-3">
+                <a class="col-md-6" href="{{ asset('styles/img/' ~ event.getHomePageImage().getSrc()) }}" title="{{ event.getHomePageImage().getAlt() }}">
+                    <img class="img-fluid rounded-4 w-100 h-100" src="{{ asset('styles/img/' ~ event.getHomePageImage().getSrc()) }}" alt="{{ event.getHomePageImage().getAlt() }}">
+                </a>
+                <div class="col-md-6">
+                    <p class="bg-lightGreen rounded-4 p-2">{{ event.content|capitalize }}</p>
+
+                    {% if not event.isPast() %}
+                        {% if event.getRemainingPlaces() <= 0 %}
+                            <div class="bg-LightGrey rounded-4 p-2 d-flex flex-column justify-content-between p-3">
+                                <div class="d-flex justify-content-between">
+                                    <h5>{{ event.nbPlaces }} places</h5>
+                                    <h4><span class="color-lightGreen">{{ event.price|number_format(2, ',', '') }}€</span>/personne</h4>
+                                </div>
+                                <p class="alert alert-danger text-center fw-bold">Complet</p>
+                            </div>
+                        {% else %}
+                            {{ form_start(form, {'attr': {'class': 'bg-LightGrey rounded-4 p-2 d-flex justify-content-between p-3', 'data-turbo': 'false'}}) }}
+                            <div class="w-50">
+                                <h5>{{ event.nbPlaces }} places <span class="color-yellow">({{ event.getRemainingPlaces() }} places restantes)</span></h5>
+
+                                {% set placeRemainingForUser = 20 - maxReservations %}
+                                {% if event.getRemainingPlaces() < placeRemainingForUser %}
+                                    {% set maxPlaces = event.getRemainingPlaces() %}
+                                {% else %}
+                                    {% set maxPlaces = placeRemainingForUser %}
+                                {% endif %}
+
+                                <p>En comptant vos réservations ainsi que votre panier, vous pouvez prendre encore {{ maxPlaces }} places.</p>
+                                <div class="input-group mb-3 w-75">
+                                    {{ form_widget(form.nb_places, {'attr': {'min': 0, 'max': maxPlaces, 'placeholder': 'Nombre de place souhaité', 'aria-label': 'Nombre de place souhaité', 'aria-describedby': 'basic-addon2'}}) }}
+                                    <span class="input-group-text" id="basic-addon2">places</span>
+                                </div>
+                            </div>
+                            <div class="w-50 d-flex align-items-end flex-column gap-2">
+                                <h4><span class="color-lightGreen">{{ event.price|number_format(2, ',', '') }}€</span>/personne</h4>
+                                <div>
+                                    <span>le <span class="color-lightGreen">{{ event.date|date('d/m/Y') }}</span></span>
+                                </div>
+                                <div>
+                                    <span>{{ event.location|capitalize }}</span>
+                                </div>
+                                <button type="submit" class="btn-yellow w-50 text-center">Ajouter au panier</button>
+                            </div>
+                            {{ form_end(form) }}
+                        {% endif %}
+                    {% else %}
+                        <div class="bg-LightGrey rounded-4 p-2 d-flex flex-column justify-content-between p-3">
+                            <div class="d-flex justify-content-between">
+                                <p>{{ event.nbPlaces }} places</p>
+                                <h4><span class="color-lightGreen">{{ event.price|number_format(2, ',', '') }}€</span>/personne</h4>
+                            </div>
+                            <p class="alert alert-warning text-center fw-bold">Événement déjà passé.</p>
+                        </div>
+                    {% endif %}
+
                 </div>
-            {% endfor %}
-        {% endfor %}
-
-
-        <header class="w-75 d-flex gap-3">
-            <a class="col-md-6" href="{{ asset('styles/img/' ~ event.getHomePageImage().getSrc()) }}" title="{{ event.getHomePageImage().getAlt() }}">
-                <img class="img-fluid rounded-4 w-100 h-100" src="{{ asset('styles/img/' ~ event.getHomePageImage().getSrc()) }}" alt="{{ event.getHomePageImage().getAlt() }}">
-            </a>
-            <div class="col-md-6">
-                <p class="bg-lightGreen rounded-4 p-2">{{ event.content|capitalize }}</p>
-
-                {% if event.getRemainingPlaces() <= 0 %}
-                    <div class="bg-LightGrey rounded-4 p-2 d-flex flex-column justify-content-between p-3">
-                        <div class="d-flex justify-content-between">
-                            <p>{{ event.nbPlaces }} places</p>
-                            <h4><span class="color-lightGreen">{{ event.price|number_format(2, ',', '') }}€</span>/personne</h4>
-                        </div>
-                        <p class="alert alert-danger text-center fw-bold">Complet</p>
-                    </div>
-                {% else %}
-                    {{ form_start(form, {'attr': {'class': 'bg-LightGrey rounded-4 p-2 d-flex justify-content-between p-3', 'data-turbo': 'false'}}) }}
-                    <div class="w-50">
-                        <p>{{ event.nbPlaces }} places <span class="color-yellow">({{ event.getRemainingPlaces() }} places restantes)</span></p>
-                        <div class="input-group mb-3 w-75">
-                            {% set maxPlaces = event.getRemainingPlaces() < 20 ? event.getRemainingPlaces() : 20 %}
-                            {{ form_widget(form.nb_places, {'attr': {'min': 0, 'max': maxPlaces, 'placeholder': 'Nombre de place souhaité', 'aria-label': 'Nombre de place souhaité', 'aria-describedby': 'basic-addon2'}}) }}
-                            <span class="input-group-text" id="basic-addon2">places</span>
-                        </div>
-                    </div>
-                    <div class="w-50 d-flex align-items-end flex-column">
-                        <h4><span class="color-lightGreen">{{ event.price|number_format(2, ',', '') }}€</span>/personne</h4>
-                        <button type="submit" class="btn-yellow w-50 text-center">Ajouter au panier</button>
-                    </div>
-                    {{ form_end(form) }}
-                {% endif %}
             </div>
         </header>
 

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BillsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,9 +16,6 @@ class Bills
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $content = null;
-
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $date = null;
 
@@ -26,9 +25,41 @@ class Bills
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $status = null;
 
-    #[ORM\ManyToOne(inversedBy: 'bills')]
+    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: 'bills')]
     #[ORM\JoinColumn(nullable: false)]
     private ?users $user = null;
+
+    #[ORM\OneToMany(targetEntity: ReservationsEvents::class, mappedBy: 'bill')]
+    private Collection $reservationsEvents;
+
+    #[ORM\OneToMany(targetEntity: ReservationsRentals::class, mappedBy: 'bill')]
+    private Collection $reservationsRentals;
+
+    public function __construct()
+    {
+        $this->reservationsEvents = new ArrayCollection();
+        $this->reservationsRentals = new ArrayCollection();
+    }
+
+    public function getReservationsEvents(): Collection
+    {
+        return $this->reservationsEvents;
+    }
+
+    public function setReservationsEvents(Collection $reservationsEvents): void
+    {
+        $this->reservationsEvents = $reservationsEvents;
+    }
+
+    public function getReservationsRentals(): Collection
+    {
+        return $this->reservationsRentals;
+    }
+
+    public function setReservationsRentals(Collection $reservationsRentals): void
+    {
+        $this->reservationsRentals = $reservationsRentals;
+    }
 
     public function getId(): ?int
     {
@@ -38,18 +69,6 @@ class Bills
     public function setId(int $id): static
     {
         $this->id = $id;
-
-        return $this;
-    }
-
-    public function getContent(): ?string
-    {
-        return $this->content;
-    }
-
-    public function setContent(string $content): static
-    {
-        $this->content = $content;
 
         return $this;
     }
@@ -100,5 +119,12 @@ class Bills
         $this->user = $user;
 
         return $this;
+    }
+    public function getAllReservations(): array
+    {
+        return array_merge(
+            $this->reservationsEvents->toArray(),
+            $this->reservationsRentals->toArray()
+        );
     }
 }

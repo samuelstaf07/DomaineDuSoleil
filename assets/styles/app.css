@@ -13,6 +13,7 @@
     --myYellow: #F7D844;
     --myBlack: #212429;
     --myRed: #CE1104;
+    --myOrange: #b5713a;
 }
 
 body{
@@ -472,6 +473,10 @@ h2{
     color: var(--myRed);
 }
 
+.color-orange{
+    color: var(--myOrange);
+}
+
 .bg-Yellow{
     background: var(--myYellow);
     color: var(--myBlack);
@@ -555,4 +560,16 @@ h2{
     height: 50px;
     width: 75px;
     object-fit: cover;
+}
+
+#fixed-alert-container {
+    position: fixed;
+    top: 10vh;
+    width: 100%;
+    z-index: 999999;
+    pointer-events: none;
+}
+
+#fixed-alert-container .alert {
+    pointer-events: all;
 }

@@ -373,20 +373,21 @@ class Rentals
         return $this;
     }
 
-    /**
-     * @return Collection<int, ReservationsRentals>
-     */
-    public function getUpcomingReservations(): Collection
+    public function getUpcomingReservations(): array
     {
-        $today = new \DateTimeImmutable();
-        $upcomingReservations = new ArrayCollection();
+        $now = new \DateTimeImmutable();
+        $upcomingReservations = [];
 
         foreach ($this->reservations as $reservation) {
-            if ($reservation->getDateStart() > $today && $reservation->getDateEnd() > $today) {
-                $upcomingReservations->add($reservation);
+            if (
+                $reservation->getStatusReservation() === true &&
+                $reservation->getDateEnd() >= $now
+            ) {
+                $upcomingReservations[] = $reservation;
             }
         }
 
         return $upcomingReservations;
     }
+
 }

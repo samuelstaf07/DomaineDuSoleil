@@ -1,0 +1,43 @@
+<turbo-frame id="account-section">
+    <h4 class="text-center">Vos réservations d'événements</h4>
+
+    {% set reservationCount = 0 %}
+    {% for bill in bills %}
+        {% set reservationCount = reservationCount + bill.getReservationsEvents()|length %}
+    {% endfor %}
+
+    {% if reservationCount > 0 %}
+        <table class="table mt-4">
+            <thead>
+            <tr>
+                <th class="text-center">id de la facture</th>
+                <th class="text-center">Événements</th>
+                <th class="text-center">Date de l'événement</th>
+                <th class="text-center">Prix total</th>
+                <th class="text-center">Nombre de places</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for bill in bills %}
+                {% for elem in bill.getReservationsEvents() %}
+                    <tr>
+                        <td class="align-middle text-center">{{ bill.id }}</td>
+                        <td class="align-middle">
+                            <a href="{{ path('app_event', {id:elem.event.id }) }}" data-turbo="false">{{ elem.event.title|capitalize }}</a>
+                        </td>
+                        <td class="align-middle text-center">{{ elem.event.date|date('d/m/Y') }}</td>
+                        <td class="align-middle text-center">
+                            {{ elem.totalDeposit|number_format(2, ',', '') }}€
+                        </td>
+                        <td class="align-middle text-center">{{ elem.nbPlaces }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+
+            </tbody>
+        </table>
+    {% else %}
+        <p class="alert alert-secondary">Aucune réservations de logements</p>
+    {% endif %}
+</turbo-frame>

@@ -45,7 +45,7 @@ class EventsRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('e')
             ->andWhere('e.is_active = :isActive')
             ->setParameter('isActive', true)
-            ->orderBy('e.created_at', 'DESC')
+            ->orderBy('e.date', 'DESC')
             ->setMaxResults(3)
             ->getQuery()
             ->getResult();
@@ -56,7 +56,7 @@ class EventsRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('e')
             ->andWhere('e.is_active = :active')
             ->setParameter('active', true)
-            ->orderBy('e.date', 'ASC')
+            ->orderBy('e.date', 'DESC')
             ->getQuery()
             ->getResult();
     }

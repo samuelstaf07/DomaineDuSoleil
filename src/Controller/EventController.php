@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\ReservationsEvents;
 use App\Form\ReservationsEventsType;
 use App\Repository\EventsRepository;
+use App\Repository\ReservationsEventsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,11 +22,32 @@ final class EventController extends AbstractController
         ]);
     }
     #[Route('/event/{id}', name: 'app_event')]
-    public function event($id, SessionInterface $session, EventsRepository $eventsRepository, Request $request): Response
+    public function event($id, SessionInterface $session, EventsRepository $eventsRepository, Request $request, ReservationsEventsRepository $reservationsEventsRepository): Response
     {
         $event = $eventsRepository->find($id);
 
         if($event->isActive()){
+            $user = $this->getUser();
+            $reservationUser = 0;
+            $totalPlaceCart = 0;
+
+            if($user){
+                $reservationUser = $reservationsEventsRepository->getTotalPlacesByUserAndEvent($user->getId(), $event->getId());
+            }
+
+            $cart = $session->get('myCart', []);
+
+            foreach ($cart as $elemCart) {
+                if (
+                    $elemCart['type'] === 'event' &&
+                    isset($elemCart['eventId']) &&
+                    $elemCart['eventId'] === $event->getId()
+                ) {
+                    $totalPlaceCart += $elemCart['nbPlaces'];
+                }
+            }
+
+            $reservationUser = $totalPlaceCart + $reservationUser;
 
             $reservation = new ReservationsEvents();
             $reservation->setEvent($event);
@@ -34,34 +56,31 @@ final class EventController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $cart = $session->get('myCart', []);
-                $totalPlaceCart = 0;
-
-                foreach ($cart as $elemCart) {
-                    if (
-                        $elemCart['type'] === 'event' &&
-                        isset($elemCart['eventId']) &&
-                        $elemCart['eventId'] === $event->getId()
-                    ) {
-                        $totalPlaceCart += $elemCart['nbPlaces'];
-                    }
-                }
-
-                $reservationsTotal = $totalPlaceCart + $reservation->getNbPlaces();
-
-                if ($reservationsTotal > 20) {
-                    $this->addFlash('danger', 'Vous ne pouvez pas avoir plus de 20 places pour cet événement !');
+                if($event->isPast()){
+                    $this->addFlash('danger', 'Événement déjà passé.');
                     return $this->render('event/index.html.twig', [
                         'event' => $event,
                         'form' => $form->createView(),
                     ]);
                 }
 
-                if($reservationsTotal > $event->getRemainingPlaces()){
+                $totalReservationUser = $reservation->getNbPlaces() + $reservationUser;
+
+                if ($totalReservationUser > 20) {
+                    $this->addFlash('danger', 'Vous ne pouvez pas avoir plus de 20 places pour cet événement !');
+                    return $this->render('event/index.html.twig', [
+                        'event' => $event,
+                        'form' => $form->createView(),
+                        'maxReservations' => $reservationUser,
+                    ]);
+                }
+
+                if($reservation->getNbPlaces() > $event->getRemainingPlaces()){
                     $this->addFlash('danger', 'Pas assez de places pour la demande.');
                     return $this->render('event/index.html.twig', [
                         'event' => $event,
                         'form' => $form->createView(),
+                        'maxReservations' => $reservationUser,
                     ]);
                 }
                 $session->set('newReservationEvent', [
@@ -76,10 +95,10 @@ final class EventController extends AbstractController
                 return $this->redirectToRoute('app_cart');
             }
 
-
             return $this->render('event/index.html.twig', [
                 'event' => $event,
                 'form' => $form->createView(),
+                'maxReservations' => $reservationUser,
             ]);
         }else{
             return $this->redirectToRoute('app_home');

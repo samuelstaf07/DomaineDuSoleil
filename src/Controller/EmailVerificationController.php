@@ -30,7 +30,7 @@ final class EmailVerificationController extends AbstractController
             $verifyEmailHelper->validateEmailConfirmation($request->getUri(), $userId, $user->getEmail());
             $user->setIsEmailAuthentificated(true);
             $entityManager->flush();
-            $this->addFlash('success', 'Votre email a bien été vérifié. Vous pouvez vous connecter mais vous serez limité.');
+            $this->addFlash('success', 'Votre email a bien été vérifié.');
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('error', 'Le lien de vérification est invalide ou a expiré.');
         }

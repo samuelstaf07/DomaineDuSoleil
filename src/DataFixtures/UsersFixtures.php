@@ -36,6 +36,7 @@ class UsersFixtures extends Fixture
             $user->setIsActive($faker->boolean);
             $user->setIsEmailAuthentificated($faker->boolean);
             $user->setRoles(['ROLE_USER']);
+            $user->setBirthDate(new \DateTimeImmutable('now'));
 
             // Hash the password
             $hashedPassword = $this->passwordHasher->hashPassword(

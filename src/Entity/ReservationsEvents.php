@@ -14,11 +14,11 @@ class ReservationsEvents
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: Bills::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?bills $bill = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: Users::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?users $user = null;
 

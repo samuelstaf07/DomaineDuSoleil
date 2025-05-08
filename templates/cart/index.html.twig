@@ -6,15 +6,6 @@
     <div class="contentMargin d-flex justify-content-center flex-column align-items-center gap-3">
         <h3>Panier</h3>
 
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label }} alert-dismissible fade show mt-3" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
-                </div>
-            {% endfor %}
-        {% endfor %}
-
         {% if cartElements %}
 
             {% set rentals = cartElements|filter(element => element.type == 'rental') %}
@@ -39,7 +30,7 @@
                             <td class="align-middle text-center">
                                 <img src="{{ asset('styles/img/' ~ elem.image.getSrc()) }}" alt="{{ asset('styles/img/' ~ elem.image.getAlt()) }}" class="iconImage rounded-3">
                             </td>
-                            <td class="align-middle text-center"><a href="{{ path('app_rental', {id: elem.rentalId }) }}">{{ elem.rentalTitle|capitalize }}</a></td>
+                            <td class="align-middle"><a href="{{ path('app_rental', {id: elem.rentalId }) }}">{{ elem.rentalTitle|capitalize }}</a></td>
                             <td class="align-middle text-center">{{ elem.dateStart|date("d/m/Y") }}</td>
                             <td class="align-middle text-center">{{ elem.dateEnd|date("d/m/Y") }}</td>
                             <td class="align-middle text-center">
@@ -87,7 +78,7 @@
                             <td class="align-middle text-center">
                                 <img src="{{ asset('styles/img/' ~ elem.image.getSrc()) }}" alt="{{ asset('styles/img/' ~ elem.image.getAlt()) }}" class="iconImage rounded-3">
                             </td>
-                            <td class="align-middle text-center"><a href="{{ path('app_event', {id:elem.eventId }) }}">{{ elem.eventTitle|capitalize }}</a></td>
+                            <td class="align-middle"><a href="{{ path('app_event', {id:elem.eventId }) }}">{{ elem.eventTitle|capitalize }}</a></td>
                             <td class="align-middle text-center">{{ elem.nbPlaces }}</td>
                             <td class="align-middle text-center">
                                 {{ elem.eventPrice|number_format(2, ',', '') }}€
@@ -126,13 +117,19 @@
 
             {% if not app.user %}
                 <p class="alert alert-danger">Vous devez être connecté pour pouvoir valider votre panier.</p>
+            {% else %}
+                {% if not app.user.isEmailAuthentificated() %}
+                    <p class="alert alert-danger">Votre email doit être vérifié pour pouvoir valider votre panier.</p>
+                {% endif %}
             {% endif %}
+
+
 
             <div class="d-flex gap-2">
                 <a href="{{ path('app_reset_cart') }}" class="btn btn-red m-3">Vider le panier</a>
 
                 <a href="{{ path('app_confirm_cart') }}" class="btn btn-lightGreen2 m-3
-                {% if not app.user %}
+                {% if not app.user or not app.user.isEmailAuthentificated() %}
                     disabledItem
                 {% endif %}
                 ">Valider le panier</a>

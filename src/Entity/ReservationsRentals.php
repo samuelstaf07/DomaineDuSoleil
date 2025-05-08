@@ -14,11 +14,11 @@ class ReservationsRentals
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: Bills::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Bills $bill = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: Users::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?users $user = null;
 
@@ -46,6 +46,9 @@ class ReservationsRentals
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Rentals $rentals = null;
+
+    #[ORM\Column]
+    private ?float $totalPrice = null;
 
     public function getId(): ?int
     {
@@ -175,6 +178,18 @@ class ReservationsRentals
     public function setRentals(?Rentals $rentals): static
     {
         $this->rentals = $rentals;
+
+        return $this;
+    }
+
+    public function getTotalPrice(): ?float
+    {
+        return $this->totalPrice;
+    }
+
+    public function setTotalPrice(float $totalPrice): static
+    {
+        $this->totalPrice = $totalPrice;
 
         return $this;
     }

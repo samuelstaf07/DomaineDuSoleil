@@ -27,7 +27,6 @@ class ReservationRentalsFixtures extends Fixture implements DependentFixtureInte
             $reservationRental->setUser($faker->randomElement($users));
             $reservationRental->setRentals($faker->randomElement($rentals));
             $reservationRental->setHasCleaningDeposit($faker->boolean(70));
-            $reservationRental->setTotalDepositReturned($faker->randomFloat(2, 50, 300));
             $reservationRental->setStatusBaseDeposit($faker->randomElement([0, 1, 2, 3, 4]));
             $reservationRental->setDateReservation(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 year', 'now')));
             $startDate = DateTimeImmutable::createFromMutable($faker->dateTimeBetween('now', '+1 year'));
@@ -35,6 +34,17 @@ class ReservationRentalsFixtures extends Fixture implements DependentFixtureInte
             $reservationRental->setDateStart($startDate);
             $reservationRental->setDateEnd($endDate);
             $reservationRental->setStatusReservation($faker->boolean(90));
+
+            if($reservationRental->hasCleaningDeposit()){
+                $reservationRental->setTotalDepositReturned($faker->randomFloat(0, 10, 50));
+            }else{
+                $reservationRental->setTotalDepositReturned(0);
+            }
+
+            $nbDay = $reservationRental->getDateStart()->diff($reservationRental->getDateEnd())->days + 1;
+
+            $reservationRental->setTotalPrice(floor($nbDay * $reservationRental->getRentals()->getPricePerDay() * 100) / 100);
+
             $manager->persist($reservationRental);
         }
 

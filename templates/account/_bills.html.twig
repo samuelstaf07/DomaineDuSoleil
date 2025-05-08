@@ -1,0 +1,50 @@
+<turbo-frame id="account-section">
+    <h4 class="text-center">Factures</h4>
+
+    {% if bills|length > 0 %}
+    <table class="table mt-4">
+        <thead>
+        <tr>
+            <th class="text-center">id</th>
+            <th class="text-center">Date de facture</th>
+            <th class="text-center">Logements</th>
+            <th class="text-center">Événements</th>
+            <th class="text-center">Prix total</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for bill in bills %}
+            <tr>
+                <td class="align-middle text-center">{{ bill.id }}</td>
+                <td class="align-middle text-center">{{ bill.date|date('d/m/Y') }}</td>
+                <td class="align-middle">
+                    {% if bill.reservationsRentals|length > 0 %}
+                        {% for reservationRental in bill.reservationsRentals %}
+                            <a href="{{ path('app_rental', {id:reservationRental.rentals.id }) }}" data-turbo="false">{{ reservationRental.rentals.title|capitalize }}</a>
+                            <br>
+                        {% endfor %}
+                    {% else %}
+                        Aucun logement
+                    {% endif %}
+                </td>
+                <td class="align-middle">
+                    {% if bill.reservationsEvents|length > 0 %}
+                        {% for reservationEvent in bill.reservationsEvents %}
+                            <a href="{{ path('app_event', {id:reservationEvent.event.id }) }}" data-turbo="false">{{ reservationEvent.event.title|capitalize }}</a>
+                            <br>
+                        {% endfor %}
+                    {% else %}
+                        Aucun événement
+                    {% endif %}
+                </td>
+                <td class="align-middle text-center">
+                    {{ bill.totalPrice|number_format(2, ',', '') }}€
+                </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p class="alert alert-secondary">Aucune facture.</p>
+    {% endif %}
+</turbo-frame>

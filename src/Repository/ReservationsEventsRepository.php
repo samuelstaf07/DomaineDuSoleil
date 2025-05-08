@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Events;
 use App\Entity\ReservationsEvents;
+use App\Entity\Users;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,4 +42,17 @@ class ReservationsEventsRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function getTotalPlacesByUserAndEvent(int $userId, int $eventId): int
+    {
+        return (int) $this->createQueryBuilder('r')
+            ->select('SUM(r.nb_places)')
+            ->where('r.user = :userId')
+            ->andWhere('r.event = :eventId')
+            ->andWhere('r.is_active = true')
+            ->setParameter('userId', $userId)
+            ->setParameter('eventId', $eventId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

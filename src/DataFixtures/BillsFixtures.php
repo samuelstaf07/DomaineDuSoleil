@@ -24,7 +24,6 @@ class BillsFixtures extends Fixture implements DependentFixtureInterface
         foreach ($users as $user) {
             for ($i = 0; $i < 3; $i++) {
                 $bill = new Bills();
-                $bill->setContent($faker->paragraphs(2, true));
                 $bill->setDate(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 year', 'now')));
                 $bill->setTotalPrice($faker->randomFloat(2, 50, 1000));
                 $bill->setStatus($faker->numberBetween(0, 4));
