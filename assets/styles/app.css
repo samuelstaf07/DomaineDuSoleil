@@ -566,7 +566,7 @@ h2{
     position: fixed;
     top: 10vh;
     width: 100%;
-    z-index: 999999;
+    z-index: 999;
     pointer-events: none;
 }
 

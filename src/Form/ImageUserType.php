@@ -21,6 +21,7 @@ class ImageUserType extends AbstractType
                     'accept' => 'image/*',
                     'placeholder' => 'Déposer votre nouvelle image de profil',
                     'class' => 'my-dropzone',
+                    'data-controller' => 'symfony--ux-dropzone--dropzone',
                 ],
                 'constraints' => [
                     new File([

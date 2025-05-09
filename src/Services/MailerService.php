@@ -88,4 +88,20 @@ class MailerService
         $this->mailer->send($email);
     }
 
+    public function sendChangeMail(string $to, string $username, string $newEmail): void
+    {
+        $body = $this->twig->render('emails/changemail.html.twig', [
+            'username' => $username,
+            'newEmail' => $newEmail,
+        ]);
+
+        $email = (new Email())
+            ->from('no-reply@domainedusoleil.com')
+            ->to($to)
+            ->subject('Adresse mail changée')
+            ->html($body);
+
+        $this->mailer->send($email);
+    }
+
 }

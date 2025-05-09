@@ -7,6 +7,7 @@ use App\Entity\ReservationsEvents;
 use App\Entity\ReservationsRentals;
 use App\Repository\EventsRepository;
 use App\Repository\RentalsRepository;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -86,6 +87,8 @@ final class CartController extends AbstractController
             }
 
             $newBill = new Bills();
+
+            $newBill->setDate(new \DateTimeImmutable('now', new DateTimeZone('Europe/Brussels')));
             $totalPriceBill = 0;
 
             foreach ($cart as $reservation){

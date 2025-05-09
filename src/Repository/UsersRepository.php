@@ -57,4 +57,18 @@ class UsersRepository extends ServiceEntityRepository implements PasswordUpgrade
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function emailExists(string $email): bool
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        $qb->select('count(u.id)')
+            ->where('u.email = :email')
+            ->setParameter('email', $email);
+
+        $count = (int) $qb->getQuery()->getSingleScalarResult();
+
+        return $count > 0;
+    }
+
 }

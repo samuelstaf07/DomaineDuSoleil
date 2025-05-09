@@ -7,6 +7,7 @@ use App\Entity\Users;
 use App\Form\RegistrationFormType;
 use App\Repository\UsersRepository;
 use App\Services\MailerService;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -37,11 +38,11 @@ class RegistrationController extends AbstractController
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword))
                 ->setIsActive(1)
                 ->setAccountNumber('0')
-                ->setLastLogAt(new \DateTimeImmutable())
+                ->setLastLogAt(new \DateTimeImmutable('now', new DateTimeZone('Europe/Brussels')))
                 ->setNbPoints(0)
                 ->setIsEmailAuthentificated(false)
-                ->setUpdatedAt(new \DateTimeImmutable())
-                ->setCreatedAt(new \DateTimeImmutable())
+                ->setUpdatedAt(new \DateTimeImmutable('now', new DateTimeZone('Europe/Brussels')))
+                ->setCreatedAt(new \DateTimeImmutable('now', new DateTimeZone('Europe/Brussels')))
                 ->setBirthDate($user->getBirthDate())
                 ->setImage($image)
             ;
