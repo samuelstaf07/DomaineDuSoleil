@@ -10,6 +10,7 @@
         <table class="table mt-4">
             <thead>
             <tr>
+                <th class="text-center">id</th>
                 <th class="text-center">id de la facture</th>
                 <th class="text-center">Événements</th>
                 <th class="text-center">Date de l'événement</th>
@@ -22,6 +23,7 @@
             {% for bill in bills %}
                 {% for elem in bill.getReservationsEvents() %}
                     <tr>
+                        <td class="align-middle text-center">{{ elem.id }}</td>
                         <td class="align-middle text-center">{{ bill.id }}</td>
                         <td class="align-middle">
                             <a href="{{ path('app_event', {id:elem.event.id }) }}" data-turbo="false">{{ elem.event.title|capitalize }}</a>

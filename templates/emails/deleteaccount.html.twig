@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Suppression de votre compte</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            padding: 40px;
+        }
+        .container {
+            background-color: #ffffff;
+            max-width: 600px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #e74c3c;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Confirmation de la suppression de votre compte</h1>
+    <p>Bonjour {{ username }},</p>
+    <p>Vous avez demandé la suppression de votre compte. Cette action est irréversible et entraînera la perte de toutes vos données associées.</p>
+    <p><b>Votre compte sera désactivé pendant 1 mois. Les données seront ensuite transformées de tel façon qu'il sera impossible de vous identifier.</b></p>
+    <p>Si vous confirmez cette demande, veuillez cliquer sur le lien ci-dessous :</p>
+    <a href="{{ confirmationUrl }}" class="button">Supprimer mon compte</a>
+    <p>Ce lien est valide pendant une durée limitée. Si vous n'avez pas fait cette demande, vous pouvez ignorer ce message et votre compte restera actif.</p>
+    <div class="footer">
+        Merci de nous avoir fait confiance. <br>
+        Domaine Du Soleil.
+    </div>
+</div>
+</body>
+</html>

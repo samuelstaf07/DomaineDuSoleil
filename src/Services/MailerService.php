@@ -22,32 +22,11 @@ class MailerService
     }
 
     /**
-     * @throws SyntaxError
-     * @throws TransportExceptionInterface
-     * @throws RuntimeError
-     * @throws LoaderError
-     */
-    public function sendWelcomeEmail(string $to, string $username): void
-    {
-        $body = $this->twig->render('emails/register.html.twig', [
-            'username' => $username
-        ]);
-
-        $email = (new Email())
-            ->from('no-reply@domainedusoleil.com')
-            ->to($to)
-            ->subject('Bienvenue au Domaine Du Soleil !')
-            ->html($body);
-
-        $this->mailer->send($email);
-    }
-
-    /**
      * @throws LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface
      */
     public function sendEmailConfirmation(string $to, string $username, string $signedUrl): void
     {
-        $body = $this->twig->render('emails/email_confirmation.html.twig', [
+        $body = $this->twig->render('emails/emailconfirmation.html.twig', [
             'username' => $username,
             'confirmationUrl' => $signedUrl,
         ]);
@@ -60,4 +39,53 @@ class MailerService
 
         $this->mailer->send($email);
     }
+
+    public function sendPasswordReset(string $to, string $username, string $signedUrl): void
+    {
+        $body = $this->twig->render('emails/passwordreset.html.twig', [
+            'username' => $username,
+            'confirmationUrl' => $signedUrl,
+        ]);
+
+        $email = (new Email())
+            ->from('no-reply@domainedusoleil.com')
+            ->to($to)
+            ->subject('Changer votre mot de passe')
+            ->html($body);
+
+        $this->mailer->send($email);
+    }
+
+    public function sendDeleteAccount(string $to, string $username, string $signedUrl): void
+    {
+        $body = $this->twig->render('emails/deleteaccount.html.twig', [
+            'username' => $username,
+            'confirmationUrl' => $signedUrl,
+        ]);
+
+        $email = (new Email())
+            ->from('no-reply@domainedusoleil.com')
+            ->to($to)
+            ->subject('Supprimer votre compte')
+            ->html($body);
+
+        $this->mailer->send($email);
+    }
+
+
+    public function sendInfoDeletedAccount(string $to, string $username): void
+    {
+        $body = $this->twig->render('emails/deletedaccount.html.twig', [
+            'username' => $username,
+        ]);
+
+        $email = (new Email())
+            ->from('no-reply@domainedusoleil.com')
+            ->to($to)
+            ->subject('Compte supprimé')
+            ->html($body);
+
+        $this->mailer->send($email);
+    }
+
 }

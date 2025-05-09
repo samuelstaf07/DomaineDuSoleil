@@ -14,7 +14,7 @@
             {{ form_row(registrationForm.lastname) }}
             {{ form_row(registrationForm.email) }}
             {{ form_row(registrationForm.birth_date, {'id': 'dateBirthRegister', 'type': 'text'}) }}
-            {{ form_row(registrationForm.plainPassword) }}
+            {{ form_row(registrationForm.plainPassword, {'attr': {'data-controller': 'ux-toggle-password'}}) }}
             {{ form_row(registrationForm.agreeTerms) }}
 
             <div class="w-100 d-flex justify-content-center">

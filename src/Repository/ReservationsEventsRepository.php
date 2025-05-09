@@ -55,4 +55,16 @@ class ReservationsEventsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    public function findUpcomingReservationsByUser(Users $user): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->join('r.event', 'e')
+            ->where('r.user = :user')
+            ->andWhere('e.date >= :today')
+            ->setParameter('user', $user)
+            ->setParameter('today', new \DateTimeImmutable('today'));
+
+        return $qb->getQuery()->getResult();
+    }
 }

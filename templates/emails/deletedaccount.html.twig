@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Compte supprimé</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            padding: 40px;
+        }
+        .container {
+            background-color: #ffffff;
+            max-width: 600px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #777;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Votre compte a été supprimé</h1>
+    <p>Bonjour {{ username }},</p>
+    <p>Nous vous confirmons que votre compte a bien été supprimé de notre système.</p>
+    <p>Toutes vos données personnelles ont été désactivées et seront anonymisées dans les plus brefs délais, conformément à notre politique de confidentialité.</p>
+    <p>Si vous avez supprimé votre compte par erreur ou si vous avez des questions, n’hésitez pas à nous contacter à <a href="mailto:info@domainedusoleil.be">info@domainedusoleil.be</a>.</p>
+</div>
+</body>
+</html>

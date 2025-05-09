@@ -1,35 +1,37 @@
-<turbo-frame id="account-section" class="w-75">
-    <h4 class="text-center">Votre compte</h4>
-    <div class="d-flex bg-lightGreen gap-4 p-4 rounded-4">
-        <div>
-            <h5 class="text-center">Photo de profil</h5>
-            <div class="bg-black m-2 rounded-4">
-                {% if app.user.image.src == "null" %}
-                    <svg class="rounded-circle" xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 24 24"><path fill="#F8F9FA" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"/></svg>
-                {% else %}
-                    <img class="rounded-4" src="{{ asset('uploads/' ~ app.user.image.src) }}" alt="{{ app.user.image.src }}" style="object-fit: cover; height: 300px; width: 300px">
-                {% endif %}
-            </div>
-            <div class="d-flex flex-column gap-1">
-                <a href="#" class="text-center btn-lightGreen">Changer la photo de profil</a>
-                <a href="#" class="text-center btn-yellow">Changer l'adresse mail</a>
-            </div>
-        </div>
-        <div class="d-flex flex-column">
-            <h5 class="text-center">Informations du compte</h5>
-            <div class="d-flex flex-column gap-2">
-                <div class="d-flex flex-column gap-1 bg-white p-3 rounded-4">
-                    <p class="my-0"><span class="fw-bold">Prénom</span>: {{ app.user.firstname }}</p>
-                    <p class="my-0"><span class="fw-bold">Nom</span>: {{ app.user.lastName }}</p>
-                    <p class="my-0"><span class="fw-bold">Adresse mail</span>: {{ app.user.email }}</p>
-                    <p class="my-0"><span class="fw-bold">Date de naissance</span>: {{ app.user.birthDate|date('d/m/Y') }}</p>
-                    <p class="my-0"><span class="fw-bold">Points</span>: {{ app.user.nbPoints }} pts</p>
-                    <p class="my-0"><span class="fw-bold">Compte créé le</span>: {{ app.user.createdAt|date('d/m/Y') }}</p>
+<turbo-frame id="account-section">
+    <div class="d-flex flex-column align-items-center justify-content-center">
+        <h4 class="text-center">Votre compte</h4>
+        <div class="d-flex bg-lightGreen gap-4 p-4 rounded-4 w-50">
+            <div>
+                <h5 class="text-center">Photo de profil</h5>
+                <div class="bg-black m-2 rounded-4">
+                    {% if app.user.image.src == "null" %}
+                        <svg class="rounded-circle" xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 24 24"><path fill="#F8F9FA" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"/></svg>
+                    {% else %}
+                        <img class="rounded-4" src="{{ asset('uploads/' ~ app.user.image.src) }}" alt="{{ app.user.image.src }}" style="object-fit: cover; height: 300px; width: 300px">
+                    {% endif %}
                 </div>
                 <div class="d-flex flex-column gap-1">
-                    <a href="{{ path('app_account_section', {section: 'modify'}) }}" data-turbo-frame="account-section" class="text-center btn-yellow">Modifier votre compte</a>
-                    <a href="#" class="text-center btn-lightGreen">Changer le mot de passe</a>
-                    <a href="#" class="text-center btn-red">Supprimer le compte</a>
+                    <a href="#" class="text-center btn-lightGreen">Changer la photo de profil</a>
+                    <a href="#" class="text-center btn-yellow">Changer l'adresse mail</a>
+                </div>
+            </div>
+            <div class="d-flex flex-column">
+                <h5 class="text-center">Informations du compte</h5>
+                <div class="d-flex flex-column gap-2">
+                    <div class="d-flex flex-column gap-1 bg-white p-3 rounded-4">
+                        <p class="my-0"><span class="fw-bold">Prénom</span>: {{ app.user.firstname }}</p>
+                        <p class="my-0"><span class="fw-bold">Nom</span>: {{ app.user.lastName }}</p>
+                        <p class="my-0"><span class="fw-bold">Adresse mail</span>: {{ app.user.email }}</p>
+                        <p class="my-0"><span class="fw-bold">Date de naissance</span>: {{ app.user.birthDate|date('d/m/Y') }}</p>
+                        <p class="my-0"><span class="fw-bold">Points</span>: {{ app.user.nbPoints }} pts</p>
+                        <p class="my-0"><span class="fw-bold">Compte créé le</span>: {{ app.user.createdAt|date('d/m/Y') }}</p>
+                    </div>
+                    <div class="d-flex flex-column gap-1">
+                        <a href="{{ path('app_account_section', {section: 'modify'}) }}" data-turbo-frame="account-section" class="text-center btn-yellow">Modifier votre compte</a>
+                        <a href="{{ path('app_account_section', {section: 'passwordmodify'}) }}" data-turbo-frame="account-section" class="text-center btn-lightGreen">Changer le mot de passe</a>
+                        <a href="{{ path('app_account_section', {section: 'deleteaccount'}) }}" data-turbo-frame="account-section" class="text-center btn-red">Supprimer le compte</a>
+                    </div>
                 </div>
             </div>
         </div>

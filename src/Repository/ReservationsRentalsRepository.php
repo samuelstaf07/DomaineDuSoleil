@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\ReservationsRentals;
+use App\Entity\Users;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,4 +41,20 @@ class ReservationsRentalsRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findCurrentAndUpcomingByUser(Users $user): array
+    {
+        $today = new \DateTimeImmutable('today');
+
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.date_end >= :today')
+            ->andWhere('r.status_reservation = true')
+            ->andWhere('r.user = :user')
+            ->setParameter('today', $today)
+            ->setParameter('user', $user)
+            ->orderBy('r.date_start', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 }
