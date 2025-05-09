@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Redirection vers Stripe...</title>
+</head>
+<body>
+<p>Redirection vers le paiement Stripe...</p>
+<script>
+    window.location.href = "{{ checkoutUrl }}";
+</script>
+<p>Vous allez être rédirigé, si ça ne fonctionne pas cliquez içi: <a href="{{ checkoutUrl }}">Payer</a></p>
+</body>
+</html>
