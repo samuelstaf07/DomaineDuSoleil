@@ -24,5 +24,9 @@ services:
         tags:
             - { name: 'kernel.event_listener', event: Symfony\Component\Security\Http\Event\LoginSuccessEvent }
 
+    App\Controller\PaymentController:
+        arguments:
+            $stripeSecretKey: '%stripe_secret_key%'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
