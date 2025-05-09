@@ -1,0 +1,26 @@
+<turbo-frame id="account-section">
+    {% if success is defined and success %}
+        <div class="alert alert-success">Modifications enregistrées.</div>
+    {% endif %}
+
+    <div class="d-flex flex-column bg-lightGreen gap-4 p-4 rounded-4 align-items-center justify-content-center p-4">
+        <h4>Changer votre image de profil</h4>
+        <div>
+
+            {{ form_errors(form) }}
+            {{ form_start(form, {
+                'action': path('app_account_section', {'section': 'changeImageUser'}),
+                'method': 'POST',
+                'attr': {
+                    'data-turbo-frame': '_top',
+                }
+            }) }}
+
+            {{ form_widget(form.image) }}
+
+            <button type="submit" class="btn-yellow form-control">Enregistrer</button>
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+</turbo-frame>

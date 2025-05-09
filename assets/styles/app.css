@@ -586,3 +586,16 @@ h2{
     align-items: center;
     z-index: 9999;
 }
+
+.my-dropzone {
+    border: 2px dashed var(--myDarkGreen);
+    background: none;
+    padding: 2rem;
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+}
+
+.dropzone-placeholder{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}

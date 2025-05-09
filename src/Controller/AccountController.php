@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Images;
+use App\Form\ImageUserType;
 use App\Form\PasswordModifyFormType;
 use App\Form\UserModifyFormType;
 use App\Repository\ReservationsEventsRepository;
@@ -9,10 +11,13 @@ use App\Repository\ReservationsRentalsRepository;
 use App\Services\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 final class AccountController extends AbstractController
@@ -35,7 +40,7 @@ final class AccountController extends AbstractController
 
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/account/{section}', name: 'app_account_section')]
-    public function section(string $section, Request $request, EntityManagerInterface $entityManager, MailerService $mailerService, VerifyEmailHelperInterface $verifyEmailHelper): Response
+    public function section(string $section, Request $request, EntityManagerInterface $entityManager, MailerService $mailerService, VerifyEmailHelperInterface $verifyEmailHelper, SluggerInterface $slugger): Response
     {
         $views = [
             'bills' => 'account/_bills.html.twig',
@@ -45,6 +50,7 @@ final class AccountController extends AbstractController
             'modify' => 'account/_modify.html.twig',
             'passwordmodify' => 'account/_passwordmodify.html.twig',
             'deleteaccount' => 'account/_deleteaccount.html.twig',
+            'changeImageUser' => 'account/_changeimageuser.html.twig',
         ];
 
         if($section == "modify"){
@@ -107,6 +113,53 @@ final class AccountController extends AbstractController
             );
 
             return $this->render('account/_deletedaccount.html.twig');
+        }
+
+        if($section == "changeImageUser"){
+            $user = $this->getUser();
+            $form = $this->createForm(ImageUserType::class, $user);
+
+            $form->handleRequest($request);
+
+            if($form->isSubmitted() && $form->isValid()) {
+                /** @var UploadedFile|null $file */
+                $file = $form->get('image')->getData();
+
+                if ($file) {
+                    $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+
+                    try {
+                        $file->move(
+                            $this->getParameter('uploads_directory'), $newFilename
+                        );
+                    } catch (FileException $e) {
+                        $this->addFlash('danger', 'Erreur lors de l’envoi du fichier.');
+                        return $this->redirectToRoute('app_account', [], 303);
+                    }
+                    $image = new Images();
+                    $image->setSrc($newFilename);
+                    $image->setAlt('Image de profil de ' . $user->getEmail());
+                    $image->setIsHomePage(false);
+
+                    $user->setImage($image);
+
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+                }
+
+
+                $this->addFlash('success', 'Vos informations ont été mises à jour avec succès.');
+                return $this->redirectToRoute('app_account', [], 303);
+            }else if($form->isSubmitted() && !$form->isValid()){
+                $this->addFlash('danger', 'Vos informations n\'ont pas été mises à jour.');
+                return $this->redirectToRoute('app_account', [], 303);
+            }
+
+            return $this->render($views[$section], [
+                'form' => $form->createView(),
+            ]);
         }
 
         return $this->render($views[$section],[

@@ -18,6 +18,8 @@ document.addEventListener('turbo:before-fetch-request', showLoader);
 document.addEventListener('turbo:before-fetch-response', hideLoader);
 document.addEventListener('turbo:fetch-request-error', hideLoader);
 
-document.querySelector('form[data-turbo="false"]').addEventListener('submit', function () {
-    showLoader();
-});
+if(document.querySelector('form[data-turbo="false"]')){
+    document.querySelector('form[data-turbo="false"]').addEventListener('submit', function () {
+        showLoader();
+    });
+}

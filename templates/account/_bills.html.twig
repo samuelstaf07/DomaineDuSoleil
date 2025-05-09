@@ -2,7 +2,7 @@
     <h4 class="text-center">Factures</h4>
 
     {% if bills|length > 0 %}
-    <table class="table mt-4">
+    <table class="table mt-4 table-bordered">
         <thead>
         <tr>
             <th class="text-center">id</th>
@@ -20,7 +20,7 @@
                 <td class="align-middle">
                     {% if bill.reservationsRentals|length > 0 %}
                         {% for reservationRental in bill.reservationsRentals %}
-                            <a href="{{ path('app_rental', {id:reservationRental.rentals.id }) }}" data-turbo="false">{{ reservationRental.rentals.title|capitalize }}</a>
+                            - <a href="{{ path('app_rental', {id:reservationRental.rentals.id }) }}" data-turbo="false">{{ reservationRental.rentals.title|capitalize }}</a>
                             <br>
                         {% endfor %}
                     {% else %}
@@ -30,7 +30,7 @@
                 <td class="align-middle">
                     {% if bill.reservationsEvents|length > 0 %}
                         {% for reservationEvent in bill.reservationsEvents %}
-                            <a href="{{ path('app_event', {id:reservationEvent.event.id }) }}" data-turbo="false">{{ reservationEvent.event.title|capitalize }}</a>
+                            - <a href="{{ path('app_event', {id:reservationEvent.event.id }) }}" data-turbo="false">{{ reservationEvent.event.title|capitalize }}</a>
                             <br>
                         {% endfor %}
                     {% else %}

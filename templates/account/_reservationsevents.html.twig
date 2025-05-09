@@ -7,15 +7,16 @@
     {% endfor %}
 
     {% if reservationCount > 0 %}
-        <table class="table mt-4">
+        <table class="table mt-4 table-bordered">
             <thead>
             <tr>
-                <th class="text-center">id</th>
-                <th class="text-center">id de la facture</th>
-                <th class="text-center">Événements</th>
-                <th class="text-center">Date de l'événement</th>
-                <th class="text-center">Prix total</th>
-                <th class="text-center">Nombre de places</th>
+                <th class="align-middle text-center">id</th>
+                <th class="align-middle text-center">id de la facture</th>
+                <th class="align-middle text-center">Événements</th>
+                <th class="align-middle text-center">Date de l'événement</th>
+                <th class="align-middle text-center">Date de réservation</th>
+                <th class="align-middle text-center">Prix total</th>
+                <th class="align-middle text-center">Nombre de places</th>
             </tr>
             </thead>
             <tbody>
@@ -29,6 +30,7 @@
                             <a href="{{ path('app_event', {id:elem.event.id }) }}" data-turbo="false">{{ elem.event.title|capitalize }}</a>
                         </td>
                         <td class="align-middle text-center">{{ elem.event.date|date('d/m/Y') }}</td>
+                        <td class="align-middle text-center">{{ bill.date|date('d/m/Y') }}</td>
                         <td class="align-middle text-center">
                             {{ elem.totalDeposit|number_format(2, ',', '') }}€
                         </td>

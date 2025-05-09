@@ -8,18 +8,19 @@
 
     {% if reservationCount > 0 %}
 
-        <table class="table mt-4">
+        <table class="table mt-4 table-bordered">
             <thead>
             <tr>
-                <th class="text-center">id de la facture</th>
-                <th class="text-center">id de la réservation</th>
-                <th class="text-center">Logement</th>
-                <th class="text-center">Caution de nettoyage</th>
-                <th class="text-center">Date de début</th>
-                <th class="text-center">Date de fin</th>
-                <th class="text-center">Prix total</th>
-                <th class="text-center">Status de la caution de nettoyage</th>
-                <th class="text-center">Caution de nettoyage renvoyée</th>
+                <th class="align-middle text-center">id de la facture</th>
+                <th class="align-middle text-center">id de la réservation</th>
+                <th class="align-middle text-center">Logement</th>
+                <th class="align-middle text-center">Caution de nettoyage</th>
+                <th class="align-middle text-center">Date de début</th>
+                <th class="align-middle text-center">Date de fin</th>
+                <th class="align-middle text-center">Date de réservation</th>
+                <th class="align-middle text-center">Prix total</th>
+                <th class="align-middle text-center">Status de la caution de nettoyage</th>
+                <th class="align-middle text-center">Caution de nettoyage renvoyée</th>
             </tr>
             </thead>
             <tbody>
@@ -41,6 +42,7 @@
                         </td>
                         <td class="align-middle text-center">{{ elem.dateStart|date('d/m/Y') }}</td>
                         <td class="align-middle text-center">{{ elem.dateEnd|date('d/m/Y') }}</td>
+                        <td class="align-middle text-center">{{ bill.date|date('d/m/Y') }}</td>
                         <td class="align-middle text-center">
                             {{ elem.totalPrice|number_format(2, ',', '') }}€
                         </td>
