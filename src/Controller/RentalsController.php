@@ -39,7 +39,6 @@ final class RentalsController extends AbstractController
         if ($rental->isActive()) {
 
             foreach ($rental->getUpcomingReservations() as $reservation) {
-                dump($reservation);
                 $reservedDates[] = [
                     'title' => 'Réservé',
                     'start' => $reservation->getDateStart()->format('Y-m-d'),
