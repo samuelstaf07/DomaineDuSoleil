@@ -2,6 +2,7 @@
 /config/secrets/*
 !/config/secrets/.gitignore
 /bin/mailpit.exe
+/bin/stripe.exe
 /.env.local
 /.env.local.php
 /.env.*.local
