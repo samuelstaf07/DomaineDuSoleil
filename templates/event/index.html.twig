@@ -49,7 +49,12 @@
                                 </div>
                             </div>
                             <div class="w-50 d-flex align-items-end flex-column gap-2">
-                                <h4><span class="color-lightGreen">{{ event.price|number_format(2, ',', '') }}€</span>/personne</h4>
+                                {% set ttc = event.price %}
+                                {% set ht = ttc / 1.2 %}
+                                {% set tva = ttc - ht %}
+
+                                <small class="fs-6 fw-light">({{ ht|number_format(2, ',', '') }} € HT + {{ tva|number_format(2, ',', '') }} € TVA à 20%)</small>
+                                <h4><span class="color-lightGreen">{{ event.price|number_format(2, ',', '') }}€ TTC</span>/personne</h4>
                                 <div>
                                     <span>le <span class="color-lightGreen">{{ event.date|date('d/m/Y') }}</span></span>
                                 </div>

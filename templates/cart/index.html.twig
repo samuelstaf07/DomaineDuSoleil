@@ -13,6 +13,7 @@
 
             {% if rentals is not empty %}
                 <h4>Logements</h4>
+                <p class="alert alert-secondary">Pour tous les logements, une caution de 50 € vous est demandée. Si nous jugeons que le logement rendu est suffisamment propre, la caution vous sera restituée.</p>
                 <table class="table w-75">
                     <thead>
                     <tr>
@@ -21,7 +22,8 @@
                         <th class="text-center">Date de début</th>
                         <th class="text-center">Date de fin</th>
                         <th class="text-center">Prix par jour</th>
-                        <th class="text-center">Prix total</th>
+                        <th class="text-center">Prix total TTC</th>
+                        <th class="text-center">Caution de nettoyage</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -48,7 +50,16 @@
                                     {% set dailyPrice = elem.rentalPricePerDay|round(2, 'floor') %}
                                 {% endif %}
 
-                                {{ (days * dailyPrice)|number_format(2, ',', '') }}€
+                                {% set totalRentalttc = days * dailyPrice %}
+                                {% set totalRentalht = (totalRentalttc / 1.1) %}
+                                {% set totalRentaltva = totalRentalttc - totalRentalht %}
+
+                                {{ totalRentalttc|number_format(2, ',', '') }}€<br>
+                                ({{ totalRentalht|number_format(2, ',', '') }}€ HT + {{ totalRentaltva|number_format(2, ',', '') }}€ TVA)
+
+                            </td>
+                            <td class="align-middle text-center" title="Si nous jugeons que le logement rendu est assez propre, la caution vous sera rendue">
+                                50€
                             </td>
                             <td class="align-middle text-center">
                                 <a href="{{ path('app_delete_element_cart', {id: elem.id}) }}" class="btn btn-red">Supprimer</a>
@@ -69,7 +80,7 @@
                         <th class="text-center">Nom</th>
                         <th class="text-center">Nombre de places</th>
                         <th class="text-center">Prix par personne</th>
-                        <th class="text-center">Prix total</th>
+                        <th class="text-center">Prix total TTC</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -84,7 +95,13 @@
                                 {{ elem.eventPrice|number_format(2, ',', '') }}€
                             </td>
                             <td class="align-middle text-center">
-                                {{ (elem.eventPrice * elem.nbPlaces)|number_format(2, ',', '') }}€
+                                {% set totalEventTTC = elem.eventPrice * elem.nbPlaces %}
+                                {% set totalEventHT = totalEventTTC / 1.2 %}
+                                {% set totalEventTVA = totalEventTTC - totalEventHT %}
+
+                                {{ totalEventTTC|number_format(2, ',', '') }}€<br>
+                                ({{ totalEventHT|number_format(2, ',', '') }}€ HT + {{ totalEventTVA|number_format(2, ',', '') }}€ TVA)
+
                             </td>
                             <td class="align-middle text-center">
                                 <a href="{{ path('app_delete_element_cart', {id: elem.id}) }}" class="btn btn-red">Supprimer</a>
@@ -99,12 +116,12 @@
 
             {% for elem in rentals %}
                 {% set days = elem.dateEnd.diff(elem.dateStart).days + 1 %}
-                {% if elem.rentalPricePerDay %}
+                {% if elem.rentalIsOnPromotion %}
                     {% set dailyPrice = (elem.rentalPricePerDay * 0.9)|round(2, 'floor') %}
                 {% else %}
                     {% set dailyPrice = elem.rentalPricePerDay|round(2, 'floor') %}
                 {% endif %}
-                {% set totalPanier = totalPanier + (days * dailyPrice) %}
+                {% set totalPanier = totalPanier + ((days * dailyPrice)+50) %}
             {% endfor %}
 
             {% for elem in events %}
@@ -112,8 +129,8 @@
             {% endfor %}
 
             <div class="mt-4 text-end">
-                <h5>Total du panier : <strong>{{ totalPanier|number_format(2, ',', '') }}€</strong></h5>
-                <h6>Vous recevrez <b>{{ (totalPanier / 100)|round(0, 'floor') }} points</b>.</h6>
+                <h5 class="text-center">Total du panier : <strong>{{ totalPanier|number_format(2, ',', '') }}€</strong></h5>
+                <h6 class="text-center">Vous recevrez <b>{{ (totalPanier / 100)|round(0, 'floor') }} points</b>.</h6>
             </div>
 
             {% if not app.user %}
@@ -141,4 +158,5 @@
             <a href="{{ path('app_rentals') }}" class="btn btn-green">Voir tous les Logements</a>
         {% endif %}
     </div>
+
 {% endblock %}

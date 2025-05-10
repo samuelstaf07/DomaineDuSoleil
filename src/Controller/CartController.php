@@ -98,9 +98,6 @@ final class CartController extends AbstractController
                     $rental = $rentalsRepository->find($reservation['rentalId']);
                     $nbDay = $reservation['dateStart']->diff($reservation['dateEnd'])->days + 1;
 
-                    //Il faut demander à l'utilisateur s'il souhaites avoir la caution de nettoyage
-                    $cleaningDeposit = true;
-
                     if ($rental->isOnPromotion()) {
                         $pricePerDay = floor($rental->getPricePerDay() * 0.9 * 100) / 100;
                     } else {
@@ -108,14 +105,14 @@ final class CartController extends AbstractController
                     }
 
                     $totalPrice = floor($nbDay * $pricePerDay * 100) / 100;
-                    $cleaningDeposit === true ? $priceCleaningDeposit = 50 : $priceCleaningDeposit = 0;
+                    $priceCleaningDeposit = 50;
                     $totalPriceBill += $totalPrice + $priceCleaningDeposit;
 
                     $reservationRental->setBill($newBill);
                     $reservationRental->setUser($this->getUser());
                     $reservationRental->setRentals($rental);
-                    $reservationRental->setHasCleaningDeposit($cleaningDeposit);
-                    $reservationRental->setTotalPrice($totalPrice + $priceCleaningDeposit);
+                    $reservationRental->setHasCleaningDeposit(true);
+                    $reservationRental->setTotalPrice($totalPrice + 50);
 
                     if($reservationRental->hasCleaningDeposit()){
                         $reservationRental->setTotalDepositReturned(50);
