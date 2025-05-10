@@ -34,6 +34,7 @@
             <th>TVA</th>
             <th>Prix HT</th>
             <th>TVA</th>
+            <th>Caution</th>
             <th>Total TTC</th>
         </tr>
         </thead>
@@ -47,6 +48,7 @@
                     <td>10%</td>
                     <td>{{ (rental.totalPrice / 1.10)|number_format(2, ',', '.') }}€</td>
                     <td>{{ (rental.totalPrice - (rental.totalPrice / 1.10))|number_format(2, ',', '.') }}€</td>
+                    <th>50€</th>
                     <td>{{ rental.totalPrice|number_format(2, ',', '.') }}€</td>
                 </tr>
             {% endfor %}

@@ -2,7 +2,14 @@
 
 namespace App\Controller;
 
-use App\Services\StripeService;
+use App\Entity\Bills;
+use App\Entity\Images;
+use App\Entity\ReservationsEvents;
+use App\Entity\ReservationsRentals;
+use App\Repository\EventsRepository;
+use App\Repository\RentalsRepository;
+use App\Repository\UsersRepository;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Checkout\Session;
 use Stripe\Exception\SignatureVerificationException;
@@ -29,13 +36,23 @@ final class PaymentController extends AbstractController
     }
 
     #[Route('/cart/create-session-stripe', name: 'app_payment_stripe')]
-    public function createCheckoutSession(Request $request, SessionInterface $session): Response
+    public function createCheckoutSession(SessionInterface $session): Response
     {
         $productStripe = [];
         $order = $session->get('myCart', []);
 
         if (empty($order)) {
-            $this->addFlash('warning', 'Votre panier est vide');
+            $this->addFlash('danger', 'Votre panier est vide');
+            return $this->redirectToRoute('app_cart');
+        }
+
+        if (!$this->getUser()) {
+            $this->addFlash('danger', 'Vous devez être connecté pour pouvoir passer commande.');
+            return $this->redirectToRoute('app_cart');
+        }
+
+        if (!$this->getUser()->isEmailAuthentificated()) {
+            $this->addFlash('danger', 'Vous devez avoir votre email authentifié pour pouvoir passer commande.');
             return $this->redirectToRoute('app_cart');
         }
 
@@ -45,9 +62,7 @@ final class PaymentController extends AbstractController
                 $productName = $product['eventTitle'];
             } elseif ($product['type'] === "rental") {
                 $nbDay = $product['dateStart']->diff($product['dateEnd'])->days + 1;
-                $pricePerDay = $product['rentalIsOnPromotion']
-                    ? floor($product['rentalPricePerDay'] * 90)
-                    : floor($product['rentalPricePerDay'] * 100);
+                $pricePerDay = $product['rentalIsOnPromotion'] ? floor($product['rentalPricePerDay'] * 90) : floor($product['rentalPricePerDay'] * 100);
                 $totalPrice = (int) round($nbDay * $pricePerDay);
                 $productName = $product['rentalTitle'];
             }
@@ -63,8 +78,6 @@ final class PaymentController extends AbstractController
                 'quantity' => 1,
             ];
 
-
-
             if ($product['type'] === "rental") {
                 $productStripe[] = [
                     'price_data' => [
@@ -79,6 +92,26 @@ final class PaymentController extends AbstractController
             }
         }
 
+        //Do a json cart because a limit of 500char send
+        $orderChange = [];
+
+        foreach ($order as $elem){
+            if($elem['type'] == "rental"){
+                $orderChange[] = [
+                    'type' => $elem['type'],
+                    'id' => $elem['rentalId'],
+                    'dateStart' => $elem['dateStart']->format('d-m-Y'),
+                    'dateEnd' => $elem['dateEnd']->format('d-m-Y'),
+                ];
+            }else if($elem['type'] == "event"){
+                $orderChange[] = [
+                    'type' => $elem['type'],
+                    'id' => $elem['eventId'],
+                    'nbPlaces' => $elem['nbPlaces'],
+                ];
+            }
+        }
+
         Stripe::setApiKey($this->stripeSecretKey);
 
         $checkout_session = Session::create([
@@ -88,6 +121,10 @@ final class PaymentController extends AbstractController
             'mode' => 'payment',
             'success_url' => $this->urlGenerator->generate('app_payment_stripe_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
             'cancel_url' => $this->urlGenerator->generate('app_payment_stripe_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'metadata' => [
+                'user_id' => $this->getUser()->getId(),
+                'cart' => json_encode($orderChange),
+            ],
         ]);
 
         $session->set('stripe_checkout_url', $checkout_session->url);
@@ -95,6 +132,7 @@ final class PaymentController extends AbstractController
 
         return $this->redirectToRoute('app_payment_stripe_redirect');
     }
+
 
     #[Route('/cart/redirect-to-stripe', name: 'app_payment_stripe_redirect', methods: ['GET'])]
     public function redirectToStripe(SessionInterface $session): Response
@@ -129,8 +167,8 @@ final class PaymentController extends AbstractController
             return $this->redirectToRoute('app_cart');
         }
 
+        $session->remove('myCart', []);
         $this->addFlash('success', 'Votre paiement est validé. Merci pour votre commande !');
-
         return $this->redirectToRoute('app_cart');
     }
 
@@ -149,8 +187,9 @@ final class PaymentController extends AbstractController
     }
 
     #[Route('/webhook/stripe', name: 'app_stripe_webhook', methods: ['POST'])]
-    public function stripeWebhook(Request $request, EntityManagerInterface $em): Response
+    public function stripeWebhook(Request $request, EntityManagerInterface $entityManager, RentalsRepository $rentalsRepository, EventsRepository $eventsRepository, UsersRepository $usersRepository, SessionInterface $session): Response
     {
+
         $endpointSecret = $this->endpointSecret;
         $payload = $request->getContent();
         $sig_header = $request->headers->get('stripe-signature');
@@ -164,11 +203,96 @@ final class PaymentController extends AbstractController
         }
 
         if ($event->type === 'checkout.session.completed') {
-            $sessionStripe = $event->data->object;
+            try {
+                $sessionStripe = $event->data->object;
 
-            //ajouter dans la db
+                $cartJson = $sessionStripe->metadata->cart ?? null;
+                $cart = $cartJson ? json_decode($cartJson, true) : [];
+
+                $userId = $sessionStripe->metadata->user_id ?? null;
+                $user = $usersRepository->find($userId);
+
+                if (!$user){
+                    return new Response('User not found', 400);
+                }
+
+                $newBill = new Bills();
+                $newBill->setDate(new \DateTimeImmutable('now', new DateTimeZone('Europe/Brussels')));
+                $totalPriceBill = 0;
+
+                foreach ($cart as $reservation) {
+                    if ($reservation['type'] === "rental") {
+
+                        $rental = $rentalsRepository->find($reservation['id']);
+                        if (!$rental){
+                            throw new \Exception("Rental not found for ID: " . $reservation['id']);
+                        }
+
+                        $start = new \DateTimeImmutable($reservation['dateStart']);
+                        $end = new \DateTimeImmutable($reservation['dateEnd']);
+
+                        $nbDay = $start->diff($end)->days + 1;
+
+
+                        $pricePerDay = $rental->isOnPromotion() ? floor($rental->getPricePerDay() * 0.9 * 100) / 100 : floor($rental->getPricePerDay() * 100) / 100;
+                        $totalPrice = floor($nbDay * $pricePerDay * 100) / 100;
+                        $priceCleaningDeposit = 50;
+                        $totalPriceBill += $totalPrice + $priceCleaningDeposit;
+
+                        $reservationRental = new ReservationsRentals();
+                        $reservationRental->setBill($newBill);
+                        $reservationRental->setUser($user);
+                        $reservationRental->setRentals($rental);
+                        $reservationRental->setHasCleaningDeposit(true);
+                        $reservationRental->setTotalPrice($totalPrice + $priceCleaningDeposit);
+                        $reservationRental->setTotalDepositReturned(50);
+                        $reservationRental->setStatusBaseDeposit(1);
+                        $reservationRental->setDateReservation(new \DateTimeImmutable('now'));
+                        $reservationRental->setDateStart(new \DateTimeImmutable($reservation['dateStart']));
+                        $reservationRental->setDateEnd(new \DateTimeImmutable($reservation['dateEnd']));
+                        $reservationRental->setStatusReservation(1);
+
+                        $entityManager->persist($reservationRental);
+                    } elseif ($reservation['type'] === "event") {
+
+                        $event = $eventsRepository->find($reservation['id']);
+                        if (!$event){
+                            throw new \Exception("Event not found for ID: " . $reservation['id']);
+                        }
+
+                        $reservationEvent = new ReservationsEvents();
+                        $totalPrice = ($event->getPrice() * $reservation['nbPlaces']);
+                        $totalPriceBill += $totalPrice;
+
+                        $reservationEvent->setEvent($event);
+                        $reservationEvent->setNbPlaces($reservation['nbPlaces']);
+                        $reservationEvent->setIsActive(1);
+                        $reservationEvent->setUser($user);
+                        $reservationEvent->setBill($newBill);
+                        $reservationEvent->setDateReservation(new \DateTimeImmutable('now'));
+                        $reservationEvent->setTotalDeposit($totalPrice);
+
+                        $entityManager->persist($reservationEvent);
+                    }
+                }
+
+                $newBill->setDate(new \DateTimeImmutable());
+                $newBill->setTotalPrice($totalPriceBill);
+                $newBill->setStatus(1);
+                $newBill->setUser($user);
+                $user->setNbPoints($user->getNbPoints() + ((int) ($totalPriceBill / 100)));
+
+                $entityManager->persist($newBill);
+                $entityManager->flush();
+
+                return new Response('Webhook reçu', 200);
+            } catch (\Throwable $e) {
+                error_log('Stripe webhook error: ' . $e->getMessage());
+                return new Response('Webhook error', 500);
+            }
         }
 
         return new Response('Webhook reçu', 200);
     }
+
 }
