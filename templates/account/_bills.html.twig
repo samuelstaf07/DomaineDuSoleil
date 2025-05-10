@@ -10,6 +10,7 @@
             <th class="text-center">Logements</th>
             <th class="text-center">Événements</th>
             <th class="text-center">Prix total</th>
+            <th class="text-center">Facture</th>
         </tr>
         </thead>
         <tbody>
@@ -39,6 +40,9 @@
                 </td>
                 <td class="align-middle text-center">
                     {{ bill.totalPrice|number_format(2, ',', '') }}€
+                </td>
+                <td class="align-middle text-center">
+                    <a href="{{ path('app_bills', {id:bill.id}) }}" data-turbo="false">Voir la facture</a>
                 </td>
         </tr>
         {% endfor %}

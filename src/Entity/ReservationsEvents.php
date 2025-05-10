@@ -22,7 +22,7 @@ class ReservationsEvents
     #[ORM\JoinColumn(nullable: false)]
     private ?users $user = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: Events::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?events $event = null;
 
