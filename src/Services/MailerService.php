@@ -2,6 +2,10 @@
 
 namespace App\Services;
 
+use App\Entity\Bills;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -10,7 +14,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class MailerService
+class MailerService extends AbstractController
 {
     private MailerInterface $mailer;
     private Environment $twig;
@@ -100,6 +104,41 @@ class MailerService
             ->to($to)
             ->subject('Adresse mail changée')
             ->html($body);
+
+        $this->mailer->send($email);
+    }
+
+    public function sendCommand(string $to, string $username, Bills $bill, $resEvents, $resRentals): void
+    {
+        $options = new Options();
+        $options->set('defaultFont', 'Arial');
+
+        $dompdf = new Dompdf($options);
+
+        $html = $this->renderView('pdf/bill.html.twig', [
+            'bill' => $bill,
+            'user' => $bill->getUser(),
+            'events' => $resEvents,
+            'rentals' => $resRentals,
+        ]);
+
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        $pdfOutput = $dompdf->output();
+
+        $body = $this->twig->render('emails/sendCommand.html.twig', [
+            'username' => $username,
+            'bill' => $bill,
+        ]);
+
+        $email = (new Email())
+            ->from('no-reply@domainedusoleil.com')
+            ->to($to)
+            ->subject('Merci pour votre commande !')
+            ->html($body)
+            ->attach($pdfOutput, 'facture.pdf', 'application/pdf');
 
         $this->mailer->send($email);
     }

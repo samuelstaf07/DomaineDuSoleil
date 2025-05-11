@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Changement d'adresse e-mail</title>
+    <title>Confirmation de commande</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -30,18 +30,28 @@
             font-size: 0.9em;
             color: #777;
         }
+        .highlight {
+            font-weight: bold;
+            color: #006633;
+        }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>Changement d'adresse e-mail confirmé</h1>
+    <h1>Commande confirmée</h1>
     <p>Bonjour {{ username }},</p>
-    <p>Nous vous confirmons que l’adresse e-mail associée à votre compte a été modifiée avec succès.</p>
-    <p>Nouvelle adresse enregistrée : <strong>{{ newEmail }}</strong></p>
-    <p>Si vous n’êtes pas à l’origine de cette modification, nous vous recommandons de nous contacter à <a href="mailto:info@domainedusoleil.be">info@domainedusoleil.be</a></p>
+
+    <p>Nous vous confirmons que votre commande n°<span class="highlight">{{ bill.id }}</span> a bien été enregistrée le <span class="highlight">{{ bill.date|date('d/m/Y') }}</span>.</p>
+
+    <p>Vous trouverez en pièce jointe la facture détaillée de votre commande.</p>
+
+    <p>Un récapitulatif de votre commande est également disponible dans votre espace client.</p>
+
+    <p>Si vous avez des questions, n’hésitez pas à nous contacter à <a href="mailto:info@domainedusoleil.be">info@domainedusoleil.be</a>.</p>
+
     <div class="footer">
-        Merci de votre confiance. <br>
-        Domaine Du Soleil.
+        Merci de votre confiance.<br>
+        L’équipe du Domaine du Soleil.
     </div>
 </div>
 </body>

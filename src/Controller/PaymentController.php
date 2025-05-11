@@ -9,6 +9,7 @@ use App\Entity\ReservationsRentals;
 use App\Repository\EventsRepository;
 use App\Repository\RentalsRepository;
 use App\Repository\UsersRepository;
+use App\Services\MailerService;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Checkout\Session;
@@ -19,6 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -187,7 +189,7 @@ final class PaymentController extends AbstractController
     }
 
     #[Route('/webhook/stripe', name: 'app_stripe_webhook', methods: ['POST'])]
-    public function stripeWebhook(Request $request, EntityManagerInterface $entityManager, RentalsRepository $rentalsRepository, EventsRepository $eventsRepository, UsersRepository $usersRepository, SessionInterface $session): Response
+    public function stripeWebhook(Request $request, EntityManagerInterface $entityManager, RentalsRepository $rentalsRepository, EventsRepository $eventsRepository, UsersRepository $usersRepository, MailerService $mailerService): Response
     {
 
         $endpointSecret = $this->endpointSecret;
@@ -220,9 +222,11 @@ final class PaymentController extends AbstractController
                 $newBill->setDate(new \DateTimeImmutable('now', new DateTimeZone('Europe/Brussels')));
                 $totalPriceBill = 0;
 
+                $allResRentals = [];
+                $allResEvents = [];
+
                 foreach ($cart as $reservation) {
                     if ($reservation['type'] === "rental") {
-
                         $rental = $rentalsRepository->find($reservation['id']);
                         if (!$rental){
                             throw new \Exception("Rental not found for ID: " . $reservation['id']);
@@ -252,6 +256,7 @@ final class PaymentController extends AbstractController
                         $reservationRental->setDateEnd(new \DateTimeImmutable($reservation['dateEnd']));
                         $reservationRental->setStatusReservation(1);
 
+                        $allResRentals[] = $reservationRental;
                         $entityManager->persist($reservationRental);
                     } elseif ($reservation['type'] === "event") {
 
@@ -272,6 +277,8 @@ final class PaymentController extends AbstractController
                         $reservationEvent->setDateReservation(new \DateTimeImmutable('now'));
                         $reservationEvent->setTotalDeposit($totalPrice);
 
+
+                        $allResEvents[] = $reservationEvent;
                         $entityManager->persist($reservationEvent);
                     }
                 }
@@ -284,6 +291,15 @@ final class PaymentController extends AbstractController
 
                 $entityManager->persist($newBill);
                 $entityManager->flush();
+
+
+                $mailerService->sendCommand(
+                    $user->getEmail(),
+                    $user->getFirstname(),
+                    $newBill,
+                    $allResEvents,
+                    $allResRentals,
+                );
 
                 return new Response('Webhook reçu', 200);
             } catch (\Throwable $e) {
