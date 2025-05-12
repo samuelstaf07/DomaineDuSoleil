@@ -45,9 +45,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $nb_points = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $account_number = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
@@ -199,18 +196,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNbPoints(int $nb_points): static
     {
         $this->nb_points = $nb_points;
-
-        return $this;
-    }
-
-    public function getAccountNumber(): ?string
-    {
-        return $this->account_number;
-    }
-
-    public function setAccountNumber(?string $account_number): static
-    {
-        $this->account_number = $account_number;
 
         return $this;
     }

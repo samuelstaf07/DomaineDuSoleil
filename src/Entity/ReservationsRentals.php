@@ -23,9 +23,6 @@ class ReservationsRentals
     private ?users $user = null;
 
     #[ORM\Column]
-    private ?bool $has_cleaning_deposit = null;
-
-    #[ORM\Column]
     private ?float $total_deposit_returned = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
@@ -82,18 +79,6 @@ class ReservationsRentals
     public function setUser(?users $user): static
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function hasCleaningDeposit(): ?bool
-    {
-        return $this->has_cleaning_deposit;
-    }
-
-    public function setHasCleaningDeposit(bool $has_cleaning_deposit): static
-    {
-        $this->has_cleaning_deposit = $has_cleaning_deposit;
 
         return $this;
     }

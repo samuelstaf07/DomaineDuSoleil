@@ -14,13 +14,12 @@
                 <th class="align-middle text-center">Id</th>
                 <th class="align-middle text-center">Id de la facture</th>
                 <th class="align-middle text-center">Logement</th>
-                <th class="align-middle text-center">Caution de nettoyage</th>
                 <th class="align-middle text-center">Date de début</th>
                 <th class="align-middle text-center">Date de fin</th>
                 <th class="align-middle text-center">Date de réservation</th>
                 <th class="align-middle text-center">Prix total</th>
-                <th class="align-middle text-center">Status de la caution de nettoyage</th>
-                <th class="align-middle text-center">Caution de nettoyage renvoyée</th>
+                <th class="align-middle text-center">Status de la caution</th>
+                <th class="align-middle text-center">Caution renvoyée</th>
             </tr>
             </thead>
             <tbody>
@@ -33,13 +32,6 @@
                         <td class="align-middle">
                             <a href="{{ path('app_rental', {id:elem.rentals.id }) }}" data-turbo="false">{{ elem.rentals.title|capitalize }}</a>
                         </td>
-                        <td class="align-middle text-center">
-                            {% if elem.hasCleaningDeposit %}
-                                Oui
-                            {% else %}
-                                Non
-                            {% endif %}
-                        </td>
                         <td class="align-middle text-center">{{ elem.dateStart|date('d/m/Y') }}</td>
                         <td class="align-middle text-center">{{ elem.dateEnd|date('d/m/Y') }}</td>
                         <td class="align-middle text-center">{{ bill.date|date('d/m/Y') }}</td>
@@ -48,19 +40,17 @@
                         </td>
                         <td class="align-middle text-center">
                             {% if elem.statusBaseDeposit == 0 %}
-                                Non payé par l'utilisateur
+                                En cours
                             {% elseif elem.statusBaseDeposit == 1 %}
-                                En cours de vérification
-                            {% elseif elem.statusBaseDeposit == 2 %}
                                 <span class="color-orange">Partielement remboursé</span>
-                            {% elseif elem.statusBaseDeposit == 3 %}
+                            {% elseif elem.statusBaseDeposit == 2 %}
                                 <span class="color-darkGreen">Totalement remboursé</span>
-                            {% elseif elem.statusBaseDeposit == 4 %}
+                            {% elseif elem.statusBaseDeposit == 3 %}
                                 <span class="color-red">Refusé</span>
                             {% endif %}
                         </td>
                         <td class="align-middle text-center">
-                            {% if elem.statusBaseDeposit == 1 %}
+                            {% if elem.statusBaseDeposit == 0 %}
                                 En cours de vérification
                             {% else %}
                                 {{ elem.totalDepositReturned|number_format(2, ',', '') }}€

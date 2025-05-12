@@ -13,7 +13,8 @@
 
             {% if rentals is not empty %}
                 <h4>Logements</h4>
-                <p class="alert alert-secondary">Pour tous les logements, une caution de 50 € vous est demandée. Si nous jugeons que le logement rendu est suffisamment propre, la caution vous sera restituée.</p>
+                <p class="alert alert-secondary">Pour l'ensemble de nos hébergements, une caution correspondant à deux fois le tarif journalier (sans promotion) vous sera exigée. <br>
+                    Cette dernière vous sera intégralement remboursée si l'état du logement lors de votre départ est conforme à nos attentes.</p>
                 <table class="table w-75">
                     <thead>
                     <tr>
@@ -22,8 +23,10 @@
                         <th class="text-center">Date de début</th>
                         <th class="text-center">Date de fin</th>
                         <th class="text-center">Prix par jour</th>
-                        <th class="text-center">Prix total TTC</th>
-                        <th class="text-center">Caution de nettoyage</th>
+                        <th class="text-center">Frais de nettoyage</th>
+                        <th class="text-center">Caution</th>
+                        <th class="text-center">Prix hors frais TTC</th>
+                        <th class="text-center">Prix Total TTC</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -43,6 +46,12 @@
                                 {% endif %}
                             </td>
                             <td class="align-middle text-center">
+                                50€
+                            </td>
+                            <td class="align-middle text-center">
+                                {{ (elem.rentalPricePerDay * 2)|number_format(2, ',', '') }}€
+                            </td>
+                            <td class="align-middle text-center">
                                 {% set days = elem.dateEnd.diff(elem.dateStart).days + 1 %}
                                 {% if elem.rentalPricePerDay %}
                                     {% set dailyPrice = (elem.rentalPricePerDay * 0.9)|round(2, 'floor') %}
@@ -50,16 +59,15 @@
                                     {% set dailyPrice = elem.rentalPricePerDay|round(2, 'floor') %}
                                 {% endif %}
 
-                                {% set totalRentalttc = days * dailyPrice %}
+                                {% set totalRentalttc = (days * dailyPrice) %}
                                 {% set totalRentalht = (totalRentalttc / 1.1) %}
                                 {% set totalRentaltva = totalRentalttc - totalRentalht %}
 
                                 {{ totalRentalttc|number_format(2, ',', '') }}€<br>
-                                ({{ totalRentalht|number_format(2, ',', '') }}€ HT + {{ totalRentaltva|number_format(2, ',', '') }}€ TVA)
-
+                                ({{ totalRentalht|number_format(2, ',', '') }}€ HT + {{ totalRentaltva|number_format(2, ',', '') }}€ TVA)<br>
                             </td>
-                            <td class="align-middle text-center" title="Si nous jugeons que le logement rendu est assez propre, la caution vous sera rendue">
-                                50€
+                            <td class="align-middle text-center">
+                                {{ (totalRentalttc + 50 + (elem.rentalPricePerDay * 2)|round(2, 'floor'))|number_format(2, ',', '') }}€
                             </td>
                             <td class="align-middle text-center">
                                 <a href="{{ path('app_delete_element_cart', {id: elem.id}) }}" class="btn btn-red">Supprimer</a>
@@ -121,7 +129,7 @@
                 {% else %}
                     {% set dailyPrice = elem.rentalPricePerDay|round(2, 'floor') %}
                 {% endif %}
-                {% set totalPanier = totalPanier + ((days * dailyPrice)+50) %}
+                {% set totalPanier = totalPanier + ((days * dailyPrice)+50) + (elem.rentalPricePerDay * 2) %}
             {% endfor %}
 
             {% for elem in events %}

@@ -154,11 +154,11 @@
 
                                     <small class="fs-6 fw-light">({{ ht|number_format(2, ',', '') }} € HT + {{ tva|number_format(2, ',', '') }} € TVA à 10%)</small>
                                     {% if rental.isOnPromotion %}
-                                        <span class="color-lightGreen">
+                                        <span class="color-lightGreen price h4">
                                             {{ (rental.pricePerDay * 0.9)|round(2, 'floor')|number_format(2, ',', '') }}€ TTC
                                         </span>
                                     {% endif %}
-                                    <p>
+                                    <p class="price h4">
                                         <span {% if rental.isOnPromotion %} class="strike" {% endif %}>
                                             {{ rental.pricePerDay|number_format(2, ',', '') }}€
                                         </span> TTC/nuit

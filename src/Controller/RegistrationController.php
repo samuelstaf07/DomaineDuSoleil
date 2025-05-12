@@ -37,7 +37,6 @@ class RegistrationController extends AbstractController
             // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword))
                 ->setIsActive(1)
-                ->setAccountNumber('0')
                 ->setLastLogAt(new \DateTimeImmutable('now', new DateTimeZone('Europe/Brussels')))
                 ->setNbPoints(0)
                 ->setIsEmailAuthentificated(false)

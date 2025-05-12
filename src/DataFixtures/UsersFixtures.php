@@ -28,7 +28,6 @@ class UsersFixtures extends Fixture
             $user->setFirstname($faker->firstName);
             $user->setLastname($faker->lastName);
             $user->setNbPoints($faker->numberBetween(0, 1000));
-            $user->setAccountNumber($faker->iban('FR'));
             $createdAt = new \DateTimeImmutable('now');
             $user->setCreatedAt($createdAt);
             $user->setUpdatedAt($createdAt);

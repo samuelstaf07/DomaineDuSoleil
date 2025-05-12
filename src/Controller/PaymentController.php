@@ -61,12 +61,13 @@ final class PaymentController extends AbstractController
         foreach ($order as $product) {
             if ($product['type'] === "event") {
                 $totalPrice = $product['eventPrice'] * $product['nbPlaces'] * 100;
-                $productName = $product['eventTitle'];
+                $productNameLong = $product['eventTitle'];
             } elseif ($product['type'] === "rental") {
                 $nbDay = $product['dateStart']->diff($product['dateEnd'])->days + 1;
                 $pricePerDay = $product['rentalIsOnPromotion'] ? floor($product['rentalPricePerDay'] * 90) : floor($product['rentalPricePerDay'] * 100);
                 $totalPrice = (int) round($nbDay * $pricePerDay);
-                $productName = $product['rentalTitle'];
+                $productNameIni = $product['rentalTitle'];
+                $productNameLong = '"' . $product['rentalTitle'] . '" du ' . $product['dateStart']->format('d-m-Y') . " au " . $product['dateEnd']->format('d-m-Y');
             }
 
             $productStripe[] = [
@@ -74,7 +75,7 @@ final class PaymentController extends AbstractController
                     'currency' => 'eur',
                     'unit_amount' => $totalPrice,
                     'product_data' => [
-                        'name' => $productName,
+                        'name' => $productNameLong ,
                     ],
                 ],
                 'quantity' => 1,
@@ -86,7 +87,17 @@ final class PaymentController extends AbstractController
                         'currency' => 'eur',
                         'unit_amount' => 5000,
                         'product_data' => [
-                            'name' => 'Caution de nettoyage pour ' . $productName,
+                            'name' => 'Frais de nettoyage pour "' . $productNameIni . '"',
+                        ],
+                    ],
+                    'quantity' => 1,
+                ];
+                $productStripe[] = [
+                    'price_data' => [
+                        'currency' => 'eur',
+                        'unit_amount' => ($product['rentalPricePerDay'] * 2) * 100,
+                        'product_data' => [
+                            'name' => 'Caution pour "' . $productNameIni . '"',
                         ],
                     ],
                     'quantity' => 1,
@@ -241,16 +252,16 @@ final class PaymentController extends AbstractController
                         $pricePerDay = $rental->isOnPromotion() ? floor($rental->getPricePerDay() * 0.9 * 100) / 100 : floor($rental->getPricePerDay() * 100) / 100;
                         $totalPrice = floor($nbDay * $pricePerDay * 100) / 100;
                         $priceCleaningDeposit = 50;
-                        $totalPriceBill += $totalPrice + $priceCleaningDeposit;
+                        $deposit = ($rental->getPricePerDay() * 2);
+                        $totalPriceBill += $totalPrice + $priceCleaningDeposit + ($rental->getPricePerDay() * 2);
 
                         $reservationRental = new ReservationsRentals();
                         $reservationRental->setBill($newBill);
                         $reservationRental->setUser($user);
                         $reservationRental->setRentals($rental);
-                        $reservationRental->setHasCleaningDeposit(true);
-                        $reservationRental->setTotalPrice($totalPrice + $priceCleaningDeposit);
-                        $reservationRental->setTotalDepositReturned(50);
-                        $reservationRental->setStatusBaseDeposit(1);
+                        $reservationRental->setTotalPrice($totalPrice + $priceCleaningDeposit + $deposit);
+                        $reservationRental->setTotalDepositReturned($pricePerDay);
+                        $reservationRental->setStatusBaseDeposit(0);
                         $reservationRental->setDateReservation(new \DateTimeImmutable('now'));
                         $reservationRental->setDateStart(new \DateTimeImmutable($reservation['dateStart']));
                         $reservationRental->setDateEnd(new \DateTimeImmutable($reservation['dateEnd']));
