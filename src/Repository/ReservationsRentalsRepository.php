@@ -47,14 +47,18 @@ class ReservationsRentalsRepository extends ServiceEntityRepository
         $today = new \DateTimeImmutable('today');
 
         return $this->createQueryBuilder('r')
+            ->join('r.bill', 'b')
             ->andWhere('r.date_end >= :today')
             ->andWhere('r.status_reservation = true')
             ->andWhere('r.user = :user')
+            ->andWhere('b.status = :active')
             ->setParameter('today', $today)
             ->setParameter('user', $user)
+            ->setParameter('active', true)
             ->orderBy('r.date_start', 'ASC')
             ->getQuery()
             ->getResult();
     }
+
 
 }

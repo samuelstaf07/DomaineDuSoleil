@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajout d'image de {{ event.title }}{% endblock %}
+
+{% block body %}
+    <div class="contentMargin d-flex flex-column justify-content-center align-items-center">
+        <div class="bg-darkGreen p-3 rounded-4">
+            <h3 class="text-center">Ajout d'image de {{ event.title }}</h3>
+            {{ form_start(form, {'attr': {'class': 'd-flex flex-column align-items-center justify-content-center'}}) }}
+            {{ form_widget(form) }}
+            <button class="btn-lightGreen" type="submit">Ajouter</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

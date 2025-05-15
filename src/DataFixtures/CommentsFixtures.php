@@ -30,6 +30,8 @@ class CommentsFixtures extends Fixture implements DependentFixtureInterface
                 $comment->setCreatedAt(new \DateTimeImmutable('now'));
                 $comment->setRating($faker->numberBetween(1, 5));
                 $comment->setIsActive($faker->boolean(95));
+                $comment->setDisabledAt(null);
+                $comment->setChangedAt(null);
                 $comment->setRentals($rental);
 
                 $manager->persist($comment);

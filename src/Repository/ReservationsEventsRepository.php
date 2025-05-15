@@ -60,11 +60,15 @@ class ReservationsEventsRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('r')
             ->join('r.event', 'e')
+            ->join('r.bill', 'b')
             ->where('r.user = :user')
             ->andWhere('e.date >= :today')
+            ->andWhere('b.status = :active')
             ->setParameter('user', $user)
-            ->setParameter('today', new \DateTimeImmutable('today'));
+            ->setParameter('today', new \DateTimeImmutable('today'))
+            ->setParameter('active', true);
 
         return $qb->getQuery()->getResult();
     }
+
 }

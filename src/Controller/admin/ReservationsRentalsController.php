@@ -5,6 +5,7 @@ namespace App\Controller\admin;
 use App\Entity\ReservationsRentals;
 use App\Form\ReservationsRentalsType;
 use App\Repository\ReservationsRentalsRepository;
+use App\Repository\UsersRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,5 +78,20 @@ final class ReservationsRentalsController extends AbstractController
         }
 
         return $this->redirectToRoute('app_reservations_rentals_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/changeActive', name: 'app_reservations_change_active')]
+    public function changeActive($id, Request $request, ReservationsRentalsRepository $reservationsRentalsRepository, EntityManagerInterface $entityManager): Response
+    {
+        $reservationsRentals = $reservationsRentalsRepository->find($id);
+
+        $reservationsRentals->setStatusReservation(!$reservationsRentals->getStatusReservation());
+
+        $entityManager->persist($reservationsRentals);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_reservations_rentals_show', [
+            'id' => $reservationsRentals->getId()
+        ]);
     }
 }

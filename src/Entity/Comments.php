@@ -34,6 +34,12 @@ class Comments
     #[ORM\JoinColumn(nullable: false)]
     private ?Rentals $rentals = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $disabled_at = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $changed_at = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -102,6 +108,30 @@ class Comments
     public function setIsActive(?bool $is_active): void
     {
         $this->is_active = $is_active;
+    }
+
+    public function getDisabledAt(): ?\DateTimeImmutable
+    {
+        return $this->disabled_at;
+    }
+
+    public function setDisabledAt(?\DateTimeImmutable $disabled_at): static
+    {
+        $this->disabled_at = $disabled_at;
+
+        return $this;
+    }
+
+    public function getChangedAt(): ?\DateTimeImmutable
+    {
+        return $this->changed_at;
+    }
+
+    public function setChangedAt(?\DateTimeImmutable $changed_at): static
+    {
+        $this->changed_at = $changed_at;
+
+        return $this;
     }
 
 

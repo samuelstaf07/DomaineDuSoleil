@@ -5,6 +5,7 @@ namespace App\Controller\admin;
 use App\Entity\Comments;
 use App\Form\CommentsType;
 use App\Repository\CommentsRepository;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,7 +43,7 @@ final class CommentsController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_comments_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_comments_show')]
     public function show(Comments $comment): Response
     {
         return $this->render('admin/comments/show.html.twig', [
@@ -77,5 +78,28 @@ final class CommentsController extends AbstractController
         }
 
         return $this->redirectToRoute('app_comments_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/changeActive', name: 'app_comments_change_active')]
+    public function changeActive($id, CommentsRepository $commentsRepository, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        $comment = $commentsRepository->find($id);
+        $comment->setIsActive(!$comment->getIsActive());
+
+        if($comment->getIsActive()){
+            $comment->setDisabledAt(null);
+        }else{
+            $comment->setDisabledAt(new \DateTimeImmutable('now', new DateTimeZone('Europe/Brussels')));
+        }
+
+        $entityManager->persist($comment);
+        $entityManager->flush();
+
+        $referer = $request->headers->get('referer');
+        if ($referer) {
+            return $this->redirect($referer);
+        }
+
+        return $this->redirectToRoute('app_comments_index');
     }
 }

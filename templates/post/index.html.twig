@@ -15,10 +15,12 @@
         <header class="d-flex flex-column align-items-center gap-3">
             <h2>{{ post.title }}</h2>
             <div class="w-75 d-flex gap-3">
-                <a class="col-md-6 w-50 h-100" href="{{ asset('styles/img/' ~ post.getHomePageImage().getSrc()) }}" title="{{ post.getHomePageImage().getAlt() }}">
-                    <img class="img-fluid rounded-4 w-100 h-100" src="{{ asset('styles/img/' ~ post.getHomePageImage().getSrc()) }}" alt="{{ post.getHomePageImage().getAlt() }}">
-                </a>
-                <div class="w-50 h-100 bg-lightGreen rounded-4 p-2">
+                {% if post.getHomePageImage() %}
+                    <a class="{% if post.getHomePageImage() %}col-md-6 w-50{% endif %} h-100" href="{{ asset('uploads/' ~ post.getHomePageImage().getSrc()) }}" title="{{ post.getHomePageImage().getAlt() }}">
+                        <img class="img-fluid rounded-4 w-100 h-100" src="{{ asset('uploads/' ~ post.getHomePageImage().getSrc()) }}" alt="{{ post.getHomePageImage().getAlt() }}">
+                    </a>
+                {% endif %}
+                <div class="{% if post.getHomePageImage() %}w-50{% else %}w-100{% endif %} h-100 bg-lightGreen rounded-4 p-2">
                     <p>{{ post.content }}</p>
                 </div>
             </div>
@@ -31,8 +33,8 @@
                 <div class="d-flex popup-gallery w-75 justify-content-center gap-3">
                     {% for image in images %}
                         {% if not image.isHomePage %}
-                            <a href="{{ asset('styles/img/' ~ image.getSrc()) }}" title="{{ image.getAlt() }}">
-                                <img src="{{ asset('styles/img/' ~ image.getSrc()) }}" alt="{{ image.getAlt() }}" class="img-fluid rounded-4 smallImage">
+                            <a href="{{ asset('uploads/' ~ image.getSrc()) }}" title="{{ image.getAlt() }}">
+                                <img src="{{ asset('uploads/' ~ image.getSrc()) }}" alt="{{ image.getAlt() }}" class="img-fluid rounded-4 smallImage">
                             </a>
                         {% endif %}
                     {% endfor %}

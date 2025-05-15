@@ -7,7 +7,8 @@
 
 :root{
     --myWhite: #F8F9FA;
-    --myLightGrey: #414141;
+    --myLightGrey: #717171;
+    --myDarkGrey: #212529;
     --myLightGreen: #95C11F;
     --myDarkGreen: #006633;
     --myYellow: #F7D844;
@@ -98,10 +99,6 @@ h2{
 .imageTop {
     height: 50%;
     width: 100%;
-    background: url('img/Chalet.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     position: relative;
 }
 
@@ -214,7 +211,7 @@ h2{
 }
 
 .dropdown button, .dropdown button:hover, .dropdown .show{
-    background: var(--myLightGrey);
+    background: var(--myDarkGrey);
     color: var(--myWhite);
     border: none;
     border-radius: 0.75rem;
@@ -338,20 +335,20 @@ h2{
 
 .btn-yellow{
     background-color: var(--myYellow);
-    color: var(--myLightGrey);
+    color: var(--myDarkGrey);
 }
 .btn-yellow:hover{
-    background-color: var(--myLightGrey);
+    background-color: var(--myDarkGrey);
     color: var(--myYellow);
 }
 .btn-yellow:hover svg{
     fill: var(--myYellow);
 }
 .btn-yellow svg{
-    fill: var(--myLightGrey);
+    fill: var(--myDarkGrey);
 }
 .btn-yellow:active{
-    background-color: color-mix(in srgb, var(--myLightGrey), black 10%) !important;
+    background-color: color-mix(in srgb, var(--myDarkGrey), black 10%) !important;
     color: var(--myYellow);
 }
 
@@ -362,10 +359,10 @@ h2{
 }
 .btn-outline-yellow:hover{
     background-color: var(--myYellow);
-    color: var(--myLightGrey)
+    color: var(--myDarkGrey)
 }
 .btn-outline-yellow:active{
-    background-color: color-mix(in srgb, var(--myLightGrey), black 10%);
+    background-color: color-mix(in srgb, var(--myDarkGrey), black 10%);
     color: var(--myYellow) !important;
 }
 
@@ -398,6 +395,16 @@ h2{
 .bg-lightGreen{
     color: var(--myLightGreen);
     background: var(--myBlack);
+}
+
+.bg-darkGrey{
+    color: var(--myWhite);
+    background: var(--myDarkGrey);
+}
+
+.bg-red{
+    background-color: var(--myRed);
+    color: var(--myWhite);
 }
 
 .btn-lightGreen2{
@@ -449,7 +456,7 @@ h2{
 }
 
 .bg-LightGrey{
-    background: var(--myBlack);
+    background: var(--myLightGrey);
     color: var(--myWhite);
 }
 
@@ -559,4 +566,28 @@ h2{
 .dropzone-placeholder{
     margin-top: 1rem;
     margin-bottom: 1rem;
+}
+
+.dt-paging-button.page-item button{
+    color: var(--myDarkGreen);
+}
+
+.dt-paging-button.page-item.active button{
+    color: var(--myWhite);
+    background: var(--myDarkGreen);
+    border: 1px solid var(--myDarkGreen);
+}
+
+.fc-daygrid-day-number, .fc-col-header-cell-cushion{
+    color: var(--myDarkGreen);
+    text-decoration: none;
+}
+
+.fc-event-title-container,
+.fc-event-main-frame,
+.fc-event-main,
+.fc-event, .fc-event-start, .fc-event-future, .fc-daygrid-event, .fc-daygrid-block-event, .fc-h-event, .fc-next-button, .fc-button, .fc-button-primary,
+.fc-daygrid-event-harness, .fc-daygrid-event-harness-abs{
+    background: var(--myDarkGreen) !important;
+    border: var(--myDarkGreen) !important;
 }

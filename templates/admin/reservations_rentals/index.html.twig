@@ -24,7 +24,6 @@
             {% for reservations_rental in reservations_rentals %}
                 <tr>
                     <td>{{ reservations_rental.id }}</td>
-                    <td>{{ reservations_rental.hasCleaningDeposit ? 'Yes' : 'No' }}</td>
                     <td>{{ reservations_rental.totalDepositReturned }}</td>
                     <td>{{ reservations_rental.statusBaseDeposit }}</td>
                     <td>{{ reservations_rental.dateReservation ? reservations_rental.dateReservation|date('Y-m-d') : '' }}</td>

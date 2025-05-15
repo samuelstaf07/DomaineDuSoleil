@@ -1,15 +1,79 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Posts{% endblock %}
+{% block title %}Modification de post{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('libs/jquery/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('libs/magnific-popup/dist/jquery.magnific-popup.min.js') }}"></script>
+    <script src="{{ asset('js/admin/popup.js') }}"></script>
+{% endblock %}
 
 {% block body %}
-    <div class="contentMargin">
-        <h1>Edit Posts</h1>
+    <div class="contentMargin d-flex flex-column justify-content-center align-items-center mb-5">
+        {% if not post.getHomePageImage() %}
+            <div class="alert alert-warning d-flex gap-2">
+                <p>La logement ne possède pas d'image de présentation</p>
+                <a href="{{ path('app_images_add_home_image_post', {id:post.id}) }}">en ajouter une</a>
+            </div>
+        {% endif %}
 
-        {{ include('admin/posts/_form.html.twig', {'button_label': 'Update'}) }}
+        <div class="w-75 p-4 rounded-4 d-flex flex-column bg-lightGreen">
+            <h1 class="text-center">Modification de post</h1>
 
-        <a href="{{ path('app_posts_index') }}">back to list</a>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <div class="d-flex gap-2">
+                <a href="{{ path('app_posts_index') }}" class="btn-lightGreen">Retour à la liste</a>
+                <button class="btn-yellow" type="submit">Sauvegarder</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
 
-        {{ include('admin/posts/_delete_form.html.twig') }}
+        <div class="d-flex flex-column align-items-center justify-content-center my-4 .popup-gallery">
+            <h3>Gallerie photo du logement</h3>
+            <div class="d-flex popup-gallery w-75 justify-content-center gap-3">
+                {% for image in post.getImages() %}
+                    {% if not image.isHomePage %}
+                        <div class="d-flex flex-column gap-2">
+                            <a href="{{ asset('uploads/' ~ image.getSrc()) }}" title="{{ image.getAlt() }}">
+                                <img src="{{ asset('uploads/' ~ image.getSrc()) }}" alt="{{ image.getAlt() }}" class="img-fluid rounded-4 smallImage">
+                            </a>
+                            <button type="button" class="btn-red text-center" data-bs-toggle="modal" data-bs-target="#modal-{{ image.id }}">
+                                Supprimer l'image
+                            </button>
+                        </div>
+                        <div class="modal fade" id="modal-{{ image.id }}" tabindex="-1" aria-labelledby="modalLabel-{{ image.id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content rounded-4">
+                                    <div class="modal-header bg-red text-white">
+                                        <h5 class="modal-title" id="modalLabel-{{ image.id }}">Confirmation de suppression</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Êtes-vous sûr de vouloir supprimer cette image ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn-black" data-bs-dismiss="modal">Annuler</button>
+                                        <a href="{{ path('app_images_delete_posts', {id:image.id}) }}" class="btn-red">Confirmer</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="d-flex flex-column gap-2">
+                            <a href="{{ asset('uploads/' ~ image.getSrc()) }}" title="{{ image.getAlt() }}">
+                                <img src="{{ asset('uploads/' ~ image.getSrc()) }}" alt="{{ image.getAlt() }}" class="img-fluid rounded-4 smallImage">
+                            </a>
+                            <a href="{{ path('app_images_change_home_image_post', {id:image.id}) }}" class="btn-lightGreen text-center">Modifier l'image d'accueil</a>
+                        </div>
+                    {% endif %}
+
+                {% endfor %}
+            </div>
+            {% if post.getImages()|length < 4 %}
+                <a href="{{ path('app_posts_add_image', {id:post.id}) }}" class="btn-yellow mt-3">Ajouter une image</a>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}

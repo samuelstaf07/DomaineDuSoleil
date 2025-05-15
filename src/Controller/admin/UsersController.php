@@ -3,8 +3,10 @@
 namespace App\Controller\admin;
 
 use App\Entity\Users;
-use App\Form\UsersType;
+use App\Repository\CommentsRepository;
+use App\Repository\RentalsRepository;
 use App\Repository\UsersRepository;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,26 +24,6 @@ final class UsersController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_users_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $user = new Users();
-        $form = $this->createForm(UsersType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('admin/users/new.html.twig', [
-            'user' => $user,
-            'form' => $form,
-        ]);
-    }
-
     #[Route('/{id}', name: 'app_users_show', methods: ['GET'])]
     public function show(Users $user): Response
     {
@@ -50,32 +32,87 @@ final class UsersController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_users_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Users $user, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/changeActive', name: 'app_users_change_active')]
+    public function delete($id, UsersRepository $usersRepository, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(UsersType::class, $user);
-        $form->handleRequest($request);
+        $user = $usersRepository->find($id);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
+        if(in_array('ROLE_ADMIN', $user->getRoles())){
+            $this->addFlash("danger", "Vous ne pouvez pas modifier un administrateur");
+            return $this->redirectToRoute('app_users_index');
         }
 
-        return $this->render('admin/users/edit.html.twig', [
-            'user' => $user,
-            'form' => $form,
+        $user->setIsActive(!$user->isActive());
+        $user->setUpdatedAt(new \DateTimeImmutable('now', new DateTimeZone('Europe/Brussels')));
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        if($user->isActive()){
+            $this->addFlash("success", "Le compte de l'utilisateur a été activé.");
+        }else{
+            $this->addFlash("success", "Le compte de l'utilisateur a été désactivé.");
+        }
+
+        return $this->redirectToRoute('app_users_show', [
+            'id' => $id,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_users_delete', methods: ['POST'])]
-    public function delete(Request $request, Users $user, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/reservations', name: 'app_users_reservations')]
+    public function reservationsRentals($id, UsersRepository $usersRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($user);
-            $entityManager->flush();
+        $user = $usersRepository->find($id);
+
+        $reservationsMin = [];
+        $reservations = $user->getReservationsRentals();
+
+        foreach($reservations as $reservation){
+            $reservationsMin[] = [
+                'title' => 'Logement: ' . $reservation->getRentals()->getTitle(),
+                'start' => $reservation->getDateStart()->format('Y-m-d'),
+                'end' => $reservation->getDateEnd()->modify('+1 day')->format('Y-m-d'),
+            ];
         }
 
-        return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
+        $reservations = $user->getReservationsEvents();
+
+        foreach($reservations as $reservation){
+            $reservationsMin[] = [
+                'title' => 'Événement: ' . $reservation->getEvent()->getTitle(),
+                'start' => $reservation->getEvent()->getDate()->format('Y-m-d'),
+                'end' => $reservation->getEvent()->getDate()->modify('+1 day')->format('Y-m-d'),
+            ];
+        }
+
+        return $this->render('admin/reservations/reservationsUser.html.twig', [
+            'user' => $user,
+            'reservationsMin' => $reservationsMin,
+            'reservationsRentals' => $user->getReservationsRentals(),
+            'reservationsEvents' => $user->getReservationsEvents(),
+        ]);
+    }
+
+    #[Route('/{id}/comments', name: 'app_users_comments')]
+    public function comments($id, UsersRepository $usersRepository, CommentsRepository $commentsRepository): Response
+    {
+        $user = $usersRepository->find($id);
+        $comments = $user->getComments();
+
+        return $this->render('admin/users/comments.html.twig', [
+            'user' => $user,
+            'comments' => $comments,
+        ]);
+    }
+
+    #[Route('/{id}/bills', name: 'app_users_bills')]
+    public function bills($id, UsersRepository $usersRepository, CommentsRepository $commentsRepository): Response
+    {
+        $user = $usersRepository->find($id);
+        $bills = $user->getBills();
+
+        return $this->render('admin/users/bill.html.twig', [
+            'user' => $user,
+            'bills' => $bills,
+        ]);
     }
 }

@@ -40,4 +40,15 @@ class BillsRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findActiveBillsByUser(\App\Entity\Users $user): array
+    {
+        return $this->createQueryBuilder('b')
+            ->where('b.user = :user')
+            ->andWhere('b.status = :status')
+            ->setParameter('user', $user)
+            ->setParameter('status', true)
+            ->orderBy('b.date', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

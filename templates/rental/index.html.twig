@@ -18,15 +18,18 @@
 
     <div class="contentMargin popup-gallery d-flex flex-column align-items-center gap-5">
         <h3 class="myTitle fs-2">{{ rental.title|capitalize }}</h3>
+        {% if not rental.isActive %}<p class="alert alert-danger">Ce logement est inactif, il n'est pas disponible.</p>{% endif %}
 
         <header class="w-75 d-flex flex-column gap-3 align-items-center">
             <div class="d-flex gap-3">
-                <a class="col-md-6" href="{{ asset('styles/img/' ~ rental.getHomePageImage().getSrc()) }}" title="{{ rental.getHomePageImage().getAlt() }}">
-                    <img class="img-fluid rounded-4 w-100 h-100" src="{{ asset('styles/img/' ~ rental.getHomePageImage().getSrc()) }}" alt="{{ rental.getHomePageImage().getAlt() }}">
-                </a>
-                <div class="col-md-6">
+                {% if rental.getHomePageImage() %}
+                    <a class="col-md-6" href="{{ asset('uploads/' ~ rental.getHomePageImage().getSrc()) }}" title="{{ rental.getHomePageImage().getAlt() }}">
+                        <img class="img-fluid rounded-4 w-100 h-100" src="{{ asset('uploads/' ~ rental.getHomePageImage().getSrc()) }}" alt="{{ rental.getHomePageImage().getAlt() }}">
+                    </a>
+                {% endif %}
+                <div {% if rental.getHomePageImage() %}class="col-md-6"{% endif %}>
                     <p class="bg-lightGreen rounded-4 p-2">{{ rental.content|capitalize }}</p>
-                    <div class="bg-LightGrey rounded-4 p-2">
+                    <div class="bg-darkGrey rounded-4 p-2">
                         <div class="d-flex gap-1 justify-content-between align-items-start">
                             <p class="fs-4">Conseillé pour <span class="color-lightGreen">{{ rental.nbSimpleBed + (2 * rental.nbDoubleBed) }} personne{% if (rental.nbSimpleBed + (2 * rental.nbDoubleBed))>1 %}s{% endif %} <span class="fw-bold">maximum</span></span></p>
                             {% if rental.isOnPromotion %}
@@ -164,7 +167,7 @@
                                         </span> TTC/nuit
                                     </p>
                                 </div>
-                                <a href="#dates" class="btn-yellow not-image">Réserver içi</a>
+                                {% if rental.isActive %}<a href="#dates" class="btn-yellow not-image">Réserver içi</a>{% endif %}
                             </div>
                         </div>
                     </div>
@@ -180,8 +183,8 @@
                 <div class="d-flex popup-gallery w-75 justify-content-center gap-3">
                     {% for imageRental in images %}
                         {% if not imageRental.isHomePage %}
-                            <a href="{{ asset('styles/img/' ~ imageRental.getSrc()) }}" title="{{ imageRental.getAlt() }}">
-                                <img src="{{ asset('styles/img/' ~ imageRental.getSrc()) }}" alt="{{ imageRental.getAlt() }}" class="img-fluid rounded-4 smallImage">
+                            <a href="{{ asset('uploads/' ~ imageRental.getSrc()) }}" title="{{ imageRental.getAlt() }}">
+                                <img src="{{ asset('uploads/' ~ imageRental.getSrc()) }}" alt="{{ imageRental.getAlt() }}" class="img-fluid rounded-4 smallImage">
                             </a>
                         {% endif %}
                     {% endfor %}
@@ -189,56 +192,57 @@
             </section>
         {% endif %}
 
-        <section id="dates" class="w-75 d-flex flex-column justify-content-center align-items-center gap-2 mb-5">
-            <div class="w-75 d-flex flex-column gap-3">
-                <h3 class="text-center">Les disponibilités</h3>
-                <p class="alert alert-danger d-none">Dates non valide</p>
+        {% if rental.isActive %}
+            <section id="dates" class="w-75 d-flex flex-column justify-content-center align-items-center gap-2 mb-5">
+                <div class="w-75 d-flex flex-column gap-3">
+                    <h3 class="text-center">Les disponibilités</h3>
+                    <p class="alert alert-danger d-none">Dates non valide</p>
 
-                {{ form_start(form, {'attr': {'class': 'd-flex flex-column gap-4 p-4 rounded-4 bg-myGreen', 'id': 'reservation-form', 'data-turbo': 'false'}}) }}
-                <div class="d-flex gap-4">
-                    <div class="w-50 d-flex flex-column gap-1">
-                        <label for="dateStart" class="mx-2 fw-bold text-center">Date de début</label>
-                        {{ form_widget(form.date_start, {
-                            'attr': {
-                                'id': 'dateStart',
-                                'name': 'dateStart',
-                                'class': 'form-control text-center rounded-4',
-                                'placeholder': 'yyyy-mm-dd',
-                            },
-                            'type': 'text'
+                    {{ form_start(form, {'attr': {'class': 'd-flex flex-column gap-4 p-4 rounded-4 bg-myGreen', 'id': 'reservation-form', 'data-turbo': 'false'}}) }}
+                    <div class="d-flex gap-4">
+                        <div class="w-50 d-flex flex-column gap-1">
+                            <label for="dateStart" class="mx-2 fw-bold text-center">Date de début</label>
+                            {{ form_widget(form.date_start, {
+                                'attr': {
+                                    'id': 'dateStart',
+                                    'name': 'dateStart',
+                                    'class': 'form-control text-center rounded-4',
+                                    'placeholder': 'yyyy-mm-dd',
+                                },
+                                'type': 'text'
+                            }) }}
+                        </div>
+                        <div class="w-50 d-flex flex-column gap-1">
+                            <label for="dateEnd" class="mx-2 fw-bold text-center">Date de fin</label>
+                            {{ form_widget(form.date_end, {
+                                'attr': {
+                                    'id': 'dateEnd',
+                                    'name': 'dateEnd',
+                                    'class': 'form-control text-center rounded-4',
+                                    'placeholder': 'yyyy-mm-dd',
+                                },
+                                'type': 'text'
+                            }) }}
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column gap-2">
+                        {{ form_widget(form.save, {
+                            'attr':{
+                                'class': 'w-100 btn-yellow text-center rounded-4 addToCart disabledItem',
+                                'value': 'Ajouter votre réservation au panier'
+                            }
                         }) }}
                     </div>
-                    <div class="w-50 d-flex flex-column gap-1">
-                        <label for="dateEnd" class="mx-2 fw-bold text-center">Date de fin</label>
-                        {{ form_widget(form.date_end, {
-                            'attr': {
-                                'id': 'dateEnd',
-                                'name': 'dateEnd',
-                                'class': 'form-control text-center rounded-4',
-                                'placeholder': 'yyyy-mm-dd',
-                            },
-                            'type': 'text'
-                        }) }}
-                    </div>
-                </div>
-                <div class="d-flex flex-column gap-2">
-                    {{ form_widget(form.save, {
-                        'attr':{
-                            'class': 'w-100 btn-yellow text-center rounded-4 addToCart disabledItem',
-                            'value': 'Ajouter votre réservation au panier'
-                        }
-                    }) }}
-                </div>
 
-                {% if form.vars.errors|length > 0 %}
-                    <div class="form-errors alert alert-danger">
-                        {{ form_errors(form) }}
-                    </div>
-                {% endif %}
-                {{ form_end(form) }}
-            </div>
-        </section>
-
+                    {% if form.vars.errors|length > 0 %}
+                        <div class="form-errors alert alert-danger">
+                            {{ form_errors(form) }}
+                        </div>
+                    {% endif %}
+                    {{ form_end(form) }}
+                </div>
+            </section>
+        {% endif %}
 
         <section id="comments" class="w-50 mb-4 d-flex flex-column align-items-center gap-2">
             <h3 class="text-center">Avis et commentaires</h3>

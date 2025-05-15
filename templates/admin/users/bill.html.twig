@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Toutes les factures de {{ user.firstname }} {{ user.lastname }}{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/admin/datatable.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const deleteModal = document.getElementById('deleteModal');
+            deleteModal.addEventListener('show.bs.modal', event => {
+                const button = event.relatedTarget;
+                const postId = button.getAttribute('data-id');
+                const confirmBtn = deleteModal.querySelector('#confirmDeleteBtn');
+                confirmBtn.href = `/admin/posts/${postId}/delete`;
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.bootstrap5.css">
+    <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
+        <div class="d-flex w-75 justify-content-start gap-2">
+            <a href="{{ path('app_admin') }}" class="btn-yellow mb-4">Revenir à l'administration</a>
+            <a href="{{ path('app_users_show', {id:user.id}) }}" class="btn-lightGreen mb-4">Revenir à l'utilisateur</a>
+        </div>
+        <h1>Toutes les factures de {{ user.firstname }} {{ user.lastname }}</h1>
+
+        <div class="w-75 p-4 rounded-4 d-flex flex-column justify-content-center align-items-cente">
+            <table class="table table-hover w-75r" id="myTable">
+                <thead>
+                <tr>
+                    <th class="align-middle text-center">Id</th>
+                    <th class="align-middle text-center">Date</th>
+                    <th class="align-middle text-center">Total_price</th>
+                    <th class="align-middle text-center">Status</th>
+                    <th class="align-middle text-center">actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for bill in bills %}
+                    <tr {% if not bill.status %}class="table-warning"{% endif %}>
+                        <td class="align-middle text-center">{{ bill.id }}</td>
+                        <td class="align-middle text-center">{{ bill.date ? bill.date|date('d/m/Y') : '' }}</td>
+                        <td class="align-middle text-center">{{ bill.totalPrice|number_format(2, ',', '') }}€</td>
+                        <td class="align-middle text-center">{{ bill.status ? '✅️' : '❌' }}</td>
+                        <td class="align-middle text-center">
+                            <div class="d-flex gap-2 justify-content-center">
+                                <a href="{{ path('app_bills', {'id': bill.id}) }}" class="btn btn-dark" target="_blank" title="Voir la facture">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="#F7D844" d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1m0 5.25a.749.749 0 1 0 0-1.5a.749.749 0 0 0 0 1.498m.5 1.25a.5.5 0 0 0-1 0v3a.5.5 0 0 0 1 0z"/></svg>
+                                </a>
+                                <a href="{{ path('app_bills_change_active', {'id': bill.id}) }}" class="btn btn-dark" title="Désactiver la facture">
+                                    {% if bill.status %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#006633" fill-rule="evenodd" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10m-4.906-3.68L18.32 7.094A8 8 0 0 1 7.094 18.32M5.68 16.906A8 8 0 0 1 16.906 5.68z"/></svg>
+                                    {% else %}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#CE1104" fill-rule="evenodd" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10m-4.906-3.68L18.32 7.094A8 8 0 0 1 7.094 18.32M5.68 16.906A8 8 0 0 1 16.906 5.68z"/></svg>
+                                    {% endif %}
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

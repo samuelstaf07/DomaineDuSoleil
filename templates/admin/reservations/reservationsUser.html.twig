@@ -1,0 +1,154 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réservations de {{ user.firstname }} {{ user.lastname }}{% endblock %}
+
+{% block body %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.bootstrap5.css">
+    <div class="contentMargin d-flex flex-column align-items-center justify-content-center my-5">
+        <div class="d-flex w-75 justify-content-start gap-2">
+            <a href="{{ path('app_users_show', {id:user.id}) }}" class="btn-yellow mb-4">Revenir à l'utilisateur</a>
+            <a href="{{ path('app_rentals_index') }}" class="btn-lightGreen mb-4">Revenir à la liste</a>
+        </div>
+        <h2 class="my-4">Réservations de {{ user.firstname }} {{ user.lastname }}</h2>
+
+        {% if reservationsRentals|length > 0 %}
+            <div class="w-75 bg-darkGreen p-3 rounded-4 my-4">
+                <h3 class="text-center py-3">Réservations de logements</h3>
+                <table class="table table-hover w-75 my-5" id="myTable">
+                    <thead>
+                    <tr>
+                        <th class="align-middle text-center">Id</th>
+                        <th class="align-middle">Facture</th>
+                        <th class="align-middle text-center">Logements</th>
+                        <th class="align-middle text-center">Date début</th>
+                        <th class="align-middle text-center">Date fin</th>
+                        <th class="align-middle text-center">Status</th>
+                        <th class="align-middle text-center">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for reservation in reservationsRentals %}
+                        <tr {% if not reservation.statusReservation %}class="table-warning"{% endif %}>
+                            <td class="align-middle text-center">{{ reservation.id }}</td>
+                            <td class="align-middle text-center">
+                                <a href="{{ path('app_bills', {'id': reservation.bill.id}) }}" target="_blank">
+                                    Voir la facture
+                                </a>
+                            </td>
+                            <td class="align-middle">
+                                <a href="{{ path('app_rental', {id:reservation.rentals.id}) }}">{{ reservation.rentals.title|capitalize }}</a>
+                            </td>
+                            <td class="align-middle text-center">
+                                {{ reservation.dateStart|date('d/m/Y') }}
+                            </td>
+                            <td class="align-middle text-center">
+                                {{ reservation.dateEnd|date('d/m/Y') }}
+                            </td>
+                            <td class="align-middle text-center">
+                                {{ reservation.statusReservation ? '✅️' : '❌' }}
+                            </td>
+                            <td class="p-2 align-middle text-center">
+                                <div class="d-flex gap-2 justify-content-center align-items-center">
+                                    <a href="{{ path('app_reservations_rentals_show', {'id': reservation.id}) }}" class="btn btn-dark">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="#F7D844" d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1m0 5.25a.749.749 0 1 0 0-1.5a.749.749 0 0 0 0 1.498m.5 1.25a.5.5 0 0 0-1 0v3a.5.5 0 0 0 1 0z"/></svg>
+                                    </a>
+                                    <a href="{{ path('app_reservations_rentals_edit', {'id': reservation.id}) }}" class="btn btn-dark">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="#006633" fill-rule="evenodd" clip-rule="evenodd"><path d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352z"/><path d="M19.846 4.318a2.2 2.2 0 0 0-.437-.692a2 2 0 0 0-.654-.463a1.92 1.92 0 0 0-1.544 0a2 2 0 0 0-.654.463l-.546.578l2.852 3.02l.546-.579a2.1 2.1 0 0 0 .437-.692a2.24 2.24 0 0 0 0-1.635M17.45 8.721L14.597 5.7L9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.5.5 0 0 0 .255-.145l4.778-5.06Z"/></g></svg>
+                                    </a>
+                                    <a href="{{ path('app_reservations_change_active', {'id': reservation.id}) }}" class="btn btn-dark">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512"><path fill="#95C11F" d="m405.822 78.899l24.444 24.444L100.485 433.1L76.04 408.657zM168.32 255.677a87.704 87.704 0 0 1 117.196-82.575l43.402-43.402A236.4 236.4 0 0 0 256 118.452a239.7 239.7 0 0 0-84.454 15.616a271 271 0 0 0-38.861 18.59a293 293 0 0 0-34.816 23.821a312 312 0 0 0-29.423 26.507a336 336 0 0 0-22.681 25.355l-4.46 5.554l-3.93 5.267c-2.443 3.204-4.518 6.224-6.2 8.678s-2.974 4.541-3.85 5.855L26 255.758l1.325 2.063c.876 1.325 2.167 3.457 3.85 5.854c1.682 2.398 3.757 5.475 6.2 8.679l3.93 5.266l4.46 5.555a336 336 0 0 0 22.68 25.355a312 312 0 0 0 29.424 26.507q7.145 5.67 14.82 11.018l60.736-60.736a87.5 87.5 0 0 1-5.106-29.642zm316.367-2.086c-.876-1.337-2.166-3.515-3.85-5.889c-1.682-2.374-3.756-5.509-6.2-8.736c-2.443-3.457-5.255-6.995-8.39-10.867a340 340 0 0 0-22.68-25.459a312 312 0 0 0-29.423-26.564a306 306 0 0 0-17.587-12.954l-59.375 59.375a87.692 87.692 0 0 1-114.35 114.35l-43.31 43.31A240 240 0 0 0 256 392.913a236.8 236.8 0 0 0 84.454-15.258a269 269 0 0 0 38.861-18.544a290 290 0 0 0 34.816-23.822a312 312 0 0 0 29.423-26.564a340 340 0 0 0 22.681-25.458c3.146-3.884 5.947-7.457 8.39-10.868c2.443-3.227 4.518-6.247 6.2-8.736s2.974-4.61 3.85-5.89L486 255.69z"/></svg>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="alert alert-secondary my-3">Aucune réservations de logements trouvées</p>
+        {% endif %}
+
+        {% if reservationsEvents|length > 0 %}
+            <div class="w-75 bg-lightGreen p-3 rounded-4">
+                <h3 class="text-center py-3">Réservations d'événements</h3>
+                <table class="table table-hover w-75 my-5" id="myTable2">
+                    <thead>
+                    <tr>
+                        <th class="align-middle text-center">Id</th>
+                        <th class="align-middle">Facture</th>
+                        <th class="align-middle text-center">Événement</th>
+                        <th class="align-middle text-center">Date réservation</th>
+                        <th class="align-middle text-center">Date Événement</th>
+                        <th class="align-middle text-center">Nb places</th>
+                        <th class="align-middle text-center">Total</th>
+                        <th class="align-middle text-center">Active</th>
+                        <th class="align-middle text-center">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for reservation in reservationsEvents %}
+                        <tr {% if not reservation.isActive %}class="table-warning"{% endif %}>
+
+                            <td class="align-middle text-center">{{ reservation.id }}</td>
+                            <td class="align-middle text-center">
+                                <a href="{{ path('app_bills_show', {'id': reservation.bill.id}) }}">
+                                    {{ reservation.bill.id }}
+                                </a>
+                            </td>
+                            <td class="align-middle">
+                                <a href="{{ path('app_rental', {id:reservation.event.id}) }}">{{ reservation.event.title|capitalize }}</a>
+                            </td>
+                            <td class="align-middle text-center">
+                                {{ reservation.dateReservation|date('d/m/Y') }}
+                            </td>
+                            <td class="align-middle text-center">
+                                {{ reservation.event.date|date('d/m/Y') }}
+                            </td>
+                            <td class="align-middle text-center">
+                                {{ reservation.nbPlaces }}
+                            </td>
+                            <td class="align-middle text-center">
+                                {{ reservation.totalDeposit }}
+                            </td>
+                            <td class="align-middle text-center">
+                                {{ reservation.isActive ? '✅️' : '❌' }}
+                            </td>
+                            <td class="p-2 align-middle text-center">
+                                <div class="d-flex gap-2 justify-content-center align-items-center">
+                                    <a href="{{ path('app_reservations_rentals_show', {'id': reservation.id}) }}" class="btn btn-dark">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="#F7D844" d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1m0 5.25a.749.749 0 1 0 0-1.5a.749.749 0 0 0 0 1.498m.5 1.25a.5.5 0 0 0-1 0v3a.5.5 0 0 0 1 0z"/></svg>
+                                    </a>
+                                    <a href="{{ path('app_reservations_rentals_edit', {'id': reservation.id}) }}" class="btn btn-dark">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="#006633" fill-rule="evenodd" clip-rule="evenodd"><path d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352z"/><path d="M19.846 4.318a2.2 2.2 0 0 0-.437-.692a2 2 0 0 0-.654-.463a1.92 1.92 0 0 0-1.544 0a2 2 0 0 0-.654.463l-.546.578l2.852 3.02l.546-.579a2.1 2.1 0 0 0 .437-.692a2.24 2.24 0 0 0 0-1.635M17.45 8.721L14.597 5.7L9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.5.5 0 0 0 .255-.145l4.778-5.06Z"/></g></svg>
+                                    </a>
+                                    <a href="{{ path('app_reservations_change_active', {'id': reservation.id}) }}" class="btn btn-dark">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512"><path fill="#95C11F" d="m405.822 78.899l24.444 24.444L100.485 433.1L76.04 408.657zM168.32 255.677a87.704 87.704 0 0 1 117.196-82.575l43.402-43.402A236.4 236.4 0 0 0 256 118.452a239.7 239.7 0 0 0-84.454 15.616a271 271 0 0 0-38.861 18.59a293 293 0 0 0-34.816 23.821a312 312 0 0 0-29.423 26.507a336 336 0 0 0-22.681 25.355l-4.46 5.554l-3.93 5.267c-2.443 3.204-4.518 6.224-6.2 8.678s-2.974 4.541-3.85 5.855L26 255.758l1.325 2.063c.876 1.325 2.167 3.457 3.85 5.854c1.682 2.398 3.757 5.475 6.2 8.679l3.93 5.266l4.46 5.555a336 336 0 0 0 22.68 25.355a312 312 0 0 0 29.424 26.507q7.145 5.67 14.82 11.018l60.736-60.736a87.5 87.5 0 0 1-5.106-29.642zm316.367-2.086c-.876-1.337-2.166-3.515-3.85-5.889c-1.682-2.374-3.756-5.509-6.2-8.736c-2.443-3.457-5.255-6.995-8.39-10.867a340 340 0 0 0-22.68-25.459a312 312 0 0 0-29.423-26.564a306 306 0 0 0-17.587-12.954l-59.375 59.375a87.692 87.692 0 0 1-114.35 114.35l-43.31 43.31A240 240 0 0 0 256 392.913a236.8 236.8 0 0 0 84.454-15.258a269 269 0 0 0 38.861-18.544a290 290 0 0 0 34.816-23.822a312 312 0 0 0 29.423-26.564a340 340 0 0 0 22.681-25.458c3.146-3.884 5.947-7.457 8.39-10.868c2.443-3.227 4.518-6.247 6.2-8.736s2.974-4.61 3.85-5.89L486 255.69z"/></svg>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="alert alert-secondary my-3">Aucune réservations d'événements trouvées</p>
+        {% endif %}
+
+        <div class="w-75 my-4">
+            <div id="calendar" data-reservations='{{ reservationsMin|json_encode() }}'></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('libs/fullcalendar/dist/index.global.min.js') }}"></script>
+    <script src="{{ asset('js/admin/reservationsRentals.js') }}"></script>
+
+    {% if reservationsRentals|length > 0 %}
+        <script src="{{ asset('js/admin/datatable.js') }}"></script>
+        <script src="{{ asset('js/admin/datatable2.js') }}"></script>
+    {% endif %}
+{% endblock %}

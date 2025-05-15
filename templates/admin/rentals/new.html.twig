@@ -1,13 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Rentals{% endblock %}
+{% block title %}Nouveau logement{% endblock %}
 
 {% block body %}
-    <div class="contentMargin">
-        <h1>Create new Rentals</h1>
+    <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5 gap-3">
+        <div class="d-flex w-75 justify-content-start">
+            <a href="{{ path('app_rentals_index') }}" class="btn-yellow">Retour à la liste</a>
+        </div>
+        <div class="w-75 bg-lightGreen d-flex flex-column p-5 rounded-4">
+            <h1>Ajouter un nouveau logement</h1>
 
-        {{ include('admin/rentals/_form.html.twig') }}
+            {{ include('admin/rentals/_form.html.twig') }}
+        </div>
 
-        <a href="{{ path('app_rentals_index') }}">back to list</a>
     </div>
 {% endblock %}

@@ -2,58 +2,94 @@
 
 {% block title %}Rentals index{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/admin/datatable.js') }}"></script>
+{% endblock %}
+
 {% block body %}
-    <div class="contentMargin">
-        <h1>Rentals index</h1>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.bootstrap5.css">
 
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Nb_double_bed</th>
-                <th>Nb_simple_bed</th>
-                <th>Has_shower</th>
-                <th>Has_toilet</th>
-                <th>Has_kitchen</th>
-                <th>Has_fridge</th>
-                <th>Has_heating</th>
-                <th>Pets_accepted</th>
-                <th>Price_per_day</th>
-                <th>Is_on_promotion</th>
-                <th>Is_active</th>
-                <th>actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for rental in rentals %}
-                <tr>
-                    <td>{{ rental.id }}</td>
-                    <td>{{ rental.title }}</td>
-                    <td>{{ rental.nbDoubleBed }}</td>
-                    <td>{{ rental.nbSimpleBed }}</td>
-                    <td>{{ rental.hasShower ? 'Yes' : 'No' }}</td>
-                    <td>{{ rental.hasToilet ? 'Yes' : 'No' }}</td>
-                    <td>{{ rental.hasKitchen ? 'Yes' : 'No' }}</td>
-                    <td>{{ rental.hasFridge ? 'Yes' : 'No' }}</td>
-                    <td>{{ rental.hasHeating ? 'Yes' : 'No' }}</td>
-                    <td>{{ rental.petsAccepted ? 'Yes' : 'No' }}</td>
-                    <td>{{ rental.pricePerDay }}</td>
-                    <td>{{ rental.isOnPromotion ? 'Yes' : 'No' }}</td>
-                    <td>{{ rental.isActive ? 'Yes' : 'No' }}</td>
-                    <td>
-                        <a href="{{ path('app_rentals_show', {'id': rental.id}) }}">show</a>
-                        <a href="{{ path('app_rentals_edit', {'id': rental.id}) }}">edit</a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="14">no records found</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
+        <div class="d-flex w-75 justify-content-start gap-2">
+            <a href="{{ path('app_admin') }}" class="btn-yellow mb-4">Revenir à l'administration</a>
+        </div>
+        <h1>Tous les logements</h1>
 
-        <a href="{{ path('app_rentals_new') }}">Create new</a>
+
+        {% if rentals|length > 0 %}
+            <div class="w-75">
+                <table class="table table-hover w-75" id="myTable">
+                    <thead>
+                    <tr>
+                        <th class="align-middle text-center">Id</th>
+                        <th class="align-middle text-center">Image</th>
+                        <th class="align-middle">Titre</th>
+                        <th class="align-middle text-center">Nb l.double</th>
+                        <th class="align-middle text-center">Nb l.simple</th>
+                        <th class="align-middle text-center">Douche</th>
+                        <th class="align-middle text-center">Toilettes</th>
+                        <th class="align-middle text-center">Cuisine</th>
+                        <th class="align-middle text-center">Frigo</th>
+                        <th class="align-middle text-center">Chauffage</th>
+                        <th class="align-middle text-center">Animaux</th>
+                        <th class="align-middle text-center">€/jour</th>
+                        <th class="align-middle text-center">En promotion</th>
+                        <th class="align-middle text-center">Actif</th>
+                        <th class="align-middle text-center">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for rental in rentals %}
+                        <tr {% if not rental.isActive %}class="table-warning"{% endif %}>
+                            <td class="align-middle text-center">{{ rental.id }}</td>
+                            <td class="align-middle text-center">
+                                {% if rental.getHomePageImage() %}
+                                    <img src="{{ asset('uploads/' ~ rental.getHomePageImage().getSrc()) }}" alt="Image de la location" class="iconImage rounded-3">
+                                {% endif %}
+                            </td>
+                            <td class="align-middle">
+                                <a href="{{ path('app_rental', {'id': rental.id}) }}">
+                                    {{ rental.title }}
+                                </a>
+                            </td>
+                            <td class="align-middle text-center">{{ rental.nbDoubleBed }}</td>
+                            <td class="align-middle text-center">{{ rental.nbSimpleBed }}</td>
+                            <td class="align-middle text-center">{{ rental.hasShower ? '✅️' : '❌' }}</td>
+                            <td class="align-middle text-center">{{ rental.hasToilet ? '✅️' : '❌' }}</td>
+                            <td class="align-middle text-center">{{ rental.hasKitchen ? '✅️' : '❌' }}</td>
+                            <td class="align-middle text-center">{{ rental.hasFridge ? '✅️' : '❌' }}</td>
+                            <td class="align-middle text-center">{{ rental.hasHeating ? '✅️' : '❌' }}</td>
+                            <td class="align-middle text-center">{{ rental.petsAccepted ? '✅️' : '❌' }}</td>
+                            <td class="align-middle text-center">{{ rental.pricePerDay|number_format(2, ',', '') }}€</td>
+                            <td class="align-middle text-center">{{ rental.isOnPromotion ? '✅️' : '❌' }}</td>
+                            <td class="align-middle text-center">{{ rental.isActive ? '✅️' : '❌' }}</td>
+                            <td class="align-middle text-center">
+                                <div class="d-flex gap-2">
+                                    <a href="{{ path('app_rentals_reservations', {'id': rental.id}) }}" class="btn btn-dark">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#95C11F" fill-rule="evenodd" d="M5 4a3 3 0 0 0-3 3v3a1 1 0 0 0 1 1a1 1 0 0 1 0 2a1 1 0 0 0-1 1v3a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-3a1 1 0 0 0-1-1a1 1 0 0 1 0-2a1 1 0 0 0 1-1V7a3 3 0 0 0-3-3zM4 7a1 1 0 0 1 1-1h4v12H5a1 1 0 0 1-1-1v-2.171a3 3 0 0 0 1.121-.708l-.692-.692l.692.692A3 3 0 0 0 4 9.171z" clip-rule="evenodd"/></svg>
+                                    </a>
+                                    <a href="{{ path('app_rentals_edit', {'id': rental.id}) }}" class="btn btn-dark">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="#006633" fill-rule="evenodd" clip-rule="evenodd"><path d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352z"/><path d="M19.846 4.318a2.2 2.2 0 0 0-.437-.692a2 2 0 0 0-.654-.463a1.92 1.92 0 0 0-1.544 0a2 2 0 0 0-.654.463l-.546.578l2.852 3.02l.546-.579a2.1 2.1 0 0 0 .437-.692a2.24 2.24 0 0 0 0-1.635M17.45 8.721L14.597 5.7L9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.5.5 0 0 0 .255-.145l4.778-5.06Z"/></g></svg>
+                                    </a>
+                                    <a href="{{ path('app_rentals_comments', {'id': rental.id}) }}" class="btn btn-dark">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48"><defs><mask id="ipSComments0"><g fill="none" stroke-linecap="round" stroke-width="4"><path stroke="#fff" stroke-linejoin="round" d="M33 38H22v-8h14v-8h8v16h-5l-3 3z"/><path fill="#fff" stroke="#fff" stroke-linejoin="round" d="M4 6h32v24H17l-4 4l-4-4H4z"/><path stroke="#000" d="M12 22h6m-6-8h12"/></g></mask></defs><path fill="#006633" d="M0 0h48v48H0z" mask="url(#ipSComments0)"/></svg>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="14">Aucune location trouvées</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="alert alert-secondary">Aucun logement</p>
+        {% endif %}
+
+        <a href="{{ path('app_rentals_new') }}" class="btn-yellow my-4">Ajouter une location</a>
     </div>
 {% endblock %}

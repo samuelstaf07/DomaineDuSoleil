@@ -6,6 +6,7 @@ use App\Entity\Images;
 use App\Form\ChangeMailType;
 use App\Form\ImageUserType;
 use App\Form\UserModifyFormType;
+use App\Repository\BillsRepository;
 use App\Repository\ReservationsEventsRepository;
 use App\Repository\ReservationsRentalsRepository;
 use App\Repository\UsersRepository;
@@ -15,6 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
+use Imagine\Image\ManipulatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -54,7 +56,8 @@ final class AccountController extends AbstractController
         VerifyEmailHelperInterface $verifyEmailHelper,
         SluggerInterface $slugger,
         UserPasswordHasherInterface $passwordHasher,
-        UsersRepository $usersRepository
+        UsersRepository $usersRepository,
+        BillsRepository $billsRepository,
     ): Response
     {
         $views = [
@@ -155,7 +158,7 @@ final class AccountController extends AbstractController
                         $imagine->open($imagePath)
                             ->thumbnail(
                                 new Box(300, 300),
-                                ImageInterface::THUMBNAIL_OUTBOUND
+                                ManipulatorInterface::THUMBNAIL_OUTBOUND
                             )
                             ->save($imagePath);
 
@@ -230,7 +233,7 @@ final class AccountController extends AbstractController
         }
 
         return $this->render($views[$section],[
-            'bills' => $this->getUser()->getBills(),
+            'bills' => $billsRepository->findActiveBillsByUser($this->getUser()),
         ]);
     }
 }

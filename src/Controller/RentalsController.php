@@ -36,104 +36,109 @@ final class RentalsController extends AbstractController
         $rental = $rentalsRepository->find($id);
         $reservedDates = [];
 
-        if ($rental->isActive()) {
-
-            foreach ($rental->getUpcomingReservations() as $reservation) {
-                $reservedDates[] = [
-                    'title' => 'Réservé',
-                    'start' => $reservation->getDateStart()->format('Y-m-d'),
-                    'end' => $reservation->getDateEnd()->format('Y-m-d'),
-                ];
-            }
-
-            $cart = $session->get('myCart', []);
-            foreach ($cart as $item) {
-                if ($item['type'] === 'rental' && $rentalsRepository->find($item['rentalId'])->getId() === $rental->getId()) {
-                    $reservedDates[] = [
-                        'title' => 'Réservation utilisateur',
-                        'start' => $item['dateStart']->format('Y-m-d'),
-                        'end' => $item['dateEnd']->format('Y-m-d'),
-                    ];
-                }
-            }
-
-            $reservation = new ReservationsRentals();
-            $reservation->setRentals($rental);
-
-            $form = $this->createForm(ReservationsRentalsType::class, $reservation);
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $dateStart = $reservation->getDateStart();
-                $dateEnd = $reservation->getDateEnd();
-
-                if ($dateStart > $dateEnd) {
-                    $this->addFlash('danger', 'La date de fin ne peut pas être antérieure à la date de début.');
-                    return $this->render('rental/index.html.twig', [
-                        'rental' => $rental,
-                        'reservedDates' => $reservedDates,
-                        'comments' => $commentsRepository->findActiveCommentsByRental($rental->getId()),
-                        'form' => $form->createView(),
-                    ]);
-                }
-
-                $userDates = [];
-                $allDatesUser = new \DatePeriod($dateStart, new \DateInterval('P1D'), (clone $dateEnd)->modify('+1 day'));
-                foreach ($allDatesUser as $date) {
-                    $userDates[] = $date->format('d-m-Y');
-                }
-
-                $reservedAllDates = [];
-                foreach ($reservedDates as $date) {
-                    $start = new \DateTimeImmutable($date['start']);
-                    $end = new \DateTimeImmutable($date['end']);
-                    $rangePeriod = new \DatePeriod($start, new \DateInterval('P1D'), (clone $end)->modify('+1 day'));
-                    foreach ($rangePeriod as $dt) {
-                        $reservedAllDates[] = $dt->format('d-m-Y');
-                    }
-                }
-
-                $check = false;
-                foreach ($userDates as $date) {
-                    if (in_array($date, $reservedAllDates)) {
-                        $check = true;
-                        break;
-                    }
-                }
-
-                if ($check) {
-                    $this->addFlash('danger', 'Les dates sélectionnées sont déjà réservées.');
-                    return $this->render('rental/index.html.twig', [
-                        'rental' => $rental,
-                        'reservedDates' => $reservedDates,
-                        'comments' => $commentsRepository->findActiveCommentsByRental($rental->getId()),
-                        'form' => $form->createView(),
-                    ]);
-                }
-
-                $session->set('newReservationRental', [
-                    'rentalId' => $rental->getId(),
-                    'rentalTitle' => $rental->getTitle(),
-                    'rentalPricePerDay' => $rental->getPricePerDay(),
-                    'rentalIsOnPromotion' => $rental->isOnPromotion(),
-                    'type' => 'rental',
-                    'image' => $rental->getHomePageImage(),
-                    'dateStart' => $dateStart,
-                    'dateEnd' => $dateEnd,
-                ]);
-
-                return $this->redirectToRoute('app_cart');
-            }
-
-            return $this->render('rental/index.html.twig', [
-                'rental' => $rental,
-                'reservedDates' => $reservedDates,
-                'comments' => $commentsRepository->findActiveCommentsByRental($rental->getId()),
-                'form' => $form->createView(),
-            ]);
+        foreach ($rental->getUpcomingReservations() as $reservation) {
+            $reservedDates[] = [
+                'title' => 'Réservé',
+                'start' => $reservation->getDateStart()->format('Y-m-d'),
+                'end' => $reservation->getDateEnd()->format('Y-m-d'),
+            ];
         }
 
-        return $this->redirectToRoute('app_home');
+        $cart = $session->get('myCart', []);
+        foreach ($cart as $item) {
+            if ($item['type'] === 'rental' && $rentalsRepository->find($item['rentalId'])->getId() === $rental->getId()) {
+                $reservedDates[] = [
+                    'title' => 'Réservation utilisateur',
+                    'start' => $item['dateStart']->format('Y-m-d'),
+                    'end' => $item['dateEnd']->format('Y-m-d'),
+                ];
+            }
+        }
+
+        $reservation = new ReservationsRentals();
+        $reservation->setRentals($rental);
+
+        $form = $this->createForm(ReservationsRentalsType::class, $reservation);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dateStart = $reservation->getDateStart();
+            $dateEnd = $reservation->getDateEnd();
+
+            if(!$rental->isActive()){
+                $this->addFlash('danger', 'Vous ne pouvez pas réserver un logement inactif.');
+                return $this->render('rental/index.html.twig', [
+                    'rental' => $rental,
+                    'reservedDates' => $reservedDates,
+                    'comments' => $commentsRepository->findActiveCommentsByRental($rental->getId()),
+                    'form' => $form->createView(),
+                ]);
+            }
+
+            if ($dateStart > $dateEnd) {
+                $this->addFlash('danger', 'La date de fin ne peut pas être antérieure à la date de début.');
+                return $this->render('rental/index.html.twig', [
+                    'rental' => $rental,
+                    'reservedDates' => $reservedDates,
+                    'comments' => $commentsRepository->findActiveCommentsByRental($rental->getId()),
+                    'form' => $form->createView(),
+                ]);
+            }
+
+            $userDates = [];
+            $allDatesUser = new \DatePeriod($dateStart, new \DateInterval('P1D'), (clone $dateEnd)->modify('+1 day'));
+            foreach ($allDatesUser as $date) {
+                $userDates[] = $date->format('d-m-Y');
+            }
+
+            $reservedAllDates = [];
+            foreach ($reservedDates as $date) {
+                $start = new \DateTimeImmutable($date['start']);
+                $end = new \DateTimeImmutable($date['end']);
+                $rangePeriod = new \DatePeriod($start, new \DateInterval('P1D'), (clone $end)->modify('+1 day'));
+                foreach ($rangePeriod as $dt) {
+                    $reservedAllDates[] = $dt->format('d-m-Y');
+                }
+            }
+
+            $check = false;
+            foreach ($userDates as $date) {
+                if (in_array($date, $reservedAllDates)) {
+                    $check = true;
+                    break;
+                }
+            }
+
+            if ($check) {
+                $this->addFlash('danger', 'Les dates sélectionnées sont déjà réservées.');
+                return $this->render('rental/index.html.twig', [
+                    'rental' => $rental,
+                    'reservedDates' => $reservedDates,
+                    'comments' => $commentsRepository->findActiveCommentsByRental($rental->getId()),
+                    'form' => $form->createView(),
+                ]);
+            }
+
+            $session->set('newReservationRental', [
+                'rentalId' => $rental->getId(),
+                'rentalTitle' => $rental->getTitle(),
+                'rentalPricePerDay' => $rental->getPricePerDay(),
+                'rentalIsOnPromotion' => $rental->isOnPromotion(),
+                'type' => 'rental',
+                'image' => $rental->getHomePageImage(),
+                'dateStart' => $dateStart,
+                'dateEnd' => $dateEnd,
+            ]);
+
+            return $this->redirectToRoute('app_cart');
+        }
+
+        return $this->render('rental/index.html.twig', [
+            'rental' => $rental,
+            'reservedDates' => $reservedDates,
+            'comments' => $commentsRepository->findActiveCommentsByRental($rental->getId()),
+            'form' => $form->createView(),
+        ]);
     }
 
 

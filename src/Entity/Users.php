@@ -69,12 +69,35 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Bills::class, mappedBy: 'user')]
     private Collection $bills;
 
+    /**
+     * @var Collection<int, ReservationsEvents>
+     */
+    #[ORM\OneToMany(targetEntity: ReservationsEvents::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $reservationsEvents;
+
+    /**
+     * @var Collection<int, ReservationsRentals>
+     */
+    #[ORM\OneToMany(targetEntity: ReservationsRentals::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $reservationsRentals;
+
+
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $birth_date = null;
+
+    /**
+     * @var Collection<int, Comments>
+     */
+    #[ORM\OneToMany(targetEntity: Comments::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $comments;
+
 
     public function __construct()
     {
         $this->bills = new ArrayCollection();
+        $this->reservationsEvents = new ArrayCollection();
+        $this->reservationsRentals = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -301,4 +324,92 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, ReservationsEvents>
+     */
+    public function getReservationsEvents(): Collection
+    {
+        return $this->reservationsEvents;
+    }
+
+    public function addReservationsEvent(ReservationsEvents $reservationEvent): static
+    {
+        if (!$this->reservationsEvents->contains($reservationEvent)) {
+            $this->reservationsEvents->add($reservationEvent);
+            $reservationEvent->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservationsEvent(ReservationsEvents $reservationEvent): static
+    {
+        if ($this->reservationsEvents->removeElement($reservationEvent)) {
+            if ($reservationEvent->getUser() === $this) {
+                $reservationEvent->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ReservationsRentals>
+     */
+    public function getReservationsRentals(): Collection
+    {
+        return $this->reservationsRentals;
+    }
+
+    public function addReservationsRental(ReservationsRentals $reservationRental): static
+    {
+        if (!$this->reservationsRentals->contains($reservationRental)) {
+            $this->reservationsRentals->add($reservationRental);
+            $reservationRental->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservationsRental(ReservationsRentals $reservationRental): static
+    {
+        if ($this->reservationsRentals->removeElement($reservationRental)) {
+            if ($reservationRental->getUser() === $this) {
+                $reservationRental->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comments>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comments $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comments $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

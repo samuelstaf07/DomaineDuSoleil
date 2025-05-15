@@ -154,4 +154,13 @@ class Posts
 
         return null;
     }
+
+    public function setHomeImage(Images $newImage): void
+    {
+        if($this->getHomePageImage()){
+            $this->getHomePageImage()->setSrc($newImage->getSrc());
+            $this->getHomePageImage()->setAlt($newImage->getAlt());
+            $this->getHomePageImage()->setSrc($newImage->getSrc());
+        }
+    }
 }

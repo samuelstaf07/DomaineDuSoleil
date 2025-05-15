@@ -1,57 +1,95 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Users index{% endblock %}
+{% block title %}Tous les utilisateurs{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/admin/datatable.js') }}"></script>
+{% endblock %}
 
 {% block body %}
-    <div class="contentMargin">
-        <h1>Users index</h1>
 
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Email</th>
-                <th>Roles</th>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>Nb_points</th>
-                <th>Account_number</th>
-                <th>Created_at</th>
-                <th>Updated_at</th>
-                <th>Last_log_at</th>
-                <th>Is_active</th>
-                <th>Is_email_authentificated</th>
-                <th>actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for user in users %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                    <td>{{ user.firstname }}</td>
-                    <td>{{ user.lastname }}</td>
-                    <td>{{ user.nbPoints }}</td>
-                    <td>{{ user.accountNumber }}</td>
-                    <td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                    <td>{{ user.updatedAt ? user.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                    <td>{{ user.lastLogAt ? user.lastLogAt|date('Y-m-d H:i:s') : '' }}</td>
-                    <td>{{ user.isActive ? 'Yes' : 'No' }}</td>
-                    <td>{{ user.isEmailAuthentificated ? 'Yes' : 'No' }}</td>
-                    <td>
-                        <a href="{{ path('app_users_show', {'id': user.id}) }}">show</a>
-                        <a href="{{ path('app_users_edit', {'id': user.id}) }}">edit</a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="14">no records found</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.bootstrap5.css">
 
-        <a href="{{ path('app_users_new') }}">Create new</a>
+    <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
+        <div class="d-flex w-75 justify-content-start gap-2">
+            <a href="{{ path('app_admin') }}" class="btn-yellow mb-4">Revenir à l'administration</a>
+        </div>
+        <h1>Tous les utilisateurs</h1>
+
+        {% if users|length > 0 %}
+            <div class="w-75">
+                <table class="table table-hover w-75" id="myTable">
+                    <thead>
+                    <tr>
+                        <th class="align-middle text-center">Id</th>
+                        <th class="align-middle text-center">Pdp</th>
+                        <th class="align-middle">Email</th>
+                        <th class="align-middle text-center">Roles</th>
+                        <th class="align-middle text-center">Prénom</th>
+                        <th class="align-middle text-center">Nom</th>
+                        <th class="align-middle text-center">Nombre de points</th>
+                        <th class="align-middle text-center">Créé le</th>
+                        <th class="align-middle text-center">Dernière modification</th>
+                        <th class="align-middle text-center">Dernière connexion</th>
+                        <th class="align-middle text-center">Active</th>
+                        <th class="align-middle text-center">Email Authentifié</th>
+                        <th class="align-middle text-center">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr {% if not user.isActive %}class="table-warning"{% endif %}>
+                            <td class="align-middle text-center">{{ user.id }}</td>
+                            <td class="align-middle text-center">
+                                {% if user.image.src == "null" %}
+                                    <div class="bg-black rounded-4">
+                                        <svg class="rounded-circle iconImage" xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 24 24"><path fill="#F8F9FA" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"/></svg>
+                                    </div>
+                                {% else %}
+                                    <img class="rounded-4 iconImage" src="{{ asset('uploads/' ~ user.image.src) }}" alt="{{ user.image.src }}" style="object-fit: cover;">
+                                {% endif %}
+                            </td>
+                            <td class="align-middle">{{ user.email }}</td>
+                            <td class="align-middle text-center">
+                                {% if user.roles|last == "ROLE_USER" %}
+                                    <span class="bg-lightGreen p-1 rounded-2">User</span>
+                                {% elseif user.roles|last == "ROLE_ADMIN" %}
+                                    <span class="bg-Yellow p-1 rounded-2">Admin</span>
+                                {% endif %}
+                            </td>
+                            <td class="align-middle text-center">{{ user.firstname }}</td>
+                            <td class="align-middle text-center">{{ user.lastname }}</td>
+                            <td class="align-middle text-center">{{ user.nbPoints }}pts</td>
+                            <td class="align-middle text-center">{{ user.createdAt ? user.createdAt|date('d/m/Y') }}</td>
+                            <td class="align-middle text-center">{{ user.updatedAt ? user.updatedAt|date('d/m/Y') }}</td>
+                            <td class="align-middle text-center">{{ user.lastLogAt ? user.lastLogAt|date('d/m/Y') }}</td>
+                            <td class="align-middle text-center">{{ user.isActive ? '✅️' : '❌' }}</td>
+                            <td class="align-middle text-center">{{ user.isEmailAuthentificated ? '✅️' : '❌' }}</td>
+                            <td class="p-2 align-middle text-center">
+                                <div class="d-flex gap-2">
+                                    <a href="{{ path('app_users_reservations', {'id': user.id}) }}" class="btn btn-dark">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#95C11F" fill-rule="evenodd" d="M5 4a3 3 0 0 0-3 3v3a1 1 0 0 0 1 1a1 1 0 0 1 0 2a1 1 0 0 0-1 1v3a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-3a1 1 0 0 0-1-1a1 1 0 0 1 0-2a1 1 0 0 0 1-1V7a3 3 0 0 0-3-3zM4 7a1 1 0 0 1 1-1h4v12H5a1 1 0 0 1-1-1v-2.171a3 3 0 0 0 1.121-.708l-.692-.692l.692.692A3 3 0 0 0 4 9.171z" clip-rule="evenodd"/></svg>
+                                    </a>
+                                    <a href="{{ path('app_users_show', {'id': user.id}) }}" class="btn btn-dark">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="#F7D844" d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1m0 5.25a.749.749 0 1 0 0-1.5a.749.749 0 0 0 0 1.498m.5 1.25a.5.5 0 0 0-1 0v3a.5.5 0 0 0 1 0z"/></svg>
+                                    </a>
+                                    <a href="{{ path('app_users_comments', {'id': user.id}) }}" class="btn btn-dark">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48"><defs><mask id="ipSComments0"><g fill="none" stroke-linecap="round" stroke-width="4"><path stroke="#fff" stroke-linejoin="round" d="M33 38H22v-8h14v-8h8v16h-5l-3 3z"/><path fill="#fff" stroke="#fff" stroke-linejoin="round" d="M4 6h32v24H17l-4 4l-4-4H4z"/><path stroke="#000" d="M12 22h6m-6-8h12"/></g></mask></defs><path fill="#006633" d="M0 0h48v48H0z" mask="url(#ipSComments0)"/></svg>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="14">Aucun utilisateurs trouvés</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="alert alert-secondary">Aucun utilisateur</p>
+        {% endif %}
     </div>
 {% endblock %}

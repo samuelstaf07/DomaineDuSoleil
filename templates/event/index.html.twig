@@ -15,15 +15,17 @@
 
         <header class="w-75 d-flex flex-column gap-3 align-items-center">
             <div class="d-flex gap-3">
-                <a class="col-md-6" href="{{ asset('styles/img/' ~ event.getHomePageImage().getSrc()) }}" title="{{ event.getHomePageImage().getAlt() }}">
-                    <img class="img-fluid rounded-4 w-100 h-100" src="{{ asset('styles/img/' ~ event.getHomePageImage().getSrc()) }}" alt="{{ event.getHomePageImage().getAlt() }}">
-                </a>
-                <div class="col-md-6">
+                {% if event.getHomePageImage() %}
+                    <a class="col-md-6" href="{{ asset('uploads/' ~ event.getHomePageImage().getSrc()) }}" title="{{ event.getHomePageImage().getAlt() }}">
+                        <img class="img-fluid rounded-4 w-100 h-100" src="{{ asset('uploads/' ~ event.getHomePageImage().getSrc()) }}" alt="{{ event.getHomePageImage().getAlt() }}">
+                    </a>
+                {% endif %}
+                <div {% if event.getHomePageImage() %}class="col-md-6"{% endif %}>
                     <p class="bg-lightGreen rounded-4 p-2">{{ event.content|capitalize }}</p>
 
                     {% if not event.isPast() %}
                         {% if event.getRemainingPlaces() <= 0 %}
-                            <div class="bg-LightGrey rounded-4 p-2 d-flex flex-column justify-content-between p-3">
+                            <div class="bg-black rounded-4 p-2 d-flex flex-column justify-content-between p-3">
                                 <div class="d-flex justify-content-between">
                                     <h5>{{ event.nbPlaces }} places</h5>
                                     <h4><span class="color-lightGreen">{{ event.price|number_format(2, ',', '') }}€</span>/personne</h4>
@@ -31,7 +33,7 @@
                                 <p class="alert alert-danger text-center fw-bold">Complet</p>
                             </div>
                         {% else %}
-                            {{ form_start(form, {'attr': {'class': 'bg-LightGrey rounded-4 p-2 d-flex justify-content-between p-3', 'data-turbo': 'false'}}) }}
+                            {{ form_start(form, {'attr': {'class': 'bg-darkGrey rounded-4 p-2 d-flex justify-content-between p-3', 'data-turbo': 'false'}}) }}
                             <div class="w-50">
                                 <h5>{{ event.nbPlaces }} places <span class="color-yellow">({{ event.getRemainingPlaces() }} places restantes)</span></h5>
 
@@ -86,8 +88,8 @@
                 <div class="d-flex popup-gallery w-75 justify-content-center gap-3">
                     {% for image in images %}
                         {% if not image.isHomePage %}
-                            <a href="{{ asset('styles/img/' ~ image.getSrc()) }}" title="{{ image.getAlt() }}">
-                                <img src="{{ asset('styles/img/' ~ image.getSrc()) }}" alt="{{ image.getAlt() }}" class="img-fluid rounded-4 smallImage">
+                            <a href="{{ asset('uploads/' ~ image.getSrc()) }}" title="{{ image.getAlt() }}">
+                                <img src="{{ asset('uploads/' ~ image.getSrc()) }}" alt="{{ image.getAlt() }}" class="img-fluid rounded-4 smallImage">
                             </a>
                         {% endif %}
                     {% endfor %}

@@ -23,7 +23,7 @@ class Bills
     private ?float $total_price = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
-    private ?int $status = null;
+    private ?bool $status = null;
 
     #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: 'bills')]
     #[ORM\JoinColumn(nullable: false)]
@@ -97,12 +97,12 @@ class Bills
         return $this;
     }
 
-    public function getStatus(): ?int
+    public function getStatus(): ?bool
     {
         return $this->status;
     }
 
-    public function setStatus(int $status): static
+    public function setStatus(bool $status): static
     {
         $this->status = $status;
 

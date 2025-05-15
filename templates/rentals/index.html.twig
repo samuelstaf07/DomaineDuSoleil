@@ -112,7 +112,7 @@
                      data-isonpromotion="{{ item.isOnPromotion ? 'true' : 'false' }}"
                      data-averageRate="{{ averageData.averageRate }}">
                 <div class="rentalDiscount rounded-4 bg-white">
-                        <div class="imageTop rounded-top-4">
+                        <div class="imageTop rounded-top-4" style="background: url({{ asset('uploads/' ~ item.getHomePageImage().src) }}); background-size: cover; background-position: center; background-repeat: no-repeat;">
                             <div class="rate d-flex gap-2 align-items-center">
                                 {{ averageData.averageRate }}/5
                                 ({{ averageData.commentCount }})
