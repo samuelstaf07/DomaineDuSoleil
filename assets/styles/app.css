@@ -64,6 +64,10 @@ nav a h2{
     font-size: 67.8px;
 }
 
+.imageEvents{
+    height: 250px;
+}
+
 .contentImage p{
     font-size: 28px;
     font-family: "DM Sans";
@@ -106,7 +110,7 @@ h2{
     position: absolute;
     bottom: 0;
     right: 0;
-    background: var(--myLightGrey);
+    background: var(--myBlack);
     color: white;
     padding: 5px 10px;
     border-top-left-radius: 5px;

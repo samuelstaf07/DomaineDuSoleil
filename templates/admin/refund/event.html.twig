@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Remboursement{% endblock %}
+
+{% block body %}
+    <div class="contentMargin d-flex flex-column justify-content-center align-items-center">
+        <div class="d-flex w-75 justify-content-start gap-2">
+            <a href="{{ path('app_reservations_events_index') }}" class="btn-yellow mb-4">Revenir à la liste des réservations</a>
+        </div>
+        <h3 class="text-center">Remboursement de {{ event.title }}</h3>
+        <p class="text-center h5">Pour <span class="color-darkGreen">{{ user.firstname }} {{ user.lastname }}</span></p>
+        <p class="text-center">Le prix total de la réservation est de {{ reservation.totalDeposit|number_format(2, ',', '') }}€</p>
+        {% set now = "now"|date("Y-m-d") %}
+        {% set event_date = reservation.event.date|date("Y-m-d") %}
+
+        {% set days_diff = date(event_date).diff(date(now)).days %}
+
+        <div class="text-center alert alert-{% if date(event_date) >= date(now) and days_diff >= 3 %}info{% else %}warning{% endif %}">
+            <p>L'événement est dans {{ days_diff }} jour(s) !</p>
+            {% if date(event_date) >= date(now) and days_diff >= 3 %}
+                <p>Il est recommandé de rembourser entierement ({{ reservation.totalDeposit|number_format(2, ',', '') }}€) l'utilisateur.</p>
+            {% else %}
+                <p>Il est recommandé de ne pas rembourser l'utilisateur</p>
+            {% endif %}
+            {% if reservation.totalDepositReturned > 0 %}
+                <p>Vous avez déja remboursé {{ reservation.totalDepositReturned|number_format(2, ',', '') }}€, le maximum remboursable désormais est de <b>{{ (reservation.totalDeposit - reservation.totalDepositReturned)|number_format(2, ',', '') }}€</b></p>
+            {% endif %}
+        </div>
+
+        <div class="bg-darkGreen p-3 rounded-4 mx-4">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button class="btn-lightGreen" type="submit">Rembourser</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

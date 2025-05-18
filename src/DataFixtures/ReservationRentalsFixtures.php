@@ -33,7 +33,14 @@ class ReservationRentalsFixtures extends Fixture implements DependentFixtureInte
             $reservationRental->setDateStart($startDate);
             $reservationRental->setDateEnd($endDate);
             $reservationRental->setStatusReservation($faker->boolean(90));
+            $reservationRental->setIsRefund($faker->boolean(false));
             $reservationRental->setTotalDepositReturned($faker->randomFloat(0, 10, 250));
+
+            if($reservationRental->isRefund()){
+                $reservationRental->setTotalDepositReturned($faker->randomFloat(0, 10, $reservationRental->getTotalPrice()));
+            }else{
+                $reservationRental->setTotalDepositReturned(0);
+            }
 
             $nbDay = $reservationRental->getDateStart()->diff($reservationRental->getDateEnd())->days + 1;
 

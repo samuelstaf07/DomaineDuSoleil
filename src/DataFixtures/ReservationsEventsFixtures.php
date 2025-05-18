@@ -29,7 +29,14 @@ class ReservationsEventsFixtures extends Fixture implements DependentFixtureInte
             $reservationEvent->setDateReservation(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 year', 'now')));
             $reservationEvent->setIsActive($faker->boolean(80));
             $reservationEvent->setNbPlaces($faker->numberBetween(1, 5));
+            $reservationEvent->setIsRefund($faker->boolean(false));
             $reservationEvent->setTotalDeposit($faker->randomFloat(2, 10, 100));
+
+            if($reservationEvent->isRefund()){
+                $reservationEvent->setTotalDepositReturned($faker->randomFloat(0, 10, $reservationEvent->getTotalDeposit()));
+            }else{
+                $reservationEvent->setTotalDepositReturned(0);
+            }
 
             $manager->persist($reservationEvent);
         }

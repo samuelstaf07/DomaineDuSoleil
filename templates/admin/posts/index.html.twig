@@ -37,7 +37,7 @@
                             <td class="align-middle text-center">{{ post.id }}</td>
                             <td class="align-middle">
                                 <a href="{{ path('app_post', {'id': post.id}) }}" data-turbo="false">
-                                    {{ post.title }}
+                                    {{ post.title|slice(0, 100) ~ '...' }}
                                 </a>
                             </td>
                             <td class="align-middle">{{ post.content|slice(0, 100) ~ '...' }}</td>

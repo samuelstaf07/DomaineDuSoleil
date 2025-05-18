@@ -1,36 +1,75 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ReservationsEvents{% endblock %}
+{% block title %}Réservation {{ reservations_event.id }}{% endblock %}
 
 {% block body %}
-    <div class="contentMargin">
-        <h1>ReservationsEvents</h1>
+    <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5 gap-2">
+        <div class="d-flex mb-3 w-75 justify-content-start gap-2">
+            <a href="{{ path('app_reservations_events_index') }}" class="btn-yellow">Retour à la liste</a>
+        </div>
+        <div class="{% if not reservations_event.isActive %}alert alert-danger{% endif %} d-flex flex-column align-items-center justify-content-center mb-5 gap-2 rounded-4 w-100">
+            <h1 class="text-center">{{ reservations_event.id }}: Réservation de <a href="{{ path('app_users_show', {id:reservations_event.user.id}) }}">{{ reservations_event.user.firstname }} {{ reservations_event.user.lastname }}</a></h1>
 
-        <table class="table">
-            <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ reservations_event.id }}</td>
-            </tr>
-            <tr>
-                <th>Date_reservation</th>
-                <td>{{ reservations_event.dateReservation ? reservations_event.dateReservation|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Date_start</th>
-                <td>{{ reservations_event.dateStart ? reservations_event.dateStart|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Is_active</th>
-                <td>{{ reservations_event.isActive ? 'Yes' : 'No' }}</td>
-            </tr>
-            </tbody>
-        </table>
+            <div class="d-flex flex-column gap-2 w-75 justify-content-center align-items-center">
+                <ul class="w-75 list-group rounded-4">
+                    <li class="list-group-item">
+                        <p>Événement: <a href="{{ path('app_event', {id:reservations_event.event.id}) }}" data-turbo="false">{{ reservations_event.event.title|capitalize }}</a></p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Date de la réservation: {{ reservations_event.event.date|date('d/m/Y') }}</p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Ajouté manuellement: {{ reservations_event.bill.paymentIntentId ? '❌' : '✅️'  }}</p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Actif: {{ reservations_event.isActive ? '✅️' : '❌' }}</p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Est remboursé: {{ reservations_event.isRefund ? '✅️' : '❌' }}</p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Facture: <a href="{{ path('app_bills', {id:reservations_event.bill.id}) }}" target="_blank">Voir la facture</a></p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Nombre de place: {{ reservations_event.nbPlaces }} place(s)</p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Prix total de la réservation: {{ reservations_event.totalDeposit|number_format(2, ',', '') }}€</p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Total remboursé: {{ reservations_event.totalDepositReturned|number_format(2, ',', '') }}€</p>
+                    </li>
+                </ul>
+                <div class="d-flex gap-2 justify-content-center">
+                    <a href="{{ path('app_reservations_events_edit', {'id': reservations_event.id}) }}" class="btn-yellow {% if reservations_event.bill.paymentIntentId %}disabledItem{% endif %}" title="Modifier la réservation">
+                        Modifier
+                    </a>
+                    <a href="{{ path('app_reservations_events_refund', {'id': reservations_event.id}) }}" class="btn-lightGreen
+                    {% if reservations_event.bill.PaymentIntentId is null or reservations_event.totalDepositReturned >= reservations_event.totalDeposit %}
+                        disabledItem
+                    {% endif %}
+                        " title="Rembourser la réservation">
+                        Rembourser l'utilisateur
+                    </a>
+                    <a href="{{ path('app_reservations_events_change_active', {'id': reservations_event.id}) }}" class="
+                            {% if reservations_event.isActive %}
+                                btn-red
+                            {% else %}
+                                btn-lightGreen2
+                            {% endif %}
+                            {% if not reservations_event.isActive and reservations_event.bill.PaymentIntentId is not null %}
+                                disabledItem
+                            {% endif %}" title="Changer le type actif">
+                        {% if reservations_event.isActive %}
+                            Désactiver
+                        {% else %}
+                            Activer
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
 
-        <a href="{{ path('app_reservations_events_index') }}">back to list</a>
 
-        <a href="{{ path('app_reservations_events_edit', {'id': reservations_event.id}) }}">edit</a>
-
-        {{ include('admin/reservations_events/_delete_form.html.twig') }}
     </div>
 {% endblock %}

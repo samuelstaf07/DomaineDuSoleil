@@ -262,6 +262,7 @@ final class PaymentController extends AbstractController
                         $reservationRental->setTotalPrice($totalPrice + $priceCleaningDeposit + $deposit);
                         $reservationRental->setTotalDepositReturned($pricePerDay);
                         $reservationRental->setStatusBaseDeposit(0);
+                        $reservationRental->setIsRefund(false);
                         $reservationRental->setDateReservation(new \DateTimeImmutable('now'));
                         $reservationRental->setDateStart(new \DateTimeImmutable($reservation['dateStart']));
                         $reservationRental->setDateEnd(new \DateTimeImmutable($reservation['dateEnd']));
@@ -285,8 +286,10 @@ final class PaymentController extends AbstractController
                         $reservationEvent->setIsActive(1);
                         $reservationEvent->setUser($user);
                         $reservationEvent->setBill($newBill);
+                        $reservationEvent->setIsRefund(false);
                         $reservationEvent->setDateReservation(new \DateTimeImmutable('now'));
                         $reservationEvent->setTotalDeposit($totalPrice);
+                        $reservationEvent->setTotalDepositReturned(0);
 
 
                         $allResEvents[] = $reservationEvent;
@@ -298,6 +301,7 @@ final class PaymentController extends AbstractController
                 $newBill->setTotalPrice($totalPriceBill);
                 $newBill->setStatus(1);
                 $newBill->setUser($user);
+                $newBill->setPaymentIntentId($sessionStripe->payment_intent);
                 $user->setNbPoints($user->getNbPoints() + ((int) ($totalPriceBill / 100)));
 
                 $entityManager->persist($newBill);

@@ -17,6 +17,7 @@
                 <th class="align-middle text-center">Date de réservation</th>
                 <th class="align-middle text-center">Prix total</th>
                 <th class="align-middle text-center">Nombre de places</th>
+                <th class="align-middle text-center">Status de la réservation</th>
             </tr>
             </thead>
             <tbody>
@@ -35,6 +36,11 @@
                             {{ elem.totalDeposit|number_format(2, ',', '') }}€
                         </td>
                         <td class="align-middle text-center">{{ elem.nbPlaces }}</td>
+                        <td class="align-middle text-center">
+                            <span class="color-{% if elem.isActive %}lightGreen{% else %}red{% endif %}">
+                                {{ elem.isActive ? 'Actif' : 'Inactif' }}
+                            </span>
+                        </td>
                     </tr>
                 {% endfor %}
             {% endfor %}

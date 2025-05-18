@@ -45,7 +45,7 @@
                             <td class="align-middle text-center">
                                 <a href="{{ path('app_rental', {id:comment.rentals.id}) }}" data-turbo="false">{{ comment.rentals.title|capitalize }}</a>
                             </td>
-                            <td class="align-middle">{{ comment.content }}</td>
+                            <td class="align-middle">{{ comment.content|slice(0, 100) ~ '...' }}</td>
                             <td class="text-center align-middle">{{ comment.createdAt ? comment.createdAt|date('d/m/Y') : '' }}</td>
                             <td class="align-middle text-center">{{ comment.disabledAt == null ? '❌' : comment.disabledAt|date('d/m/Y') }}</td>
                             <td class="align-middle text-center">{{ comment.changedAt == null ? '❌' : comment.changedAt|date('d/m/Y') }}</td>

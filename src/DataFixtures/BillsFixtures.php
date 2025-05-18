@@ -28,6 +28,7 @@ class BillsFixtures extends Fixture implements DependentFixtureInterface
                 $bill->setTotalPrice($faker->randomFloat(2, 50, 1000));
                 $bill->setStatus($faker->boolean(95));
                 $bill->setUser($user);
+                $bill->setPaymentIntentId(null);
                 $manager->persist($bill);
             }
         }

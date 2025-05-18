@@ -35,6 +35,9 @@ class Bills
     #[ORM\OneToMany(targetEntity: ReservationsRentals::class, mappedBy: 'bill')]
     private Collection $reservationsRentals;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $paymentIntentId = null;
+
     public function __construct()
     {
         $this->reservationsEvents = new ArrayCollection();
@@ -126,5 +129,17 @@ class Bills
             $this->reservationsEvents->toArray(),
             $this->reservationsRentals->toArray()
         );
+    }
+
+    public function getPaymentIntentId(): ?string
+    {
+        return $this->paymentIntentId;
+    }
+
+    public function setPaymentIntentId(?string $paymentIntentId): static
+    {
+        $this->paymentIntentId = $paymentIntentId;
+
+        return $this;
     }
 }

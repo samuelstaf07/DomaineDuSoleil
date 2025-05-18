@@ -38,6 +38,12 @@ class ReservationsEvents
     #[ORM\Column]
     private ?float $totalDeposit = null;
 
+    #[ORM\Column]
+    private ?bool $isRefund = null;
+
+    #[ORM\Column]
+    private ?float $total_deposit_returned = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -116,6 +122,30 @@ class ReservationsEvents
     public function setTotalDeposit(float $totalDeposit): static
     {
         $this->totalDeposit = $totalDeposit;
+
+        return $this;
+    }
+
+    public function isRefund(): ?bool
+    {
+        return $this->isRefund;
+    }
+
+    public function setIsRefund(bool $isRefund): static
+    {
+        $this->isRefund = $isRefund;
+
+        return $this;
+    }
+
+    public function getTotalDepositReturned(): ?float
+    {
+        return $this->total_deposit_returned;
+    }
+
+    public function setTotalDepositReturned(float $total_deposit_returned): static
+    {
+        $this->total_deposit_returned = $total_deposit_returned;
 
         return $this;
     }

@@ -21,7 +21,7 @@
                             {% for item in rental %}
                                 <div class="col-sm-4">
                                     <div class="rentalDiscount rounded-4">
-                                        <div class="imageTop rounded-top-4">
+                                        <div class="imageTop rounded-top-4" style="background: url({{ asset('uploads/' ~ item.getHomePageImage().src) }}); background-size: cover; background-position: center; background-repeat: no-repeat;">
                                             <div class="rate d-flex gap-2 align-items-center">
                                                 {% set averageData = item.getAverageRateAndCommentCount() %}
                                                 {{ averageData.averageRate }}/5

@@ -29,5 +29,10 @@ services:
             $stripeSecretKey: '%env(STRIPE_SECRET_KEY)%'
             $endpointSecret: '%env(STRIPE_WEBHOOK_SECRET)%'
 
+    App\Controller\admin\ReservationsEventsController:
+        arguments:
+            $stripeSecretKey: '%env(STRIPE_SECRET_KEY)%'
+            $endpointSecret: '%env(STRIPE_WEBHOOK_SECRET)%'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Comments{% endblock %}
+{% block title %}Commentaire de {{ comment.user.firstname }} {{ comment.user.lastname }}s{% endblock %}
 
 {% block body %}
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5 gap-2">
         <div class="d-flex mb-3 w-75 justify-content-start gap-2">
             <a href="{{ path('app_comments_index') }}" class="btn-yellow">Retour à la liste</a>
         </div>
-        <div class="{% if not comment.isActive %}alert alert-danger{% endif %} d-flex flex-column align-items-center justify-content-center mb-5 gap-2 rounded-4">
+        <div class="{% if not comment.isActive %}alert alert-danger{% endif %} d-flex flex-column align-items-center justify-content-center mb-5 gap-2 rounded-4 w-100">
             <h1 class="text-center">{{ comment.id }}: Commentaire de {{ comment.user.firstname }} {{ comment.user.lastname }}</h1>
             <span class="bg-darkGreen p-2 rounded-3 h2">{{ comment.rating }}/5</span>
-            <div class="d-flex gap-2">
+            <div class="d-flex gap-2 w-75">
                 <p class="bg-lightGreen p-4 rounded-4 w-50">{{ comment.content|capitalize }}</p>
                 <ul class="w-50 list-group rounded-4">
                     <li class="list-group-item">
@@ -38,6 +38,5 @@
                 Activer
             {% endif %}
         </a>
-
     </div>
 {% endblock %}

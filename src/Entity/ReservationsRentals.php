@@ -47,6 +47,9 @@ class ReservationsRentals
     #[ORM\Column]
     private ?float $totalPrice = null;
 
+    #[ORM\Column]
+    private ?bool $isRefund = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -175,6 +178,18 @@ class ReservationsRentals
     public function setTotalPrice(float $totalPrice): static
     {
         $this->totalPrice = $totalPrice;
+
+        return $this;
+    }
+
+    public function isRefund(): ?bool
+    {
+        return $this->isRefund;
+    }
+
+    public function setIsRefund(bool $isRefund): static
+    {
+        $this->isRefund = $isRefund;
 
         return $this;
     }
