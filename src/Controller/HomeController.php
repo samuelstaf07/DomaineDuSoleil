@@ -21,6 +21,12 @@ final class HomeController extends AbstractController
         $posts = $postsRepository->findLatestActivePosts();
         $events = $eventsRepository->findLatestActiveEvents();
 
+        if($this->getUser()){
+            if(!$this->getUser()->isEmailAuthentificated()){
+                $this->addFlash('warning', 'Votre email n\'est pas vérifié, veuillez la vérifié dans vos paramètres d\'utilisateur.');
+            }
+        }
+
         return $this->render('home/index.html.twig', [
             'rentals' => $rentals,
             'posts' => $posts,

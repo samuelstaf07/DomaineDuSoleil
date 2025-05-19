@@ -232,6 +232,29 @@ final class AccountController extends AbstractController
             ]);
         }
 
+        if($section == "sendVerifyEmail"){
+
+            if(!$this->getUser()->isEmailAuthentificated()){
+                $signatureComponents = $verifyEmailHelper->generateSignature(
+                    'app_verify_email',
+                    $this->getUser()->getId(),
+                    $this->getUser()->getEmail(),
+                    ['id' => $this->getUser()->getId()]
+                );
+
+                $mailerService->sendEmailConfirmation(
+                    $this->getUser()->getEmail(),
+                    $this->getUser()->getFirstname(),
+                    $signatureComponents->getSignedUrl()
+                );
+                $this->addFlash('success', 'Un email de confirmation vous a été envoyé.');
+            }else{
+                $this->addFlash('warning', 'Votre email est déja vérifié.');
+            }
+
+            return $this->redirectToRoute('app_account');
+        }
+
         return $this->render($views[$section],[
             'bills' => $billsRepository->findActiveBillsByUser($this->getUser()),
         ]);

@@ -22,23 +22,14 @@
                 <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
             </div>
 
-            <input type="hidden" name="_csrf_token"
-                   value="{{ csrf_token('authenticate') }}"
-            >
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-            {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
-
-            <div class="checkbox mb-3">
-                <input type="checkbox" name="_remember_me" id="_remember_me">
-                <label for="_remember_me">Remember me</label>
-            </div>
-            #}
-
-            <div class="w-100 d-flex justify-content-center gap-3">
-                <button class="btn-green" type="submit">Se connecter</button>
-                <a href="{{ path('app_register') }}" class="btn-signup">S'inscrire</a>
+            <div class="w-100 d-flex flex-column justify-content-center gap-3">
+                <div class="d-flex gap-3 w-100">
+                    <button class="btn-green w-50 text-center" type="submit">Se connecter</button>
+                    <a href="{{ path('app_register') }}" class="btn-signup w-50 text-center">S'inscrire</a>
+                </div>
+                <a href="{{ path('app_forgot_password_request') }}" class="text-center btn-yellow">Mot de passe oublié</a>
             </div>
         </div>
     </form>
