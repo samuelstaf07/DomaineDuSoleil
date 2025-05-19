@@ -3,30 +3,20 @@
 {% block title %}Administration{% endblock %}
 
 {% block body %}
-    <ul class="list-group container" style="margin-top: 150px">
-        <li class="list-group-item">
-            <a href="{{ path('app_users_index') }}" class="btn btn-outline-primary">Utilisateurs</a>
-        </li>
-        <li class="list-group-item">
-            <a href="{{ path('app_rentals_index') }}" class="btn btn-outline-primary">Locations</a>
-        </li>
-        <li class="list-group-item">
-            <a href="{{ path('app_posts_index') }}" class="btn btn-outline-primary">Actualités</a>
-        </li>
-        <li class="list-group-item">
-            <a href="{{ path('app_bills_index') }}" class="btn btn-outline-primary">Factures</a>
-        </li>
-        <li class="list-group-item">
-            <a href="{{ path('app_events_index') }}" class="btn btn-outline-primary">Événements</a>
-        </li>
-        <li class="list-group-item">
-            <a href="{{ path('app_comments_index') }}" class="btn btn-outline-primary">Commentaires</a>
-        </li>
-        <li class="list-group-item">
-            <a href="{{ path('app_reservations_events_index') }}" class="btn btn-outline-primary">Réservations événements</a>
-        </li>
-        <li class="list-group-item">
-            <a href="{{ path('app_reservations_rentals_index') }}" class="btn btn-outline-primary">Réservations locations</a>
-        </li>
-    </ul>
+    <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
+        <h1>Administration</h1>
+
+        <div class="d-flex gap-3">
+            <a href="{{ path('app_users_index') }}" class="btn-lightGreen2">Utilisateurs</a>
+            <a href="{{ path('app_rentals_index') }}" class="btn-lightGreen2">Logements</a>
+            <a href="{{ path('app_posts_index') }}" class="btn-lightGreen2">Actualités</a>
+            <a href="{{ path('app_bills_index') }}" class="btn-lightGreen2">Factures</a>
+            <a href="{{ path('app_events_index') }}" class="btn-lightGreen2">Événements</a>
+            <a href="{{ path('app_comments_index') }}" class="btn-lightGreen2">Commentaires</a>
+            <a href="{{ path('app_reservations_events_index') }}" class="btn-lightGreen2">Réservations événements</a>
+            <a href="{{ path('app_reservations_rentals_index') }}" class="btn-lightGreen2">Réservations locations</a>
+        </div>
+
+        <img src="{{ asset('styles/img/imageAccueil.jpg') }}" alt="image d'accueil" class="imageAdmin rounded-4 mt-5">
+    </div>
 {% endblock %}

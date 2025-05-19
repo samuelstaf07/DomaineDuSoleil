@@ -12,9 +12,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.bootstrap5.css">
 
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
-        <div class="d-flex w-75 justify-content-start gap-2">
-            <a href="{{ path('app_admin') }}" class="btn-yellow mb-4">Revenir à l'administration</a>
-        </div>
+        {% include 'admin/navbar/index.html.twig' %}
         <h1>Tous les utilisateurs</h1>
 
         {% if users|length > 0 %}

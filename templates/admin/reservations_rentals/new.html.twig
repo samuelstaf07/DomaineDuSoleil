@@ -1,13 +1,75 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New ReservationsRentals{% endblock %}
+{% block title %}Ajout d'une nouvelle réservation de logement{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% if step == 2 %}
+        <script src="{{ asset('libs/mc-datepicker/dist/mc-calendar.min.js') }}"></script>
+        <script src="{{ asset('js/admin/rental.js') }}"></script>
+    {% endif %}
+{% endblock %}
 
 {% block body %}
-    <div class="contentMargin">
-        <h1>Create new ReservationsRentals</h1>
 
-        {{ include('admin/reservations_rentals/_form.html.twig') }}
+    <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
+        <div class="d-flex w-75 justify-content-start gap-2">
+            <a href="{{ path('app_admin') }}" class="btn-yellow mb-4">Revenir à l'administration</a>
+        </div>
+        <h1>Ajout d'une nouvelle réservation de logement</h1>
 
-        <a href="{{ path('app_reservations_rentals_index') }}">back to list</a>
+        {% if user is defined and rentals is defined %}
+        <h3>Réservation pour <span class="color-darkGreen">{{ user.firstname }} {{ user.lastname }}</span> à <span class="color-darkGreen">{{ rentals.title|capitalize }}</span></h3>
+        {% endif %}
+        <div id="dates">
+            <p class="alert alert-danger d-none">Dates non valide</p>
+        </div>
+
+        <div class="w-50 d-flex flex-column">
+            {{ form_start(form) }}
+            <div class="d-flex flex-column gap-3 bg-lightGreen p-4 rounded-4">
+                {% if step is defined %}
+                    {% if step == 1 %}
+                        {{ form_row(form.user) }}
+                        {{ form_row(form.rentals) }}
+                    {% else %}
+                        <script>
+                            window.reservedDates = {{ reservedDates|json_encode|raw }};
+                        </script>
+                        <div class="d-flex gap-4">
+                            <div class="w-50 d-flex flex-column gap-1">
+                                <label for="dateStart" class="mx-2 fw-bold text-center">Date de début</label>
+                                {{ form_widget(form.date_start, {
+                                    'attr': {
+                                        'id': 'date_start',
+                                        'name': 'date_start',
+                                        'class': 'form-control text-center rounded-4',
+                                        'placeholder': 'yyyy-mm-dd',
+                                    },
+                                    'type': 'text'
+                                }) }}
+                            </div>
+                            <div class="w-50 d-flex flex-column gap-1">
+                                <label for="dateEnd" class="mx-2 fw-bold text-center">Date de fin</label>
+                                {{ form_widget(form.date_end, {
+                                    'attr': {
+                                        'id': 'date_end',
+                                        'name': 'date_end',
+                                        'class': 'form-control text-center rounded-4',
+                                        'placeholder': 'yyyy-mm-dd',
+                                    },
+                                    'type': 'text'
+                                }) }}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                <div class="d-flex gap-2">
+                    <button class="btn-yellow add">Ajouter</button>
+                </div>
+            </div>
+            {{ form_rest(form) }}
+            {{ form_end(form, {'render_rest': false}) }}
+        </div>
     </div>
 {% endblock %}

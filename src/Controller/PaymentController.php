@@ -260,7 +260,7 @@ final class PaymentController extends AbstractController
                         $reservationRental->setUser($user);
                         $reservationRental->setRentals($rental);
                         $reservationRental->setTotalPrice($totalPrice + $priceCleaningDeposit + $deposit);
-                        $reservationRental->setTotalDepositReturned($pricePerDay);
+                        $reservationRental->setTotalDepositReturned(0);
                         $reservationRental->setStatusBaseDeposit(0);
                         $reservationRental->setIsRefund(false);
                         $reservationRental->setDateReservation(new \DateTimeImmutable('now'));

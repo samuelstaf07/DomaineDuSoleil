@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Réservation {{ reservations_event.id }}{% endblock %}
+{% block title %}{{ reservations_event.id }}: Réservation de <a href="{{ path('app_users_show', {id:reservations_event.user.id}) }}">{{ reservations_event.user.firstname }} {{ reservations_event.user.lastname }}{% endblock %}
 
 {% block body %}
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5 gap-2">
@@ -16,10 +16,13 @@
                         <p>Événement: <a href="{{ path('app_event', {id:reservations_event.event.id}) }}" data-turbo="false">{{ reservations_event.event.title|capitalize }}</a></p>
                     </li>
                     <li class="list-group-item">
+                        <p>Utilisateur: <a href="{{ path('app_users_show', {id:reservations_event.user.id}) }}">{{ reservations_event.user.firstname }} {{ reservations_event.user.lastname }}</a></p>
+                    </li>
+                    <li class="list-group-item">
                         <p>Date de la réservation: {{ reservations_event.event.date|date('d/m/Y') }}</p>
                     </li>
                     <li class="list-group-item">
-                        <p>Ajouté manuellement: {{ reservations_event.bill.paymentIntentId ? '❌' : '✅️'  }}</p>
+                        <p>Ajouté manuellement: {{ reservations_event.bill is not null ? '❌' : '✅️'  }}</p>
                     </li>
                     <li class="list-group-item">
                         <p>Actif: {{ reservations_event.isActive ? '✅️' : '❌' }}</p>
@@ -28,7 +31,13 @@
                         <p>Est remboursé: {{ reservations_event.isRefund ? '✅️' : '❌' }}</p>
                     </li>
                     <li class="list-group-item">
-                        <p>Facture: <a href="{{ path('app_bills', {id:reservations_event.bill.id}) }}" target="_blank">Voir la facture</a></p>
+                        <p>Facture:
+                        {% if reservations_event.bill is not null  %}
+                            <a href="{{ path('app_bills', {id:reservations_event.bill.id}) }}" target="_blank">Voir la facture</a>
+                        {% else %}
+                            Aucune Facture, réservation ajoutée manuellement
+                        {% endif %}
+                        </p>
                     </li>
                     <li class="list-group-item">
                         <p>Nombre de place: {{ reservations_event.nbPlaces }} place(s)</p>
@@ -41,11 +50,11 @@
                     </li>
                 </ul>
                 <div class="d-flex gap-2 justify-content-center">
-                    <a href="{{ path('app_reservations_events_edit', {'id': reservations_event.id}) }}" class="btn-yellow {% if reservations_event.bill.paymentIntentId %}disabledItem{% endif %}" title="Modifier la réservation">
+                    <a href="{{ path('app_reservations_events_edit', {'id': reservations_event.id}) }}" class="btn-yellow {% if reservations_event.bill is not null %}disabledItem{% endif %}" title="Modifier la réservation">
                         Modifier
                     </a>
                     <a href="{{ path('app_reservations_events_refund', {'id': reservations_event.id}) }}" class="btn-lightGreen
-                    {% if reservations_event.bill.PaymentIntentId is null or reservations_event.totalDepositReturned >= reservations_event.totalDeposit %}
+                    {% if reservations_event.bill is null or reservations_event.totalDepositReturned >= reservations_event.totalDeposit %}
                         disabledItem
                     {% endif %}
                         " title="Rembourser la réservation">
@@ -57,7 +66,7 @@
                             {% else %}
                                 btn-lightGreen2
                             {% endif %}
-                            {% if not reservations_event.isActive and reservations_event.bill.PaymentIntentId is not null %}
+                            {% if not reservations_event.isActive and reservations_event.bill is not null %}
                                 disabledItem
                             {% endif %}" title="Changer le type actif">
                         {% if reservations_event.isActive %}
@@ -66,10 +75,10 @@
                             Activer
                         {% endif %}
                     </a>
+
+                    <a href="{{ path('app_reservations_events_delete', {id:reservations_event.id}) }}" class="btn-red {% if reservations_event.bill %}disabledItem{% endif %}">Supprimer</a>
                 </div>
             </div>
         </div>
-
-
     </div>
 {% endblock %}

@@ -1,48 +1,122 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ReservationsRentals{% endblock %}
+{% block title %}{{ reservations_rental.id }}: Réservation de <a href="{{ path('app_users_show', {id:reservations_rental.user.id}) }}">{{ reservations_rental.user.firstname }} {{ reservations_rental.user.lastname }}{% endblock %}
 
 {% block body %}
-    <div class="contentMargin">
-        <h1>ReservationsRentals</h1>
+    <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5 gap-2">
+        <div class="d-flex mb-3 w-75 justify-content-start gap-2">
+            <a href="{{ path('app_reservations_rentals_index') }}" class="btn-yellow">Retour à la liste</a>
+        </div>
 
-        <table class="table">
-            <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ reservations_rental.id }}</td>
-            </tr>
-            <tr>
-                <th>Total_deposit_returned</th>
-                <td>{{ reservations_rental.totalDepositReturned }}</td>
-            </tr>
-            <tr>
-                <th>Status_base_deposit</th>
-                <td>{{ reservations_rental.statusBaseDeposit }}</td>
-            </tr>
-            <tr>
-                <th>Date_reservation</th>
-                <td>{{ reservations_rental.dateReservation ? reservations_rental.dateReservation|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Date_start</th>
-                <td>{{ reservations_rental.dateStart ? reservations_rental.dateStart|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Date_end</th>
-                <td>{{ reservations_rental.dateEnd ? reservations_rental.dateEnd|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Status_reservation</th>
-                <td>{{ reservations_rental.statusReservation }}</td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="{% if not reservations_rental.statusReservation %}alert alert-danger{% endif %} d-flex flex-column align-items-center justify-content-center mb-5 gap-2 rounded-4 w-100">
+            <h1 class="text-center">{{ reservations_rental.id }}: Réservation de <a href="{{ path('app_users_show', {id:reservations_rental.user.id}) }}">{{ reservations_rental.user.firstname }} {{ reservations_rental.user.lastname }}</a></h1>
 
-        <a href="{{ path('app_reservations_rentals_index') }}">back to list</a>
-
-        <a href="{{ path('app_reservations_rentals_edit', {'id': reservations_rental.id}) }}">edit</a>
-
-        {{ include('admin/reservations_rentals/_delete_form.html.twig') }}
+            <div class="d-flex flex-column gap-2 w-75 justify-content-center align-items-center">
+                <ul class="w-75 list-group rounded-4">
+                    <li class="list-group-item">
+                        <p>Logement: <a href="{{ path('app_rental', {id:reservations_rental.rentals.id}) }}" data-turbo="false">{{ reservations_rental.rentals.title|capitalize }}</a></p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Utilisateur: <a href="{{ path('app_users_show', {id:reservations_rental.user.id}) }}">{{ reservations_rental.user.firstname }} {{ reservations_rental.user.lastname }}</a></p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Date de début: {{ reservations_rental.dateStart ? reservations_rental.dateStart|date('d/m/Y') : '' }}</p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Date de fin: {{ reservations_rental.dateEnd ? reservations_rental.dateStart|date('d/m/Y') : '' }}</p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Date de réservation: {{ reservations_rental.dateReservation ? reservations_rental.dateStart|date('d/m/Y') : '' }}</p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Prix total: {{ reservations_rental.totalPrice|number_format(2, ',', '') }}€</p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Total remboursé: {{ reservations_rental.totalDepositReturned|number_format(2, ',', '') }}€</p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Est remboursé: {{ reservations_rental.isRefund ? '✅️' : '❌' }}</p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Status du remboursement:
+                            {% if reservations_rental.statusBaseDeposit == 0 %}
+                                En cours
+                            {% elseif reservations_rental.statusBaseDeposit == 1 %}
+                                <span class="color-orange">Partielement remboursé</span>
+                            {% elseif reservations_rental.statusBaseDeposit == 2 %}
+                                <span class="color-darkGreen">Totalement remboursé</span>
+                            {% elseif reservations_rental.statusBaseDeposit == 3 %}
+                                <span class="color-red">Refusé</span>
+                            {% elseif reservations_rental.statusBaseDeposit == 4 %}
+                                <span class="color-red">Annulé</span>
+                            {% endif %}
+                        </p>
+                    </li>
+                    <li class="list-group-item">
+                        <p>Status réservation: {{ reservations_rental.statusReservation ? '✅️' : '❌' }}</p>
+                    </li>
+                    <li class="list-group-item">
+                        Ajoutée manuellement: {{ reservations_rental.bill is null ? '✅️' : '❌' }}
+                    </li>
+                    <li class="list-group-item">
+                        <p>Facture:
+                            {% if reservations_rental.bill is not null  %}
+                                <a href="{{ path('app_bills', {id:reservations_rental.bill.id}) }}" target="_blank">Voir la facture</a>
+                            {% else %}
+                                Aucune Facture, réservation ajoutée manuellement
+                            {% endif %}
+                        </p>
+                    </li>
+                </ul>
+            </div>
+            <div class="d-flex gap-2 justify-content-center">
+                <a href="{{ path('app_reservations_rentals_edit', {'id': reservations_rental.id}) }}" class="btn-yellow" title="Modifier la réservation">
+                    Modifier
+                </a>
+                <a href="{{ path('app_reservations_rentals_refund', {'id': reservations_rental.id}) }}" class="btn-lightGreen {% if reservations_rental.bill == null or (reservations_rental.bill.PaymentIntentId is null or reservations_rental.totalDepositReturned >= reservations_rental.totalPrice) %}disabledItem{% endif %}" title="Rembourser la réservation">
+                    Rembourser
+                </a>
+                <a href="{{ path('app_reservations_rentals_change_active', {'id': reservations_rental.id}) }}" class="
+                        {% if reservations_rental.statusReservation %}
+                            btn-red
+                        {% else %}
+                            btn-lightGreen2
+                        {% endif %}
+                        {% if not reservations_rental.statusReservation and reservations_rental.bill is not null %}
+                            disabledItem
+                        {% endif %}" title="Changer le type actif">
+                    {% if reservations_rental.statusReservation %}
+                        Désactiver
+                    {% else %}
+                        Activer
+                    {% endif %}
+                </a>
+                <button type="button" class="btn-red" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    Supprimer
+                </button>
+            </div>
+        </div>
     </div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header bg-red">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmer la suppression</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir supprimer cette réservation ? Cette action est irréversible.
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-signup" data-bs-dismiss="modal">Annuler</button>
+
+                <form method="post" action="{{ path('app_reservations_rentals_delete', {'id': reservations_rental.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reservations_rental.id) }}">
+                    <button class="btn-red">Confirmer la suppression</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

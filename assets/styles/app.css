@@ -325,16 +325,16 @@ h2{
 }
 
 .btn-signup{
-    background-color: var(--myLightGrey);
-    color: var(--myWhite);
+    background-color: var(--myWhite);
+    color: var(--myBlack);
 }
 .btn-signup:hover{
-    background-color: var(--myWhite);
-    color: var(--myLightGrey)
+    background-color: var(--myBlack);
+    color: var(--myWhite)
 }
 .btn-signup:active{
-    background-color: color-mix(in srgb, var(--myWhite), black 10%) !important;
-    color: var(--myLightGrey) !important;
+    background-color: color-mix(in srgb, var(--myBlack), black 10%) !important;
+    color: var(--myWhite) !important;
 }
 
 .btn-yellow{
@@ -594,4 +594,10 @@ h2{
 .fc-daygrid-event-harness, .fc-daygrid-event-harness-abs{
     background: var(--myDarkGreen) !important;
     border: var(--myDarkGreen) !important;
+}
+
+.imageAdmin{
+    height: 50vh;
+    width: 70vw;
+    object-fit: cover;
 }

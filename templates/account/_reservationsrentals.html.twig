@@ -47,6 +47,8 @@
                                 <span class="color-darkGreen">Totalement remboursé</span>
                             {% elseif elem.statusBaseDeposit == 3 %}
                                 <span class="color-red">Refusé</span>
+                            {% elseif elem.statusBaseDeposit == 4 %}
+                                <span class="color-red">Annulé</span>
                             {% endif %}
                         </td>
                         <td class="align-middle text-center">

@@ -4,8 +4,12 @@ namespace App\Controller\admin;
 
 use App\Entity\ReservationsEvents;
 use App\Form\RefundType;
+use App\Form\ReservationsEventsFullType;
 use App\Form\ReservationsEventsType;
+use App\Repository\EventsRepository;
 use App\Repository\ReservationsEventsRepository;
+use App\Repository\UsersRepository;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Refund;
@@ -38,25 +42,85 @@ final class ReservationsEventsController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_reservations_events_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/new', name: 'app_reservations_events_new_step1')]
+    public function newStep1(Request $request): Response
     {
-        $reservationsEvent = new ReservationsEvents();
-        $form = $this->createForm(ReservationsEventsType::class, $reservationsEvent);
+        $reservationsEvents = new ReservationsEvents();
+        $form = $this->createForm(ReservationsEventsFullType::class, $reservationsEvents, [
+            'step' => 1
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            return $this->redirectToRoute('app_reservations_events_new_step2', [
+                'idUser' => $reservationsEvents->getUser()->getId(),
+                'idEvent' => $reservationsEvents->getEvent()->getId(),
+            ]);
+        }
+
+        return $this->render('admin/reservations_events/new.html.twig', [
+            'reservations_event' => $reservationsEvents,
+            'form' => $form,
+            'step' => 1,
+        ]);
+    }
+
+    #[Route('/new/{idUser}/{idEvent}', name: 'app_reservations_events_new_step2')]
+    public function newStep2($idUser, $idEvent, Request $request, EntityManagerInterface $entityManager, EventsRepository $eventsRepository, UsersRepository $usersRepository): Response
+    {
+        $user = $usersRepository->find($idUser);
+        $event = $eventsRepository->find($idEvent);
+
+        if(!$user || !$event){
+            $this->addFlash('danger', 'Utilisateur ou événement incorrect.');
+            return $this->redirectToRoute('app_reservations_events_new_step1');
+        }
+
+        $reservationsEvents = new ReservationsEvents();
+        $reservationsEvents->setUser($user);
+        $reservationsEvents->setEvent($event);
+
+        $form = $this->createForm(ReservationsEventsFullType::class, $reservationsEvents, [
+            'step' => 2
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($reservationsEvent);
+
+            if($event->isPast()){
+                $this->addFlash('danger', 'Événement déjà passé.');
+                return $this->redirectToRoute('app_reservations_events_new_step1');
+            }
+
+            if($reservationsEvents->getNbPlaces() > $event->getRemainingPlaces()){
+                $this->addFlash('danger', 'Pas assez de places pour la demande.');
+                return $this->redirectToRoute('app_reservations_events_new_step1');
+            }
+
+
+            $reservationsEvents->setTotalDeposit(0);
+            $reservationsEvents->setTotalDepositReturned(0);
+            $reservationsEvents->setDateReservation(new \DateTimeImmutable('now', new DateTimeZone('Europe/Brussels')));
+            $reservationsEvents->setBill(null);
+            $reservationsEvents->setIsRefund(false);
+            $reservationsEvents->setIsActive(true);
+
+            $entityManager->persist($reservationsEvents);
             $entityManager->flush();
 
+            $this->addFlash('success', 'La réservation a été ajoutée.');
             return $this->redirectToRoute('app_reservations_events_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/reservations_events/new.html.twig', [
-            'reservations_event' => $reservationsEvent,
+            'reservations_event' => $reservationsEvents,
             'form' => $form,
+            'step' => 2,
+            'user' => $reservationsEvents->getUser(),
+            'event' => $reservationsEvents->getEvent(),
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_reservations_events_show', methods: ['GET'])]
     public function show(ReservationsEvents $reservationsEvent): Response
@@ -73,10 +137,7 @@ final class ReservationsEventsController extends AbstractController
 
         if($reservationsEventUser->getBill()->getPaymentIntentId()){
             $this->addFlash('danger', 'Vous ne pouvez pas modifier une réservation fait par un utilisateur.');
-            $referer = $request->headers->get('referer');
-            if ($referer) {
-                return $this->redirect($referer);
-            }
+            return $this->redirectToRoute('app_reservations_events_index', [], Response::HTTP_SEE_OTHER);
         }
 
         $form = $this->createForm(ReservationsEventsType::class, $reservationsEvent);
@@ -85,6 +146,7 @@ final class ReservationsEventsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            $this->addFlash('success', 'La réservation a été modifiée.');
             return $this->redirectToRoute('app_reservations_events_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -94,14 +156,22 @@ final class ReservationsEventsController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_reservations_events_delete', methods: ['POST'])]
-    public function delete(Request $request, ReservationsEvents $reservationsEvent, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/delete', name: 'app_reservations_events_delete')]
+    public function delete($id, ReservationsEventsRepository $reservationsEventsRepository, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$reservationsEvent->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($reservationsEvent);
-            $entityManager->flush();
+        $reservationsEvents = $reservationsEventsRepository->find($id);
+
+        if($reservationsEvents->getBill()->getPaymentIntentId()){
+            $this->addFlash('danger', 'Vous ne pouvez pas supprimer une réservation fait par un utilisateur.');
+            return $this->redirectToRoute('app_reservations_events_show', [
+                'id' => $reservationsEvents->getId(),
+            ]);
         }
 
+        $entityManager->remove($reservationsEvents);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'La réservation a bien été supprimer.');
         return $this->redirectToRoute('app_reservations_events_index', [], Response::HTTP_SEE_OTHER);
     }
 

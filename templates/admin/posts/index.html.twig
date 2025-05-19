@@ -11,9 +11,7 @@
 {% block body %}
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.bootstrap5.css">
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
-        <div class="d-flex w-75 justify-content-start gap-2">
-            <a href="{{ path('app_admin') }}" class="btn-yellow mb-4">Revenir à l'administration</a>
-        </div>
+        {% include 'admin/navbar/index.html.twig' %}
 
         <div class="w-75 p-4 rounded-4 d-flex flex-column justify-content-center align-items-cente">
             <h1 class="text-center">Tous les nouveautés</h1>

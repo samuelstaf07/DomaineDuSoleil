@@ -5,25 +5,27 @@
 {% block body %}
     <div class="contentMargin d-flex flex-column justify-content-center align-items-center">
         <div class="d-flex w-75 justify-content-start gap-2">
-            <a href="{{ path('app_reservations_events_index') }}" class="btn-yellow mb-4">Revenir à la liste des réservations</a>
+            <a href="{{ path('app_reservations_rentals_index') }}" class="btn-yellow mb-4">Revenir à la liste des réservations</a>
         </div>
-        <h3 class="text-center">Remboursement de {{ event.title }}</h3>
+        <h3 class="text-center">Remboursement de {{ rental.title }}</h3>
         <p class="text-center h5">Pour <span class="color-darkGreen">{{ user.firstname }} {{ user.lastname }}</span></p>
-        <p class="text-center">Le prix total de la réservation est de {{ reservation.totalDeposit|number_format(2, ',', '') }}€</p>
+        <p class="text-center">Le prix total de la réservation est de {{ reservation.totalPrice|number_format(2, ',', '') }}€</p>
         {% set now = "now"|date("Y-m-d") %}
-        {% set event_date = reservation.event.date|date("Y-m-d") %}
+        {% set rental_start = reservation.dateStart|date("Y-m-d") %}
 
-        {% set days_diff = date(event_date).diff(date(now)).days %}
+        {% set days_diff = date(rental_start).diff(date(now)).days %}
 
-        <div class="text-center alert alert-{% if date(event_date) >= date(now) and days_diff >= 3 %}info{% else %}warning{% endif %}">
-            <p>L'événement est dans {{ days_diff }} jour(s) !</p>
-            {% if date(event_date) >= date(now) and days_diff >= 3 %}
-                <p>Il est recommandé de rembourser entierement ({{ reservation.totalDeposit|number_format(2, ',', '') }}€) l'utilisateur.</p>
+        <div class="text-center alert alert-{% if date(rental_start) >= date(now) and days_diff >= 3 %}info{% else %}warning{% endif %}">
+            <p>Le logement est dans {{ days_diff }} jour(s) !</p>
+            {% if date(rental_start) >= date(now) and days_diff > 30 %}
+                <p>Il est recommandé de rembourser à 90% ({{ (reservation.totalPrice * 0.9)|number_format(2, ',', '') }}€) l'utilisateur.</p>
+            {% elseif date(rental_start) >= date(now) and days_diff <= 30 and days_diff >= 15 %}
+                <p>Il est recommandé de rembourser à 50% ({{ (reservation.totalPrice * 0.5)|number_format(2, ',', '') }}€) l'utilisateur.</p>
             {% else %}
                 <p>Il est recommandé de ne pas rembourser l'utilisateur</p>
             {% endif %}
-            {% if reservation.totalDepositReturned > 0 %}
-                <p>Vous avez déja remboursé {{ reservation.totalDepositReturned|number_format(2, ',', '') }}€, le maximum remboursable désormais est de <b>{{ (reservation.totalDeposit - reservation.totalDepositReturned)|number_format(2, ',', '') }}€</b></p>
+            {% if reservation.totalPrice > 0 %}
+                <p>Vous avez déja remboursé {{ reservation.totalDepositReturned|number_format(2, ',', '') }}€, le maximum remboursable désormais est de <b>{{ (reservation.totalPrice - reservation.totalDepositReturned)|number_format(2, ',', '') }}€</b></p>
             {% endif %}
         </div>
 

@@ -15,7 +15,7 @@ class ReservationsRentals
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Bills::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Bills $bill = null;
 
     #[ORM\ManyToOne(targetEntity: Users::class)]
@@ -67,7 +67,7 @@ class ReservationsRentals
         return $this->bill;
     }
 
-    public function setBill(Bills $bill): static
+    public function setBill(?Bills $bill): static
     {
         $this->bill = $bill;
 

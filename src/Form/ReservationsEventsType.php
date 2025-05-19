@@ -21,6 +21,7 @@ class ReservationsEventsType extends AbstractType
     {
         $builder
             ->add('nb_places', IntegerType::class, [
+                'label' => 'Nombre de places',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez entrer le nombre de places.',

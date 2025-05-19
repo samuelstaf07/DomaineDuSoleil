@@ -1,13 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New ReservationsEvents{% endblock %}
+{% block title %}Ajout d'une nouvelle réservation d'événement{% endblock %}
 
 {% block body %}
-    <div class="contentMargin">
-        <h1>Create new ReservationsEvents</h1>
+    <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
+        <div class="d-flex w-75 justify-content-start gap-2">
+            <a href="{{ path('app_admin') }}" class="btn-yellow mb-4">Revenir à l'administration</a>
+        </div>
+        <h1>Ajout d'une nouvelle réservation d'événement</h1>
 
-        {{ include('admin/reservations_events/_form.html.twig') }}
-
-        <a href="{{ path('app_reservations_events_index') }}">back to list</a>
+        {% if user is defined and events is defined %}
+            <h3>Réservation pour <span class="color-darkGreen">{{ user.firstname }} {{ user.lastname }}</span> à <span class="color-darkGreen">{{ event.title|capitalize }}</span></h3>
+        {% endif %}
+            <div class="w-50 d-flex flex-column">
+                {{ form_start(form) }}
+                <div class="d-flex flex-column gap-3 bg-lightGreen p-4 rounded-4">
+                    {% if step is defined %}
+                        {% if step == 1 %}
+                            {{ form_row(form.user) }}
+                            {{ form_row(form.event) }}
+                        {% else %}
+                            {{ form_row(form.nb_places) }}
+                        {% endif %}
+                    {% endif %}
+                    <div class="d-flex gap-2">
+                        <button class="btn-yellow add">Ajouter</button>
+                    </div>
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form, {'render_rest': false}) }}
+            </div>
     </div>
 {% endblock %}

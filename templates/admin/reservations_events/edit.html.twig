@@ -1,13 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit ReservationsEvents{% endblock %}
+{% block title %}Modification de la réservation {{ reservations_event.id }}{% endblock %}
 
 {% block body %}
-    <div class="contentMargin">
-        <h1>Edit ReservationsEvents</h1>
+    <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
+        <h1>Modification de la réservation {{ reservations_event.id }}</h1>
 
-        {{ include('admin/reservations_events/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <div class="d-flex gap-2">
+            <button class="btn btn-lightGreen2">Mettre à jour</button>
+            <a href="{{ path('app_reservations_events_index') }}" class="btn-yellow">Revenir à la liste</a>
+        </div>
+        {{ form_end(form) }}
 
-        <a href="{{ path('app_reservations_events_index') }}">back to list</a>
     </div>
 {% endblock %}
