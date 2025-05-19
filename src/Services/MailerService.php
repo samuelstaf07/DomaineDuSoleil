@@ -13,6 +13,7 @@ use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use Symfony\Component\Mime\Address;
 
 class MailerService extends AbstractController
 {
@@ -36,7 +37,7 @@ class MailerService extends AbstractController
         ]);
 
         $email = (new Email())
-            ->from('no-reply@domainedusoleil.com')
+            ->from(new Address('no-reply@domainedusoleil.com', 'Domaine du Soleil'))
             ->to($to)
             ->subject('Confirmez votre adresse email')
             ->html($body);
@@ -52,7 +53,7 @@ class MailerService extends AbstractController
         ]);
 
         $email = (new Email())
-            ->from('no-reply@domainedusoleil.com')
+            ->from(new Address('no-reply@domainedusoleil.com', 'Domaine du Soleil'))
             ->to($to)
             ->subject('Changer votre mot de passe')
             ->html($body);
@@ -68,7 +69,7 @@ class MailerService extends AbstractController
         ]);
 
         $email = (new Email())
-            ->from('no-reply@domainedusoleil.com')
+            ->from(new Address('no-reply@domainedusoleil.com', 'Domaine du Soleil'))
             ->to($to)
             ->subject('Supprimer votre compte')
             ->html($body);
@@ -84,7 +85,7 @@ class MailerService extends AbstractController
         ]);
 
         $email = (new Email())
-            ->from('no-reply@domainedusoleil.com')
+            ->from(new Address('no-reply@domainedusoleil.com', 'Domaine du Soleil'))
             ->to($to)
             ->subject('Compte supprimé')
             ->html($body);
@@ -100,7 +101,7 @@ class MailerService extends AbstractController
         ]);
 
         $email = (new Email())
-            ->from('no-reply@domainedusoleil.com')
+            ->from(new Address('no-reply@domainedusoleil.com', 'Domaine du Soleil'))
             ->to($to)
             ->subject('Adresse mail changée')
             ->html($body);
@@ -134,7 +135,7 @@ class MailerService extends AbstractController
         ]);
 
         $email = (new Email())
-            ->from('no-reply@domainedusoleil.com')
+            ->from(new Address('no-reply@domainedusoleil.com', 'Domaine du Soleil'))
             ->to($to)
             ->subject('Merci pour votre commande !')
             ->html($body)

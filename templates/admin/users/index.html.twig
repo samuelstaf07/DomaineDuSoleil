@@ -54,6 +54,8 @@
                                     <span class="bg-lightGreen p-1 rounded-2">User</span>
                                 {% elseif user.roles|last == "ROLE_ADMIN" %}
                                     <span class="bg-Yellow p-1 rounded-2">Admin</span>
+                                {% elseif user.roles|last == "ROLE_SUPER_ADMIN" %}
+                                    <span class="bg-darkGreen p-1 rounded-2">S.Admin</span>
                                 {% endif %}
                             </td>
                             <td class="align-middle text-center">{{ user.firstname }}</td>

@@ -58,6 +58,8 @@ final class AccountController extends AbstractController
         UserPasswordHasherInterface $passwordHasher,
         UsersRepository $usersRepository,
         BillsRepository $billsRepository,
+        ReservationsRentalsRepository $reservationsRentalsRepository,
+        ReservationsEventsRepository $reservationsEventsRepository
     ): Response
     {
         $views = [
@@ -116,6 +118,13 @@ final class AccountController extends AbstractController
 
         if($section == "deleteaccount"){
             $user = $this->getUser();
+
+            if (in_array('ROLE_ADMIN', $user->getRoles())) {
+                return $this->render('account/index.html.twig', [
+                    'reservationsRentals' => $reservationsRentalsRepository->findCurrentAndUpcomingByUser($user),
+                    'reservationsEvents' => $reservationsEventsRepository->findUpcomingReservationsByUser($user),
+                ]);
+            }
 
             $signatureComponents = $verifyEmailHelper->generateSignature(
                 'app_delete_account',

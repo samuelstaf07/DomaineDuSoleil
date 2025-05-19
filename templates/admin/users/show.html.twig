@@ -36,9 +36,11 @@
                         <p class="my-0">
                             <span class="fw-bold">Rôle</span>:
                             {% if user.roles|last == "ROLE_USER" %}
-                                User
+                                <span class="bg-lightGreen p-1 rounded-2">User</span>
                             {% elseif user.roles|last == "ROLE_ADMIN" %}
-                                Admin
+                                <span class="bg-Yellow p-1 rounded-2">Admin</span>
+                            {% elseif user.roles|last == "ROLE_SUPER_ADMIN" %}
+                                <span class="bg-darkGreen p-1 rounded-2">S.Admin</span>
                             {% endif %}
                         </p>
                     </div>
@@ -46,20 +48,76 @@
             </div>
         </div>
 
-        <div class="d-flex gap-2">
-            <a href="{{ path('app_users_index') }}" class="btn-yellow">Retour à la liste</a>
-            <a href="{{ path('app_users_change_active', {id:user.id}) }}" class="btn-{% if user.isActive %}red{% else %}lightGreen2{% endif %}">
-                {% if user.isActive %}Désactiver{% else %}Activer{% endif %}
-            </a>
-            <a href="{{ path('app_users_comments', {'id': user.id}) }}" class="btn-lightGreen2">
-                Voir les commentaires
-            </a>
-            <a href="{{ path('app_users_reservations', {'id': user.id}) }}" class="btn-lightGreen">
-                Voir les réservations
-            </a>
-            <a href="{{ path('app_users_bills', {'id': user.id}) }}" class="btn-black">
-                Voir les factures
-            </a>
+        <div class="d-flex flex-column gap-4 align-items-center mb-4">
+            <div class="d-flex gap-2">
+                <a href="{{ path('app_users_index') }}" class="btn-yellow">Retour à la liste</a>
+                <a href="{{ path('app_users_change_active', {id:user.id}) }}" class="btn-{% if user.isActive %}red{% else %}lightGreen2{% endif %}">
+                    {% if user.isActive %}Désactiver{% else %}Activer{% endif %}
+                </a>
+                <a href="{{ path('app_users_comments', {'id': user.id}) }}" class="btn-lightGreen2">
+                    Voir les commentaires
+                </a>
+                <a href="{{ path('app_users_reservations', {'id': user.id}) }}" class="btn-lightGreen">
+                    Voir les réservations
+                </a>
+                <a href="{{ path('app_users_bills', {'id': user.id}) }}" class="btn-black">
+                    Voir les factures
+                </a>
+            </div>
+            {% if not is_granted('ROLE_SUPER_ADMIN') %}
+            <p class="alert alert-warning">Vous ne pouvez pas changer le rôle de l'utilisateur car vous n'êtes pas Super Admin.</p>
+            {% endif %}
+            <div class="d-flex gap-2 bg-darkGrey p-2 rounded-4 w-50 {% if not is_granted('ROLE_SUPER_ADMIN') %}disabledItem{% endif %}">
+                <button class="btn-lightGreen2 w-50 text-center {% if not is_granted('ROLE_SUPER_ADMIN') or (user.roles|last == "ROLE_SUPER_ADMIN") or user.isActive == false %}disabledItem{% endif %}"
+                        data-bs-toggle="modal" data-bs-target="#confirmPromotionModal">
+                    Promouvoir
+                </button>
+
+                <button class="btn-red w-50 text-center {% if not is_granted('ROLE_SUPER_ADMIN') or (user.roles|last == "ROLE_USER" or user.roles|last == "ROLE_SUPER_ADMIN") or user.isActive == false %}disabledItem{% endif %}"
+                        data-bs-toggle="modal" data-bs-target="#confirmDemotionModal">
+                    Rétrograder
+                </button>
+            </div>
         </div>
     </div>
+
+    <div class="modal fade" id="confirmPromotionModal" tabindex="-1" aria-labelledby="confirmPromotionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4">
+                <div class="modal-header bg-lightGreen">
+                    <h5 class="modal-title" id="confirmPromotionModalLabel">Confirmation de promotion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir promouvoir <strong>{{ user.firstname }} {{ user.lastname }}</strong> ?
+                    {% if user.roles|last == "ROLE_ADMIN" %}
+                        <p class="alert alert-warning mt-2">Vous perdrez votre rôle de <b>Super Admin</b> si vous lui transférez le rôle.</p>
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-signup" data-bs-dismiss="modal">Annuler</button>
+                    <a href="{{ path('superadmin_upgrade_role', { id: user.id }) }}" class="btn-lightGreen2">Confirmer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmDemotionModal" tabindex="-1" aria-labelledby="confirmDemotionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4">
+                <div class="modal-header bg-red">
+                    <h5 class="modal-title" id="confirmDemotionModalLabel">Confirmation de rétrogradation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir rétrograder <strong>{{ user.firstname }} {{ user.lastname }}</strong> ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-signup" data-bs-dismiss="modal">Annuler</button>
+                    <a href="{{ path('superadmin_downgrade_role', { id: user.id }) }}" class="btn-red">Confirmer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
