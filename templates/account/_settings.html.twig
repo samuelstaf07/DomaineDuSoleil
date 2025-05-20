@@ -24,10 +24,9 @@
                 <div class="d-flex flex-column gap-2">
                     <div class="d-flex flex-column gap-1 bg-white p-3 rounded-4">
                         <p class="my-0"><span class="fw-bold">Prénom</span>: {{ app.user.firstname }}</p>
-                        <p class="my-0"><span class="fw-bold">Nom</span>: {{ app.user.lastName }}</p>
+                        <p class="my-0"><span class="fw-bold">Nom</span>: {% if app.user.lastname %}{{ app.user.lastName }}{% else %}<span class="color-red">aucun</span>{% endif %}</p>
                         <p class="my-0"><span class="fw-bold">Adresse mail</span>: {{ app.user.email }}</p>
                         <p class="my-0"><span class="fw-bold">Date de naissance</span>: {{ app.user.birthDate|date('d/m/Y') }}</p>
-                        <p class="my-0"><span class="fw-bold">Points</span>: {{ app.user.nbPoints }} pts</p>
                         <p class="my-0"><span class="fw-bold">Compte créé le</span>: {{ app.user.createdAt|date('d/m/Y') }}</p>
                     </div>
                     <div class="d-flex flex-column gap-1">
