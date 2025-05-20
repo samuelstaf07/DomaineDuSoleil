@@ -2,16 +2,7 @@
 
 {% block title %}Tous les événements{% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('js/admin/datatable.js') }}"></script>
-    <script src="{{ asset('js/admin/deleteModal.js') }}"></script>
-{% endblock %}
-
 {% block body %}
-
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.bootstrap5.css">
-
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
         {% include 'admin/navbar/index.html.twig' %}
         <h1>Tous les événements</h1>
@@ -22,17 +13,37 @@
                 <table class="table table-hover" id="myTable">
                     <thead>
                     <tr>
-                        <th class="align-middle text-center">Id</th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(events, 'ID', 'event.id') }}
+                        </th>
                         <th class="align-middle text-center">Image</th>
-                        <th class="align-middle text-center">Titre</th>
-                        <th class="align-middle">Contenu</th>
-                        <th class="align-middle text-center">Prix</th>
-                        <th class="align-middle text-center">Date</th>
-                        <th class="align-middle text-center">Nb de places</th>
-                        <th class="align-middle text-center">Localisation</th>
-                        <th class="align-middle text-center">Actif</th>
-                        <th class="align-middle text-center">Âge requis</th>
-                        <th class="align-middle text-center">Créé le</th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(events, 'Titre', 'event.title') }}
+                        </th>
+                        <th class="align-middle">
+                            {{ knp_pagination_sortable(events, 'Contenu', 'event.content') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(events, 'Prix', 'event.price') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(events, 'Date', 'event.date') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(events, 'Nb de places', 'event.nb_places') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(events, 'Localisation', 'event.location') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(events, 'Actif', 'event.is_active') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(events, 'Âge requis', 'event.age_requirement') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(events, 'Créé le', 'event.created_at') }}
+                        </th>
                         <th class="align-middle text-center">Actions</th>
                     </tr>
                     </thead>
@@ -51,7 +62,7 @@
                                 </a>
                             </td>
                             <td class="align-middle">{{ event.content|slice(0, 40) ~ '...' }}</td>
-                            <td class="align-middle text-center">{{ event.price }}</td>
+                            <td class="align-middle text-center">{{ event.price|number_format(2, ',', '') }}€</td>
                             <td class="align-middle text-center">{{ event.date ? event.date|date('d/m/Y') : '' }}</td>
                             <td class="align-middle text-center">{{ event.nbPlaces }}</td>
                             <th class="align-middle">{{ event.location }}</th>
@@ -80,6 +91,11 @@
         {% else %}
             <p class="alert alert-secondary">Aucun événement</p>
         {% endif %}
+        <div class="d-flex justify-content-between">
+            <div class="mt-2 ">
+                {{ knp_pagination_render(events) }}
+            </div>
+        </div>
 
         <a href="{{ path('app_events_new') }}" class="btn-yellow">Créer un nouvel événement</a>
     </div>

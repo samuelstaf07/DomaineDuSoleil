@@ -11,6 +11,7 @@ use App\Repository\ReservationsEventsRepository;
 use App\Repository\UsersRepository;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Refund;
 use Stripe\Stripe;
@@ -35,10 +36,30 @@ final class ReservationsEventsController extends AbstractController
     }
 
     #[Route(name: 'app_reservations_events_index', methods: ['GET'])]
-    public function index(ReservationsEventsRepository $reservationsEventsRepository): Response
+    public function index(ReservationsEventsRepository $reservationsEventsRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $page = $request->query->getInt('page',1);
+        $sort = $request->query->getString('sort', 'null');
+        $direction = $request->query->getString('direction', 'null');
+
+        $reservationsEvents = $reservationsEventsRepository->createQueryBuilder('reservations_event')
+            ->leftJoin('reservations_event.event', 'event')
+            ->addSelect('event')
+            ->leftJoin('reservations_event.user', 'user')
+            ->addSelect('user')
+            ->leftJoin('reservations_event.bill', 'bill')
+            ->addSelect('bill');
+
+        $pagination = $paginator->paginate(
+            $reservationsEvents,
+            $request->query->getInt('page', $page),
+            20
+        );
+
         return $this->render('admin/reservations_events/index.html.twig', [
-            'reservations_events' => $reservationsEventsRepository->findAll(),
+            'reservations_events' => $pagination,
+            'sort' => $sort,
+            'direction' => $direction,
         ]);
     }
 

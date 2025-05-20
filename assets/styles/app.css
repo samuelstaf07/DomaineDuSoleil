@@ -601,3 +601,29 @@ h2{
     width: 70vw;
     object-fit: cover;
 }
+
+.page-item .page-link {
+    transition: none;
+    color: var(--myBlack);
+    background-color: var(--myYellow);
+    border-color: var(--myYellow);
+}
+
+.page-item.active .page-link {
+    background-color: var(--myBlack);
+    border-color: var(--myBlack);
+    color: var(--myYellow);
+}
+
+.page-item.disabled .page-link {
+    background-color: var(--myWhite);
+    border-color: #EFEFEFFF;
+    color: var(--myBlack);
+}
+
+.page-item .page-link:hover {
+    transition: none;
+    background-color: var(--myBlack);
+    color: var(--myYellow);
+    border-color: var(--myBlack);
+}

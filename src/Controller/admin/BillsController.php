@@ -6,6 +6,7 @@ use App\Entity\Bills;
 use App\Form\BillsType;
 use App\Repository\BillsRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,10 +16,26 @@ use Symfony\Component\Routing\Attribute\Route;
 final class BillsController extends AbstractController
 {
     #[Route(name: 'app_bills_index', methods: ['GET'])]
-    public function index(BillsRepository $billsRepository): Response
+    public function index(BillsRepository $billsRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $page = $request->query->getInt('page',1);
+        $sort = $request->query->getString('sort', 'null');
+        $direction = $request->query->getString('direction', 'null');
+
+        $bills = $billsRepository->createQueryBuilder('bill')
+                                ->leftJoin('bill.user', 'user')
+                                ->addSelect('user');
+
+        $pagination = $paginator->paginate(
+            $bills,
+            $request->query->getInt('page', $page),
+            20
+        );
+
         return $this->render('admin/bills/index.html.twig', [
-            'bills' => $billsRepository->findAll(),
+            'bills' => $pagination,
+            'sort' => $sort,
+            'direction' => $direction,
         ]);
     }
 

@@ -2,13 +2,7 @@
 
 {% block title %}Toutes les réservations d'événements{% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('js/admin/datatable.js') }}"></script>
-{% endblock %}
-
 {% block body %}
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.bootstrap5.css">
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
         {% include 'admin/navbar/index.html.twig' %}
         <h1>Toutes les réservations d'événements</h1>
@@ -18,17 +12,37 @@
             <table class="table table-hover" id="myTable">
             <thead>
             <tr>
-                <th class="text-center align-middle">Id</th>
-                <th class="align-middle">Événement</th>
-                <th class="align-middle">Utilisateur</th>
-                <th class="text-center align-middle">Date de réservation</th>
-                <th class="text-center align-middle">Ajouté manuellement</th>
-                <th class="text-center align-middle">Actif</th>
-                <th class="text-center align-middle">Est remboursé</th>
-                <th class="text-center align-middle">Nb places</th>
-                <th class="text-center align-middle">Prix total</th>
-                <th class="text-center align-middle">Total remboursé</th>
-                <th class="text-center align-middle">actions</th>
+                <th class="text-center align-middle">
+                    {{ knp_pagination_sortable(reservations_events, 'ID', 'reservations_event.id') }}
+                </th>
+                <th class="align-middle">
+                    {{ knp_pagination_sortable(reservations_events, 'Événement', 'event.title') }}
+                </th>
+                <th class="align-middle">
+                    {{ knp_pagination_sortable(reservations_events, 'Utilisateur', 'user.firstname') }}
+                </th>
+                <th class="text-center align-middle">
+                    {{ knp_pagination_sortable(reservations_events, 'Date de réservation', 'reservations_event.date_reservation') }}
+                </th>
+                <th class="text-center align-middle">
+                    {{ knp_pagination_sortable(reservations_events, 'Ajouté manuellement', 'bill.id') }}
+                </th>
+                <th class="text-center align-middle">
+                    {{ knp_pagination_sortable(reservations_events, 'Actif', 'reservations_event.is_active') }}
+                </th>
+                <th class="text-center align-middle">
+                    {{ knp_pagination_sortable(reservations_events, 'Est remboursé', 'reservations_event.isRefund') }}
+                </th>
+                <th class="text-center align-middle">
+                    {{ knp_pagination_sortable(reservations_events, 'Nb places', 'reservations_event.nb_places') }}
+                </th>
+                <th class="text-center align-middle">
+                    {{ knp_pagination_sortable(reservations_events, 'Prix total', 'reservations_event.totalDeposit') }}
+                </th>
+                <th class="text-center align-middle">
+                    {{ knp_pagination_sortable(reservations_events, 'Total remboursé', 'reservations_event.total_deposit_returned') }}
+                </th>
+                <th class="text-center align-middle">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -82,6 +96,12 @@
         {% else %}
             <p class="alert alert-secondary">Aucune réservation</p>
         {% endif %}
+        <div class="d-flex justify-content-between">
+            <div class="mt-2 ">
+                {{ knp_pagination_render(reservations_events) }}
+            </div>
+        </div>
+
         <a href="{{ path('app_reservations_events_new_step1') }}" class="btn-yellow">Créé une réservation</a>
     </div>
 {% endblock %}

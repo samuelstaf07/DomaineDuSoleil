@@ -1,32 +1,41 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Comments index{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('js/admin/datatable.js') }}"></script>
-    <script src="{{ asset('js/admin/deleteModal.js') }}"></script>
-{% endblock %}
+{% block title %}Tous les commentaires{% endblock %}
 
 {% block body %}
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.bootstrap5.css">
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
         {% include 'admin/navbar/index.html.twig' %}
-        <h1>Comments index</h1>
+        <h1>Tous les commentaires</h1>
 
         {% if comments|length > 0 %}
             <div class="w-75">
                 <table class="table table-hover" id="myTable">
                     <thead>
                     <tr>
-                        <th class="text-center align-middle">Id</th>
-                        <th class="text-center align-middle">User</th>
-                        <th class="text-center">Contenu</th>
-                        <th class="text-center align-middle">Créé</th>
-                        <th class="text-center align-middle">Désactivé le</th>
-                        <th class="text-center align-middle">Modifié le</th>
-                        <th class="text-center align-middle">Taux</th>
-                        <th class="text-center align-middle">Actif</th>
+                        <th class="text-center align-middle">
+                            {{ knp_pagination_sortable(comments, 'ID', 'comment.id') }}
+                        </th>
+                        <th class="text-center align-middle">
+                            {{ knp_pagination_sortable(comments, 'User', 'user.firstname') }}
+                        </th>
+                        <th class="text-center">
+                            {{ knp_pagination_sortable(comments, 'Contenu', 'comment.content') }}
+                        </th>
+                        <th class="text-center align-middle">
+                            {{ knp_pagination_sortable(comments, 'Créé le', 'comment.created_at') }}
+                        </th>
+                        <th class="text-center align-middle">
+                            {{ knp_pagination_sortable(comments, 'Désactivé le', 'comment.disabled_at') }}
+                        </th>
+                        <th class="text-center align-middle">
+                            {{ knp_pagination_sortable(comments, 'Modifié le', 'comment.changed_at') }}
+                        </th>
+                        <th class="text-center align-middle">
+                            {{ knp_pagination_sortable(comments, 'Taux', 'comment.rating') }}
+                        </th>
+                        <th class="text-center align-middle">
+                            {{ knp_pagination_sortable(comments, 'Actif', 'comment.is_active') }}
+                        </th>
                         <th class="text-center align-middle">Actions</th>
                     </tr>
                     </thead>
@@ -69,7 +78,10 @@
         {% else %}
             <p class="alert alert-secondary">Aucun commentaires</p>
         {% endif %}
-
-        <a href="{{ path('app_comments_new') }}">Create new</a>
+        <div class="d-flex justify-content-between">
+            <div class="mt-2 ">
+                {{ knp_pagination_render(comments) }}
+            </div>
+        </div>
     </div>
 {% endblock %}

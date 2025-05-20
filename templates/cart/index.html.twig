@@ -146,7 +146,6 @@
 
             <div class="mt-4 text-end">
                 <h5 class="text-center">Total du panier : <strong>{{ totalPanier|number_format(2, ',', '') }}€</strong></h5>
-                <h6 class="text-center">Vous recevrez <b>{{ (totalPanier / 100)|round(0, 'floor') }} points</b>.</h6>
             </div>
 
             {% if not app.user %}

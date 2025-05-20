@@ -2,15 +2,7 @@
 
 {% block title %}Tous les utilisateurs{% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('js/admin/datatable.js') }}"></script>
-{% endblock %}
-
 {% block body %}
-
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.bootstrap5.css">
-
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
         {% include 'admin/navbar/index.html.twig' %}
         <h1>Tous les utilisateurs</h1>
@@ -20,18 +12,37 @@
                 <table class="table table-hover w-75" id="myTable">
                     <thead>
                     <tr>
-                        <th class="align-middle text-center">Id</th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(users, 'ID', 'user.id') }}
+                        </th>
                         <th class="align-middle text-center">Pdp</th>
-                        <th class="align-middle">Email</th>
-                        <th class="align-middle text-center">Roles</th>
-                        <th class="align-middle text-center">Prénom</th>
-                        <th class="align-middle text-center">Nom</th>
-                        <th class="align-middle text-center">Nombre de points</th>
-                        <th class="align-middle text-center">Créé le</th>
-                        <th class="align-middle text-center">Dernière modification</th>
-                        <th class="align-middle text-center">Dernière connexion</th>
-                        <th class="align-middle text-center">Active</th>
-                        <th class="align-middle text-center">Email Authentifié</th>
+                        <th class="align-middle">
+                            {{ knp_pagination_sortable(users, 'Email', 'user.email') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(users, 'Roles', 'user.roles') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(users, 'Prénom', 'user.firstname') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(users, 'Nom', 'user.lastname') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(users, 'Créé le', 'user.created_at') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(users, 'Dernière modification', 'user.updated_at') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(users, 'Dernière connexion', 'user.last_log_at') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(users, 'Active', 'user.is_active') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(users, 'Email Authentifié', 'user.is_email_authentificated') }}
+                        </th>
                         <th class="align-middle text-center">Actions</th>
                     </tr>
                     </thead>
@@ -60,7 +71,6 @@
                             </td>
                             <td class="align-middle text-center">{{ user.firstname }}</td>
                             <td class="align-middle text-center">{{ user.lastname }}</td>
-                            <td class="align-middle text-center">{{ user.nbPoints }}pts</td>
                             <td class="align-middle text-center">{{ user.createdAt ? user.createdAt|date('d/m/Y') }}</td>
                             <td class="align-middle text-center">{{ user.updatedAt ? user.updatedAt|date('d/m/Y') }}</td>
                             <td class="align-middle text-center">{{ user.lastLogAt ? user.lastLogAt|date('d/m/Y') }}</td>
@@ -91,5 +101,10 @@
         {% else %}
             <p class="alert alert-secondary">Aucun utilisateur</p>
         {% endif %}
+        <div class="d-flex justify-content-between">
+            <div class="mt-2 ">
+                {{ knp_pagination_render(users) }}
+            </div>
+        </div>
     </div>
 {% endblock %}

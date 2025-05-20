@@ -43,9 +43,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $lastname = null;
 
     #[ORM\Column]
-    private ?int $nb_points = null;
-
-    #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column]
@@ -207,18 +204,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function setImage(images $image): static
     {
         $this->image = $image;
-
-        return $this;
-    }
-
-    public function getNbPoints(): ?int
-    {
-        return $this->nb_points;
-    }
-
-    public function setNbPoints(int $nb_points): static
-    {
-        $this->nb_points = $nb_points;
 
         return $this;
     }

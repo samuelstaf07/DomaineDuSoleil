@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\ManipulatorInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,10 +26,24 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 final class RentalsController extends AbstractController
 {
     #[Route(name: 'app_rentals_index', methods: ['GET'])]
-    public function index(RentalsRepository $rentalsRepository): Response
+    public function index(RentalsRepository $rentalsRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $page = $request->query->getInt('page',1);
+        $sort = $request->query->getString('sort', 'null');
+        $direction = $request->query->getString('direction', 'null');
+
+        $rentals = $rentalsRepository->createQueryBuilder('rental');
+
+        $pagination = $paginator->paginate(
+            $rentals,
+            $request->query->getInt('page', $page),
+            20
+        );
+
         return $this->render('admin/rentals/index.html.twig', [
-            'rentals' => $rentalsRepository->findAll(),
+            'rentals' => $pagination,
+            'sort' => $sort,
+            'direction' => $direction,
         ]);
     }
 

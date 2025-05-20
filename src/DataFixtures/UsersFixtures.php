@@ -27,7 +27,6 @@ class UsersFixtures extends Fixture
             $user->setEmail($faker->email);
             $user->setFirstname($faker->firstName);
             $user->setLastname($faker->lastName);
-            $user->setNbPoints($faker->numberBetween(0, 1000));
             $createdAt = new \DateTimeImmutable('now');
             $user->setCreatedAt($createdAt);
             $user->setUpdatedAt($createdAt);

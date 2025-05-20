@@ -12,6 +12,7 @@ use App\Repository\ReservationsRentalsRepository;
 use App\Repository\UsersRepository;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Refund;
 use Stripe\Stripe;
@@ -36,10 +37,30 @@ final class ReservationsRentalsController extends AbstractController
     }
 
     #[Route(name: 'app_reservations_rentals_index', methods: ['GET'])]
-    public function index(ReservationsRentalsRepository $reservationsRentalsRepository): Response
+    public function index(ReservationsRentalsRepository $reservationsRentalsRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $page = $request->query->getInt('page',1);
+        $sort = $request->query->getString('sort', 'null');
+        $direction = $request->query->getString('direction', 'null');
+
+        $reservationsRentals = $reservationsRentalsRepository->createQueryBuilder('reservations_rental')
+            ->leftJoin('reservations_rental.rentals', 'rentals')
+            ->addSelect('rentals')
+            ->leftJoin('reservations_rental.user', 'user')
+            ->addSelect('user')
+            ->leftJoin('reservations_rental.bill', 'bill')
+            ->addSelect('bill');
+
+        $pagination = $paginator->paginate(
+            $reservationsRentals,
+            $request->query->getInt('page', $page),
+            20
+        );
+
         return $this->render('admin/reservations_rentals/index.html.twig', [
-            'reservations_rentals' => $reservationsRentalsRepository->findAll(),
+            'reservations_rentals' => $pagination,
+            'sort' => $sort,
+            'direction' => $direction,
         ]);
     }
 

@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\ManipulatorInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,10 +25,24 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 final class EventsController extends AbstractController
 {
     #[Route(name: 'app_events_index', methods: ['GET'])]
-    public function index(EventsRepository $eventsRepository): Response
+    public function index(EventsRepository $eventsRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $page = $request->query->getInt('page',1);
+        $sort = $request->query->getString('sort', 'null');
+        $direction = $request->query->getString('direction', 'null');
+
+        $events = $eventsRepository->createQueryBuilder('event');
+
+        $pagination = $paginator->paginate(
+            $events,
+            $request->query->getInt('page', $page),
+            20
+        );
+
         return $this->render('admin/events/index.html.twig', [
-            'events' => $eventsRepository->findAll(),
+            'events' => $pagination,
+            'sort' => $sort,
+            'direction' => $direction,
         ]);
     }
 

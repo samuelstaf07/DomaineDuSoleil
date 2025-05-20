@@ -7,6 +7,7 @@ use App\Form\CommentsType;
 use App\Repository\CommentsRepository;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,10 +17,26 @@ use Symfony\Component\Routing\Attribute\Route;
 final class CommentsController extends AbstractController
 {
     #[Route(name: 'app_comments_index', methods: ['GET'])]
-    public function index(CommentsRepository $commentsRepository): Response
+    public function index(CommentsRepository $commentsRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $page = $request->query->getInt('page',1);
+        $sort = $request->query->getString('sort', 'null');
+        $direction = $request->query->getString('direction', 'null');
+
+        $comments = $commentsRepository->createQueryBuilder('comment')
+            ->leftJoin('comment.user', 'user')
+            ->addSelect('user');
+
+        $pagination = $paginator->paginate(
+            $comments,
+            $request->query->getInt('page', $page),
+            20
+        );
+
         return $this->render('admin/comments/index.html.twig', [
-            'comments' => $commentsRepository->findAll(),
+            'comments' => $pagination,
+            'sort' => $sort,
+            'direction' => $direction,
         ]);
     }
 

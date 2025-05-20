@@ -8,6 +8,7 @@ use App\Repository\RentalsRepository;
 use App\Repository\UsersRepository;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,10 +18,24 @@ use Symfony\Component\Routing\Attribute\Route;
 final class UsersController extends AbstractController
 {
     #[Route(name: 'app_users_index', methods: ['GET'])]
-    public function index(UsersRepository $usersRepository): Response
+    public function index(UsersRepository $usersRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $page = $request->query->getInt('page',1);
+        $sort = $request->query->getString('sort', 'null');
+        $direction = $request->query->getString('direction', 'null');
+
+        $users = $usersRepository->createQueryBuilder('user');
+
+        $pagination = $paginator->paginate(
+            $users,
+            $request->query->getInt('page', $page),
+            20
+        );
+
         return $this->render('admin/users/index.html.twig', [
-            'users' => $usersRepository->findAll(),
+            'users' => $pagination,
+            'sort' => $sort,
+            'direction' => $direction,
         ]);
     }
 

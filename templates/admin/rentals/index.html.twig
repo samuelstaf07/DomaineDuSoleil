@@ -2,14 +2,7 @@
 
 {% block title %}Rentals index{% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('js/admin/datatable.js') }}"></script>
-{% endblock %}
-
 {% block body %}
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.bootstrap5.css">
-
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
         {% include 'admin/navbar/index.html.twig' %}
         <h1>Tous les logements</h1>
@@ -17,23 +10,49 @@
 
         {% if rentals|length > 0 %}
             <div class="w-75">
-                <table class="table table-hover w-75" id="myTable">
+                <table class="table table-hover w-100" id="myTable">
                     <thead>
                     <tr>
-                        <th class="align-middle text-center">Id</th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(rentals, 'ID', 'rental.id') }}
+                        </th>
                         <th class="align-middle text-center">Image</th>
-                        <th class="align-middle">Titre</th>
-                        <th class="align-middle text-center">Nb l.double</th>
-                        <th class="align-middle text-center">Nb l.simple</th>
-                        <th class="align-middle text-center">Douche</th>
-                        <th class="align-middle text-center">Toilettes</th>
-                        <th class="align-middle text-center">Cuisine</th>
-                        <th class="align-middle text-center">Frigo</th>
-                        <th class="align-middle text-center">Chauffage</th>
-                        <th class="align-middle text-center">Animaux</th>
-                        <th class="align-middle text-center">€/jour</th>
-                        <th class="align-middle text-center">En promotion</th>
-                        <th class="align-middle text-center">Actif</th>
+                        <th class="align-middle">
+                            {{ knp_pagination_sortable(rentals, 'Titre', 'rental.title') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(rentals, 'Nb lit double', 'rental.nb_double_bed') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(rentals, 'Nb lit simple', 'rental.nb_simple_bed') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(rentals, 'Douche', 'rental.has_shower') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(rentals, 'Toilettes', 'rental.has_toilet') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(rentals, 'Cuisine', 'rental.has_kitchen') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(rentals, 'Frigo', 'rental.has_fridge') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(rentals, 'Chauffage', 'rental.has_heating') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(rentals, 'Animaux', 'rental.pets_accepted') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(rentals, '€/jour', 'rental.price_per_day') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(rentals, 'En promotion', 'rental.is_on_promotion') }}
+                        </th>
+                        <th class="align-middle text-center">
+                            {{ knp_pagination_sortable(rentals, 'Actif', 'rental.is_active') }}
+                        </th>
                         <th class="align-middle text-center">Actions</th>
                     </tr>
                     </thead>
@@ -87,6 +106,11 @@
         {% else %}
             <p class="alert alert-secondary">Aucun logement</p>
         {% endif %}
+        <div class="d-flex justify-content-between">
+            <div class="mt-2 ">
+                {{ knp_pagination_render(rentals) }}
+            </div>
+        </div>
 
         <a href="{{ path('app_rentals_new') }}" class="btn-yellow my-4">Ajouter une location</a>
     </div>

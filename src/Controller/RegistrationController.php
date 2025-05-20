@@ -38,7 +38,6 @@ class RegistrationController extends AbstractController
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword))
                 ->setIsActive(1)
                 ->setLastLogAt(new \DateTimeImmutable('now', new DateTimeZone('Europe/Brussels')))
-                ->setNbPoints(0)
                 ->setIsEmailAuthentificated(false)
                 ->setUpdatedAt(new \DateTimeImmutable('now', new DateTimeZone('Europe/Brussels')))
                 ->setCreatedAt(new \DateTimeImmutable('now', new DateTimeZone('Europe/Brussels')))
@@ -47,7 +46,7 @@ class RegistrationController extends AbstractController
             ;
 
             if ($usersRepository->count([]) === 0) {
-                $user->setRoles(['ROLE_ADMIN']);
+                $user->setRoles(['ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN']);
             } else {
                 $user->setRoles(['ROLE_USER']);
             }

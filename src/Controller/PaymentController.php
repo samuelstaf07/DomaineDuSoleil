@@ -302,7 +302,6 @@ final class PaymentController extends AbstractController
                 $newBill->setStatus(1);
                 $newBill->setUser($user);
                 $newBill->setPaymentIntentId($sessionStripe->payment_intent);
-                $user->setNbPoints($user->getNbPoints() + ((int) ($totalPriceBill / 100)));
 
                 $entityManager->persist($newBill);
                 $entityManager->flush();

@@ -2,22 +2,6 @@
 
 {% block title %}Toutes les factures{% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('js/admin/datatable.js') }}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const deleteModal = document.getElementById('deleteModal');
-            deleteModal.addEventListener('show.bs.modal', event => {
-                const button = event.relatedTarget;
-                const postId = button.getAttribute('data-id');
-                const confirmBtn = deleteModal.querySelector('#confirmDeleteBtn');
-                confirmBtn.href = `/admin/posts/${postId}/delete`;
-            });
-        });
-    </script>
-{% endblock %}
-
 {% block body %}
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.bootstrap5.css">
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
@@ -29,12 +13,22 @@
                 <table class="table table-hover w-75r" id="myTable">
                     <thead>
                     <tr>
-                        <th class="align-middle text-center">Id</th>
-                        <th class="align-middle text-center">Utilisateur</th>
-                        <th class="align-middle text-center">Date</th>
-                        <th class="align-middle text-center">Total_price</th>
-                        <th class="align-middle text-center">Status</th>
-                        <th class="align-middle text-center">actions</th>
+                        <th class="align-middle text-center {% if bills.isSorted('bill.id') %}sorted{% endif %}">
+                            {{ knp_pagination_sortable(bills, 'ID', 'bill.id') }}
+                        </th>
+                        <th class="align-middle text-center {% if bills.isSorted('user.firstname') %}sorted{% endif %}">
+                            {{ knp_pagination_sortable(bills, 'User', 'user.firstname') }}
+                        </th>
+                        <th class="align-middle text-center {% if bills.isSorted('bill.date') %}sorted{% endif %}">
+                            {{ knp_pagination_sortable(bills, 'Date', 'bill.date') }}
+                        </th>
+                        <th class="align-middle text-center {% if bills.isSorted('bill.total_price') %}sorted{% endif %}">
+                            {{ knp_pagination_sortable(bills, 'Montant', 'bill.total_price') }}
+                        </th>
+                        <th class="align-middle text-center {% if bills.isSorted('bill.status') %}sorted{% endif %}">
+                            {{ knp_pagination_sortable(bills, 'Statut', 'bill.status') }}
+                        </th>
+                        <th class="align-middle text-center">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -75,6 +69,10 @@
         {% else %}
             <p class="alert alert-secondary">Aucune facture</p>
         {% endif %}
-
+        <div class="d-flex justify-content-between">
+            <div class="mt-2 ">
+                {{ knp_pagination_render(bills) }}
+            </div>
+        </div>
     </div>
 {% endblock %}
