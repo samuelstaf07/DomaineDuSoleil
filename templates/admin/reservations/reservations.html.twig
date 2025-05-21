@@ -3,7 +3,6 @@
 {% block title %}Réservations de {{ rental.title }}{% endblock %}
 
 {% block body %}
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.bootstrap5.css">
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center my-5">
         <div class="d-flex w-75 justify-content-start">
             <a href="{{ path('app_rentals_index') }}" class="btn-yellow mb-4">Revenir à la liste</a>
@@ -73,9 +72,4 @@
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('libs/fullcalendar/dist/index.global.min.js') }}"></script>
-    <script src="{{ asset('js/admin/reservationsRentals.js') }}"></script>
-
-    {% if reservations|length > 0 %}
-        <script src="{{ asset('js/admin/datatable.js') }}"></script>
-    {% endif %}
 {% endblock %}

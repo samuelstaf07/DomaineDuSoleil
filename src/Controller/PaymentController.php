@@ -37,9 +37,15 @@ final class PaymentController extends AbstractController
         $this->endpointSecret = $endpointSecret;
     }
 
-    #[Route('/cart/create-session-stripe', name: 'app_payment_stripe')]
+    #[Route('/cart/create-session-stripe', name: 'app_payment_stripe', methods: ['GET'])]
     public function createCheckoutSession(SessionInterface $session): Response
     {
+        if (!$session->get('is_adult_confirmed')) {
+            $this->addFlash('danger', 'Vous devez confirmer être majeur pour pouvoir passer commande.');
+            return $this->redirectToRoute('app_cart');
+        }
+
+        $session->remove('is_adult_confirmed');
         $productStripe = [];
         $order = $session->get('myCart', []);
 

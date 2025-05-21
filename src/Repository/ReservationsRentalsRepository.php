@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\Comments;
+use App\Entity\Rentals;
 use App\Entity\ReservationsRentals;
 use App\Entity\Users;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -60,5 +62,34 @@ class ReservationsRentalsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findFinishedReservationsWithoutCommentForUser(Users $user): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->leftJoin('r.rentals', 'rental')
+            ->leftJoin(
+                Comments::class,
+                'c',
+                'WITH',
+                'c.user = r.user AND c.rentals = rental'
+            )
+            ->where('r.user = :user')
+            ->andWhere('r.date_end < :now')
+            ->andWhere('c.id IS NULL')
+            ->setParameter('user', $user)
+            ->setParameter('now', new \DateTimeImmutable());
 
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findByUserAndRental(Users $user, Rentals $rental): array
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.user = :user')
+            ->andWhere('r.rentals = :rental')
+            ->setParameter('user', $user)
+            ->setParameter('rental', $rental)
+            ->orderBy('r.date_reservation', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

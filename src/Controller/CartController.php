@@ -5,11 +5,14 @@ namespace App\Controller;
 use App\Entity\Bills;
 use App\Entity\ReservationsEvents;
 use App\Entity\ReservationsRentals;
+use App\Form\IsAdultType;
+use App\Form\ReservationsRentalsType;
 use App\Repository\EventsRepository;
 use App\Repository\RentalsRepository;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,7 +20,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class CartController extends AbstractController
 {
     #[Route('/cart', name: 'app_cart')]
-    public function index(SessionInterface $session): Response
+    public function index(SessionInterface $session, Request $request): Response
     {
         $newReservationRental = $session->get('newReservationRental');
         $newReservationEvent = $session->get('newReservationEvent');
@@ -44,8 +47,17 @@ final class CartController extends AbstractController
 
         $session->set('cartIdCounter', $idCounter);
 
+        $form = $this->createForm(isAdultType::class);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $session->set('is_adult_confirmed', true);
+            return $this->redirectToRoute('app_payment_stripe');
+        }
+
         return $this->render('cart/index.html.twig', [
             'cartElements' => $myCart,
+            'form' => $form,
         ]);
     }
 

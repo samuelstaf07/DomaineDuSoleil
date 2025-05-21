@@ -40,7 +40,9 @@ final class AccountController extends AbstractController
             $this->addFlash('danger','Vous devez être connecté pour accéder à cette section.');
             return $this->redirectToRoute('app_home');
         }
+
         return $this->render('account/index.html.twig', [
+            'finishedReservationsRentals' => $reservationsRentalsRepository->findFinishedReservationsWithoutCommentForUser($this->getUser()),
             'reservationsRentals' => $reservationsRentalsRepository->findCurrentAndUpcomingByUser($user),
             'reservationsEvents' => $reservationsEventsRepository->findUpcomingReservationsByUser($user),
         ]);
@@ -266,6 +268,7 @@ final class AccountController extends AbstractController
 
         return $this->render($views[$section],[
             'bills' => $billsRepository->findActiveBillsByUser($this->getUser()),
+            'user' => $this->getUser(),
         ]);
     }
 }

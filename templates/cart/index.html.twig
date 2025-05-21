@@ -158,14 +158,19 @@
 
 
 
-            <div class="d-flex gap-2">
+            <div class="d-flex  flex-column gap-2">
                 <a href="{{ path('app_reset_cart') }}" class="btn btn-red m-3">Vider le panier</a>
 
-                <a href="{{ path('app_payment_stripe') }}" class="btn btn-lightGreen2 m-3
+                {{ form_start(form) }}
+                <div class="d-flex flex-column bg-darkGreen p-3 rounded-4">
+                    {{ form_widget(form) }}
+                    <button type="submit" class="btn btn-lightGreen2 m-3
                 {% if not app.user or not app.user.isEmailAuthentificated() %}
                     disabledItem
                 {% endif %}
-                ">Valider le panier</a>
+                ">Valider le panier</button>
+                </div>
+                {{ form_end(form) }}
             </div>
         {% else %}
             <p class="alert alert-secondary m-3">Panier vide.</p>

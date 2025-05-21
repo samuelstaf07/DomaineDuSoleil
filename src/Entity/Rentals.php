@@ -400,4 +400,14 @@ class Rentals
         }
     }
 
+    public function hasCommentByUser(Users $user): bool
+    {
+        foreach ($this->getComments() as $comment) {
+            if ($comment->getUser() === $user) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

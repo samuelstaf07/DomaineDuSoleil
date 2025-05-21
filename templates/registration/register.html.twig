@@ -17,8 +17,9 @@
             {{ form_row(registrationForm.plainPassword, {'attr': {'data-controller': 'ux-toggle-password'}}) }}
             {{ form_row(registrationForm.agreeTerms) }}
 
-            <div class="w-100 d-flex justify-content-center">
+            <div class="w-100 d-flex justify-content-center gap-3">
                 <button type="submit" class="btn-green w-50">S'inscrire</button>
+                <a href="{{ path('app_login') }}" class="btn-yellow text-center w-50">Déja un compte ?</a>
             </div>
             {{ form_end(registrationForm) }}
         </div>

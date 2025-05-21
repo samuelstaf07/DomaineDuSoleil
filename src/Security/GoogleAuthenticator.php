@@ -3,6 +3,9 @@
 namespace App\Security;
 
 use App\Entity\Images;
+use App\Repository\UsersRepository;
+use App\Services\MailerService;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,6 +20,8 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelper;
+use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 class GoogleAuthenticator implements AuthenticatorInterface
 {
@@ -24,6 +29,10 @@ class GoogleAuthenticator implements AuthenticatorInterface
         private ClientRegistry $clientRegistry,
         private EntityManagerInterface $entityManager,
         private RouterInterface $router,
+        private UsersRepository $usersRepository,
+        private UserPasswordHasherInterface $passwordHasher,
+        private MailerService $mailerService,
+        private VerifyEmailHelperInterface $verifyEmailHelper,
     ) {}
 
     public function supports(Request $request): ?bool
@@ -42,7 +51,7 @@ class GoogleAuthenticator implements AuthenticatorInterface
 
         return new SelfValidatingPassport(
             new UserBadge($email, function() use ($email, $googleUser) {
-                $user = $this->entityManager->getRepository(Users::class)->findOneBy(['email' => $email]);
+                $user = $this->usersRepository->findOneBy(['email' => $email]);
 
                 if (!$user) {
                     $image = new Images();
@@ -54,7 +63,6 @@ class GoogleAuthenticator implements AuthenticatorInterface
                     $user->setGoogleAuthenticatorSecret($googleUser->getId());
                     $user->setFirstname($googleUser->getFirstName());
                     $user->setLastname($googleUser->getLastName());
-                    $user->setPassword(bin2hex(random_bytes(10)));
                     $user->setCreatedAt(new \DateTimeImmutable('now'));
                     $user->setLastLogAt(new \DateTimeImmutable('now'));
                     $user->setUpdatedAt(new \DateTimeImmutable('now'));
@@ -63,11 +71,13 @@ class GoogleAuthenticator implements AuthenticatorInterface
                     $user->setIsEmailAuthentificated(true);
                     $user->setImage($image);
                     $user->setBirthDate(new \DateTimeImmutable('now'));
+                    $user->setPassword($this->passwordHasher->hashPassword($user, bin2hex(random_bytes(10))));
 
                     $this->entityManager->persist($user);
                 }
 
                 $this->entityManager->flush();
+
                 return $user;
             })
         );

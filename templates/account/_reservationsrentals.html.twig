@@ -20,6 +20,7 @@
                 <th class="align-middle text-center">Prix total</th>
                 <th class="align-middle text-center">Status de la caution</th>
                 <th class="align-middle text-center">Total renvoyé</th>
+                <th class="align-middle text-center">Ajouter un commentaire</th>
             </tr>
             </thead>
             <tbody>
@@ -56,6 +57,17 @@
                                 En cours de vérification
                             {% else %}
                                 {{ elem.totalDepositReturned|number_format(2, ',', '') }}€
+                            {% endif %}
+                        </td>
+                        <td class="align-middle text-center">
+                            {% if elem.dateEnd|date('d/m/Y') >= "now"|date('d/m/Y') %}
+                                Réservation pas encore finie/commencée
+                            {% else %}
+                                {% if elem.rentals.hasCommentByUser(user) %}
+                                    Déja un commentaire
+                                {% else %}
+                                    <a href="{{ path('app_add_comment', {id: elem.rentals.id}) }}" data-turbo="false">Ajouter un commentaire</a>
+                                {% endif %}
                             {% endif %}
                         </td>
                     </tr>
