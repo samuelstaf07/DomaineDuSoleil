@@ -62,19 +62,12 @@ class ReservationsRentalsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findFinishedReservationsWithoutCommentForUser(Users $user): array
+    public function findFinishedReservations(Users $user): array
     {
         $qb = $this->createQueryBuilder('r')
             ->leftJoin('r.rentals', 'rental')
-            ->leftJoin(
-                Comments::class,
-                'c',
-                'WITH',
-                'c.user = r.user AND c.rentals = rental'
-            )
             ->where('r.user = :user')
             ->andWhere('r.date_end < :now')
-            ->andWhere('c.id IS NULL')
             ->setParameter('user', $user)
             ->setParameter('now', new \DateTimeImmutable());
 

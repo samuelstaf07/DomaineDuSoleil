@@ -41,8 +41,15 @@ final class AccountController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
+        $reservationWithoutComment = [];
+        foreach ($reservationsRentalsRepository->findFinishedReservations($this->getUser()) as $reservation){
+            if(!$reservation->getRentals()->hasCommentByUser($this->getUser())){
+                $reservationWithoutComment[] = $reservation;
+            }
+        }
+
         return $this->render('account/index.html.twig', [
-            'finishedReservationsRentals' => $reservationsRentalsRepository->findFinishedReservationsWithoutCommentForUser($this->getUser()),
+            'finishedReservationsRentals' => $reservationWithoutComment,
             'reservationsRentals' => $reservationsRentalsRepository->findCurrentAndUpcomingByUser($user),
             'reservationsEvents' => $reservationsEventsRepository->findUpcomingReservationsByUser($user),
         ]);
