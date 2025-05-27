@@ -8,21 +8,26 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto flex gap-3 align-items-center">
-                <li class="nav-item">
-                    <a class="btn-black" href="{{ path('app_posts') }}">Nouveautés</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn-yellow" href="{{ path('app_events') }}">Événements</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn-lightGreen" href="{{ path('app_rentals') }}">Logements</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn-lightGreen2" href="{{ path('app_cart') }}">
-                        <img src="{{ asset('styles/img/cart.svg') }}" alt="Accéder au panier">
-                    </a>
-                </li>
+            <ul class="navbar-nav ms-auto align-items-center d-flex p-3 flex-md-row flex-column gap-md-3 flex-md-wrap gap-4">
+                <div class="d-flex gap-3">
+                    <li class="nav-item">
+                        <a class="btn-black" href="{{ path('app_posts') }}">Nouveautés</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn-yellow" href="{{ path('app_events') }}">Événements</a>
+                    </li>
+                </div>
+                <div class="d-flex gap-3">
+                    <li class="nav-item">
+                        <a class="btn-lightGreen" href="{{ path('app_rentals') }}">Logements</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn-lightGreen2" href="{{ path('app_cart') }}">
+                            <img src="{{ asset('styles/img/cart.svg') }}" alt="Accéder au panier">
+                        </a>
+                    </li>
+                </div>
+
                 {% if app.user %}
                     <div class="dropdown">
                         <button class="dropdown-toggle d-flex gap-2 align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -51,14 +56,15 @@
                             </li>
                         </ul>
                     </div>
-
                 {% else %}
-                    <li class="nav-item">
-                        <a class="btn-green" href="{{ path('app_login') }}">Connexion</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn-signup" href="{{ path('app_register') }}">Inscription</a>
-                    </li>
+                    <div class="d-flex gap-3">
+                        <li class="nav-item">
+                            <a class="btn-green" href="{{ path('app_login') }}">Connexion</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn-signup" href="{{ path('app_register') }}">Inscription</a>
+                        </li>
+                    </div>
                 {% endif %}
             </ul>
         </div>

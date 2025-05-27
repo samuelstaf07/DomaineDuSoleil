@@ -14,13 +14,15 @@
 
         <header class="d-flex flex-column align-items-center gap-3">
             <h2>{{ post.title }}</h2>
-            <div class="w-75 d-flex gap-3">
+            <div class="w-75 d-flex flex-column flex-xl-row gap-3">
                 {% if post.getHomePageImage() %}
-                    <a class="{% if post.getHomePageImage() %}col-md-6 w-50{% endif %} h-100" href="{{ asset('uploads/' ~ post.getHomePageImage().getSrc()) }}" title="{{ post.getHomePageImage().getAlt() }}">
-                        <img class="img-fluid rounded-4 w-100 h-100" src="{{ asset('uploads/' ~ post.getHomePageImage().getSrc()) }}" alt="{{ post.getHomePageImage().getAlt() }}">
-                    </a>
+                    <div class="col-12 col-xl-6">
+                        <a class="{% if post.getHomePageImage() %}col-xl-6 w-50{% endif %} h-100" href="{{ asset('uploads/' ~ post.getHomePageImage().getSrc()) }}" title="{{ post.getHomePageImage().getAlt() }}">
+                            <img class="object-fit-cover rounded-4 w-100 h-100" src="{{ asset('uploads/' ~ post.getHomePageImage().getSrc()) }}" alt="{{ post.getHomePageImage().getAlt() }}">
+                        </a>
+                    </div>
                 {% endif %}
-                <div class="{% if post.getHomePageImage() %}w-50{% else %}w-100{% endif %} h-100 bg-lightGreen rounded-4 p-2">
+                <div class="{% if post.getHomePageImage() %}col-12 col-xl-6{% else %}col-12{% endif %} h-100 bg-lightGreen rounded-4 p-2">
                     <p>{{ post.content }}</p>
                 </div>
             </div>
@@ -30,7 +32,7 @@
         {% if images|length > 1 %}
             <section id="galleryPost" class="d-flex flex-column align-items-center gap-3 py-4 px-5 rounded-4 bg-lightGreen">
                 <h3>Gallerie photo du poste</h3>
-                <div class="d-flex popup-gallery w-75 justify-content-center gap-3">
+                <div class="d-flex flex-column flex-md-row popup-gallery w-75 justify-content-center gap-3">
                     {% for image in images %}
                         {% if not image.isHomePage %}
                             <a href="{{ asset('uploads/' ~ image.getSrc()) }}" title="{{ image.getAlt() }}">

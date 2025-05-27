@@ -17,17 +17,19 @@
     </script>
 
     <div class="contentMargin popup-gallery d-flex flex-column align-items-center gap-5">
-        <h3 class="myTitle fs-2">{{ rental.title|capitalize }}</h3>
+        <h3 class="myTitle fs-2 text-center">{{ rental.title|capitalize }}</h3>
         {% if not rental.isActive %}<p class="alert alert-danger">Ce logement est inactif, il n'est pas disponible.</p>{% endif %}
 
         <header class="w-75 d-flex flex-column gap-3 align-items-center">
-            <div class="d-flex gap-3">
+            <div class="d-block d-xl-flex gap-3">
                 {% if rental.getHomePageImage() %}
-                    <a class="col-md-6" href="{{ asset('uploads/' ~ rental.getHomePageImage().getSrc()) }}" title="{{ rental.getHomePageImage().getAlt() }}">
-                        <img class="img-fluid rounded-4 w-100 h-100" src="{{ asset('uploads/' ~ rental.getHomePageImage().getSrc()) }}" alt="{{ rental.getHomePageImage().getAlt() }}">
-                    </a>
+                    <div class="col-xl-6">
+                        <a href="{{ asset('uploads/' ~ rental.getHomePageImage().getSrc()) }}" title="{{ rental.getHomePageImage().getAlt() }}">
+                            <img class="object-fit-cover rounded-4 w-100 h-100" src="{{ asset('uploads/' ~ rental.getHomePageImage().getSrc()) }}" alt="{{ rental.getHomePageImage().getAlt() }}">
+                        </a>
+                    </div>
                 {% endif %}
-                <div {% if rental.getHomePageImage() %}class="col-md-6"{% endif %}>
+                <div class="{% if rental.getHomePageImage() %}col-xl-6{% else %}col-12{% endif %}">
                     <p class="bg-lightGreen rounded-4 p-2">{{ rental.content|capitalize }}</p>
                     <div class="bg-darkGrey rounded-4 p-2">
                         <div class="d-flex gap-1 justify-content-between align-items-start">
@@ -99,7 +101,7 @@
                                 </div>
                             </div>
                             <div class="w-50 d-flex flex-column justify-content-end align-items-end gap-3 p-4">
-                                <div class="rate d-flex gap-2 align-items-center">
+                                <div class="rate d-flex flex-md-row flex-column gap-2 align-items-center">
                                     {% set averageData = rental.getAverageRateAndCommentCount() %}
                                     {{ averageData.averageRate }}/5
                                     ({{ averageData.commentCount }})
@@ -180,7 +182,7 @@
         {% if images|length > 1 %}
             <section id="galleryRental" class="d-flex flex-column align-items-center gap-3 py-4 px-5 rounded-4 bg-lightGreen">
                 <h3>Gallerie photo du logement</h3>
-                <div class="d-flex popup-gallery w-75 justify-content-center gap-3">
+                <div class="d-flex flex-column flex-xl-row popup-gallery w-75 justify-content-center gap-3">
                     {% for imageRental in images %}
                         {% if not imageRental.isHomePage %}
                             <a href="{{ asset('uploads/' ~ imageRental.getSrc()) }}" title="{{ imageRental.getAlt() }}">
@@ -199,8 +201,8 @@
                     <p class="alert alert-danger d-none">Dates non valide</p>
 
                     {{ form_start(form, {'attr': {'class': 'd-flex flex-column gap-4 p-4 rounded-4 bg-myGreen', 'id': 'reservation-form', 'data-turbo': 'false'}}) }}
-                    <div class="d-flex gap-4">
-                        <div class="w-50 d-flex flex-column gap-1">
+                    <div class="d-flex flex-column flex-xl-row justify-content-center gap-4">
+                        <div class="col-12 col-xl-5 d-flex flex-column gap-1">
                             <label for="dateStart" class="mx-2 fw-bold text-center">Date de début</label>
                             {{ form_widget(form.date_start, {
                                 'attr': {
@@ -212,7 +214,7 @@
                                 'type': 'text'
                             }) }}
                         </div>
-                        <div class="w-50 d-flex flex-column gap-1">
+                        <div class="col-12 col-xl-5 d-flex flex-column gap-1">
                             <label for="dateEnd" class="mx-2 fw-bold text-center">Date de fin</label>
                             {{ form_widget(form.date_end, {
                                 'attr': {
@@ -244,26 +246,31 @@
             </section>
         {% endif %}
 
-        <section id="comments" class="w-50 mb-4 d-flex flex-column align-items-center gap-2">
+        <section id="comments" class="container mb-4 d-flex flex-column align-items-center gap-2">
             <h3 class="text-center">Avis et commentaires</h3>
+
             {% if comments|length == 0 %}
                 <p class="text-center alert alert-secondary rounded-4 my-4">Aucun commentaire.</p>
             {% else %}
-                <div class="d-flex flex-column gap-2">
+                <div class="d-flex flex-column gap-3 w-100">
                     {% for comment in comments %}
-                        <div class="commentUser p-4 rounded-4 d-none gap-4">
-                            <div class="imageUser d-flex justify-content-center align-items-center rounded-circle">
+                        <div class="commentUser p-3 rounded-4 d-none gap-4 border bg-light w-100">
+                            <div class="imageUser d-flex justify-content-center align-items-center rounded-circle flex-shrink-0 mx-auto mx-md-0" style="width: 75px; height: 75px;">
                                 {% if comment.user.image.src == "null" %}
-                                    <svg class="rounded-circle" xmlns="http://www.w3.org/2000/svg" width="75" height="75" viewBox="0 0 24 24"><path fill="#F8F9FA" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"/></svg>
+                                    <svg class="rounded-circle" xmlns="http://www.w3.org/2000/svg" width="75" height="75" viewBox="0 0 24 24">
+                                        <path fill="#F8F9FA" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"/>
+                                    </svg>
                                 {% else %}
-                                    <img class="rounded-circle" src="{{ asset('uploads/' ~ comment.user.image.src) }}" alt="{{ comment.user.image.alt }}" style="object-fit: cover; height: 75px; width: 75px">
+                                    <img class="rounded-circle" src="{{ asset('uploads/' ~ comment.user.image.src) }}" alt="{{ comment.user.image.alt }}" style="object-fit: cover; width: 75px; height: 75px;">
                                 {% endif %}
                             </div>
+
                             <div class="d-flex flex-column w-100">
-                                <div class="commentTitle d-flex mx-2 gap-2 w-100 border-bottom">
-                                    <p class="w-25 h5 fw-bold">{{ comment.user.lastName }} {{ comment.user.firstName }}</p>
-                                    <div class="w-50 d-flex gap-2">
-                                        <p>{{ comment.rating }}/5</p>
+                                <div class="commentTitle d-flex flex-column flex-md-row gap-2 w-100 border-bottom pb-2">
+                                    <p class="h5 fw-bold m-0">{{ comment.user.lastName }} {{ comment.user.firstName }}</p>
+
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <p class="m-0">{{ comment.rating }}/5</p>
                                         <div>
                                             {% set emptyStars = 5 - comment.rating %}
 
@@ -280,20 +287,22 @@
                                             {% endif %}
                                         </div>
                                     </div>
-                                    <p class="w-25">
-                                        {{ comment.createdAt|date('d/m/Y') }}
-                                    </p>
+
+                                    <p class="text-muted m-0 ms-auto">{{ comment.createdAt|date('d/m/Y') }}</p>
                                 </div>
-                                <div class="commentContent mx-2 mt-2">
-                                    <p>{{ comment.content }}</p>
+
+                                <div class="commentContent mt-2">
+                                    <p class="mb-0">{{ comment.content }}</p>
                                 </div>
                             </div>
                         </div>
                     {% endfor %}
                 </div>
             {% endif %}
-            <button class="btn-green voir-plus">Voir plus...</button>
+
+            <button class="btn-green mt-3 voir-plus">Voir plus...</button>
         </section>
+
     </div>
 
 {% endblock %}

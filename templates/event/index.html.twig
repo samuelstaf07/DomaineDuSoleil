@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tous les événements{% endblock %}
+{% block title %}{{ event.title|capitalize }}{% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
@@ -11,16 +11,18 @@
 
 {% block body %}
     <div class="contentMargin popup-gallery d-flex flex-column align-items-center gap-5 mb-4">
-        <h3 class="myTitle fs-2">{{ event.title|capitalize }}</h3>
+        <h3 class="myTitle fs-2 text-center">{{ event.title|capitalize }}</h3>
 
         <header class="w-75 d-flex flex-column gap-3 align-items-center">
-            <div class="d-flex gap-3">
+            <div class="d-block d-xl-flex gap-3">
                 {% if event.getHomePageImage() %}
-                    <a class="col-md-6" href="{{ asset('uploads/' ~ event.getHomePageImage().getSrc()) }}" title="{{ event.getHomePageImage().getAlt() }}">
-                        <img class="img-fluid rounded-4 w-100 h-100" src="{{ asset('uploads/' ~ event.getHomePageImage().getSrc()) }}" alt="{{ event.getHomePageImage().getAlt() }}">
-                    </a>
+                    <div class="col-xl-6">
+                        <a class="col-xl-6" href="{{ asset('uploads/' ~ event.getHomePageImage().getSrc()) }}" title="{{ event.getHomePageImage().getAlt() }}">
+                            <img class="object-fit-cover rounded-4 w-100 h-100" src="{{ asset('uploads/' ~ event.getHomePageImage().getSrc()) }}" alt="{{ event.getHomePageImage().getAlt() }}">
+                        </a>
+                    </div>
                 {% endif %}
-                <div {% if event.getHomePageImage() %}class="col-md-6"{% endif %}>
+                <div class="{% if event.getHomePageImage() %}col-xl-6{% else %}col-12{% endif %}">
                     <p class="bg-lightGreen rounded-4 p-2">{{ event.content|capitalize }}</p>
 
                     {% if not event.isPast() %}
@@ -68,7 +70,7 @@
                             {{ form_end(form) }}
                         {% endif %}
                     {% else %}
-                        <div class="bg-LightGrey rounded-4 p-2 d-flex flex-column justify-content-between p-3">
+                        <div class="bg-darkGrey rounded-4 p-2 d-flex flex-column justify-content-between p-3">
                             <div class="d-flex justify-content-between">
                                 <p>{{ event.nbPlaces }} places</p>
                                 <h4><span class="color-lightGreen">{{ event.price|number_format(2, ',', '') }}€</span>/personne</h4>
@@ -83,9 +85,9 @@
 
         {% set images = event.getImages() %}
         {% if images|length > 1 %}
-            <section id="galleryEvent" class="d-flex flex-column align-items-center gap-3 py-4 px-5 rounded-4 bg-lightGreen">
+            <section id="galleryEvent" class="container d-flex flex-column align-items-center gap-3 py-4 px-5 rounded-4 bg-lightGreen">
                 <h3>Gallerie photo de l'événement</h3>
-                <div class="d-flex popup-gallery w-75 justify-content-center gap-3">
+                <div class="d-flex flex-column flex-md-row popup-gallery w-75 justify-content-center gap-3">
                     {% for image in images %}
                         {% if not image.isHomePage %}
                             <a href="{{ asset('uploads/' ~ image.getSrc()) }}" title="{{ image.getAlt() }}">

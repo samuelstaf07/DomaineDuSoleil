@@ -8,74 +8,76 @@
 
     {% if reservationCount > 0 %}
 
-        <table class="table mt-4 table-bordered table-striped table-hover">
-            <thead>
-            <tr>
-                <th class="align-middle text-center">Id</th>
-                <th class="align-middle text-center">Id de la facture</th>
-                <th class="align-middle text-center">Logement</th>
-                <th class="align-middle text-center">Date de début</th>
-                <th class="align-middle text-center">Date de fin</th>
-                <th class="align-middle text-center">Date de réservation</th>
-                <th class="align-middle text-center">Prix total</th>
-                <th class="align-middle text-center">Status de la caution</th>
-                <th class="align-middle text-center">Total renvoyé</th>
-                <th class="align-middle text-center">Ajouter un commentaire</th>
-            </tr>
-            </thead>
-            <tbody>
+        <div class="table-responsive">
+            <table class="table mt-4 table-bordered table-striped table-hover">
+                <thead>
+                <tr>
+                    <th class="align-middle text-center">Id</th>
+                    <th class="align-middle text-center">Id de la facture</th>
+                    <th class="align-middle text-center">Logement</th>
+                    <th class="align-middle text-center">Date de début</th>
+                    <th class="align-middle text-center">Date de fin</th>
+                    <th class="align-middle text-center">Date de réservation</th>
+                    <th class="align-middle text-center">Prix total</th>
+                    <th class="align-middle text-center">Status de la caution</th>
+                    <th class="align-middle text-center">Total renvoyé</th>
+                    <th class="align-middle text-center">Ajouter un commentaire</th>
+                </tr>
+                </thead>
+                <tbody>
 
-            {% for bill in bills %}
-                {% for elem in bill.getReservationsRentals() %}
-                    <tr>
-                        <td class="align-middle text-center">{{ bill.id }}</td>
-                        <td class="align-middle text-center">{{ elem.id }}</td>
-                        <td class="align-middle">
-                            <a href="{{ path('app_rental', {id:elem.rentals.id }) }}" data-turbo="false">{{ elem.rentals.title|capitalize }}</a>
-                        </td>
-                        <td class="align-middle text-center">{{ elem.dateStart|date('d/m/Y') }}</td>
-                        <td class="align-middle text-center">{{ elem.dateEnd|date('d/m/Y') }}</td>
-                        <td class="align-middle text-center">{{ bill.date|date('d/m/Y') }}</td>
-                        <td class="align-middle text-center">
-                            {{ elem.totalPrice|number_format(2, ',', '') }}€
-                        </td>
-                        <td class="align-middle text-center">
-                            {% if elem.statusBaseDeposit == 0 %}
-                                En cours
-                            {% elseif elem.statusBaseDeposit == 1 %}
-                                <span class="color-orange">Partielement remboursé</span>
-                            {% elseif elem.statusBaseDeposit == 2 %}
-                                <span class="color-darkGreen">Totalement remboursé</span>
-                            {% elseif elem.statusBaseDeposit == 3 %}
-                                <span class="color-red">Refusé</span>
-                            {% elseif elem.statusBaseDeposit == 4 %}
-                                <span class="color-red">Annulé</span>
-                            {% endif %}
-                        </td>
-                        <td class="align-middle text-center">
-                            {% if elem.statusBaseDeposit == 0 %}
-                                En cours de vérification
-                            {% else %}
-                                {{ elem.totalDepositReturned|number_format(2, ',', '') }}€
-                            {% endif %}
-                        </td>
-                        <td class="align-middle text-center">
-                            {% if elem.dateEnd|date('d/m/Y') >= "now"|date('d/m/Y') %}
-                                Réservation pas encore finie/commencée
-                            {% else %}
-                                {% if elem.rentals.hasCommentByUser(user) %}
-                                    Déja un commentaire
-                                {% else %}
-                                    <a href="{{ path('app_add_comment', {id: elem.rentals.id}) }}" data-turbo="false">Ajouter un commentaire</a>
+                {% for bill in bills %}
+                    {% for elem in bill.getReservationsRentals() %}
+                        <tr>
+                            <td class="align-middle text-center">{{ bill.id }}</td>
+                            <td class="align-middle text-center">{{ elem.id }}</td>
+                            <td class="align-middle">
+                                <a href="{{ path('app_rental', {id:elem.rentals.id }) }}" data-turbo="false">{{ elem.rentals.title|capitalize }}</a>
+                            </td>
+                            <td class="align-middle text-center">{{ elem.dateStart|date('d/m/Y') }}</td>
+                            <td class="align-middle text-center">{{ elem.dateEnd|date('d/m/Y') }}</td>
+                            <td class="align-middle text-center">{{ bill.date|date('d/m/Y') }}</td>
+                            <td class="align-middle text-center">
+                                {{ elem.totalPrice|number_format(2, ',', '') }}€
+                            </td>
+                            <td class="align-middle text-center">
+                                {% if elem.statusBaseDeposit == 0 %}
+                                    En cours
+                                {% elseif elem.statusBaseDeposit == 1 %}
+                                    <span class="color-orange">Partielement remboursé</span>
+                                {% elseif elem.statusBaseDeposit == 2 %}
+                                    <span class="color-darkGreen">Totalement remboursé</span>
+                                {% elseif elem.statusBaseDeposit == 3 %}
+                                    <span class="color-red">Refusé</span>
+                                {% elseif elem.statusBaseDeposit == 4 %}
+                                    <span class="color-red">Annulé</span>
                                 {% endif %}
-                            {% endif %}
-                        </td>
-                    </tr>
+                            </td>
+                            <td class="align-middle text-center">
+                                {% if elem.statusBaseDeposit == 0 %}
+                                    En cours de vérification
+                                {% else %}
+                                    {{ elem.totalDepositReturned|number_format(2, ',', '') }}€
+                                {% endif %}
+                            </td>
+                            <td class="align-middle text-center">
+                                {% if elem.dateEnd|date('d/m/Y') >= "now"|date('d/m/Y') %}
+                                    Réservation pas encore finie/commencée
+                                {% else %}
+                                    {% if elem.rentals.hasCommentByUser(user) %}
+                                        Déja un commentaire
+                                    {% else %}
+                                        <a href="{{ path('app_add_comment', {id: elem.rentals.id}) }}" data-turbo="false">Ajouter un commentaire</a>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
                 {% endfor %}
-            {% endfor %}
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     {% else %}
         <p class="alert alert-secondary text-center">Aucune réservations de logements</p>
     {% endif %}

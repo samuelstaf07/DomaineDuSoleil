@@ -4,9 +4,9 @@
     {% endif %}
 
     <div class="d-flex justify-content-center">
-        <div class="d-flex flex-column gap-4 bg-lightGreen w-50 p-4 rounded-4 align-items-center justify-content-center p-4">
+        <div class="d-flex flex-column gap-4 bg-lightGreen col-10 col-md-8 col-xl-6 p-4 rounded-4 align-items-center justify-content-center p-4">
             <h4>Modification de votre compte</h4>
-            <div class="w-50">
+            <div class="col-12">
 
                 {{ form_errors(form) }}
                 {{ form_start(form, {
@@ -29,5 +29,6 @@
     </div>
 
     <script src="{{ asset('libs/jquery/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('libs/mc-datepicker/dist/mc-calendar.min.js') }}"></script>
     <script src="{{ asset('js/userModify.js') }}"></script>
 </turbo-frame>

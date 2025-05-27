@@ -36,53 +36,57 @@
             </p>
 
             {% if reservationsRentals|length > 0 %}
-                <table class="table table-active table-striped table-hover">
-                    <thead>
-                    <tr>
-                        <th class="text-center">Image</th>
-                        <th>Nom de la location</th>
-                        <th class="text-center">Date de début</th>
-                        <th class="text-center">Date de fin</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for reservation in reservationsRentals %}
+                <div class="table-responsive">
+                    <table class="table table-active table-striped table-hover">
+                        <thead>
                         <tr>
-                            <td class="align-middle text-center">
-                                <img src="{{ asset('styles/img/' ~ reservation.rentals.getHomePageImage().getSrc()) }}" alt="{{ asset('styles/img/' ~ reservation.rentals.getHomePageImage().getAlt()) }}" class="iconImage rounded-3">
-                            </td>
-                            <td class="align-middle">{{ reservation.rentals.title|capitalize }}</td>
-                            <td class="align-middle text-center">{{ reservation.dateStart|date('d/m/Y') }}</td>
-                            <td class="align-middle text-center">{{ reservation.dateEnd|date('d/m/Y') }}</td>
+                            <th class="text-center">Image</th>
+                            <th>Nom de la location</th>
+                            <th class="text-center">Date de début</th>
+                            <th class="text-center">Date de fin</th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {% for reservation in reservationsRentals %}
+                            <tr>
+                                <td class="align-middle text-center">
+                                    <img src="{{ asset('styles/img/' ~ reservation.rentals.getHomePageImage().getSrc()) }}" alt="{{ asset('styles/img/' ~ reservation.rentals.getHomePageImage().getAlt()) }}" class="iconImage rounded-3">
+                                </td>
+                                <td class="align-middle">{{ reservation.rentals.title|capitalize }}</td>
+                                <td class="align-middle text-center">{{ reservation.dateStart|date('d/m/Y') }}</td>
+                                <td class="align-middle text-center">{{ reservation.dateEnd|date('d/m/Y') }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             {% endif %}
 
             {% if reservationsEvents|length > 0 %}
-                <table class="table table-active">
-                    <thead>
-                    <tr>
-                        <th class="text-center">Image</th>
-                        <th>Nom de l'événement</th>
-                        <th class="text-center">Date</th>
-                        <th class="text-center">nombre de place</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for reservation in reservationsEvents %}
+                <div class="table-responsive">
+                    <table class="table table-active">
+                        <thead>
                         <tr>
-                            <td class="align-middle text-center">
-                                <img src="{{ asset('styles/img/' ~ reservation.event.getHomePageImage().getSrc()) }}" alt="{{ asset('styles/img/' ~ reservation.event.getHomePageImage().getAlt()) }}" class="iconImage rounded-3">
-                            </td>
-                            <td class="align-middle">{{ reservation.event.title|capitalize }}</td>
-                            <td class="align-middle text-center">{{ reservation.event.date|date('d/m/Y') }}</td>
-                            <td class="align-middle text-center">{{ reservation.nbPlaces }} places</td>
+                            <th class="text-center">Image</th>
+                            <th>Nom de l'événement</th>
+                            <th class="text-center">Date</th>
+                            <th class="text-center">nombre de place</th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {% for reservation in reservationsEvents %}
+                            <tr>
+                                <td class="align-middle text-center">
+                                    <img src="{{ asset('styles/img/' ~ reservation.event.getHomePageImage().getSrc()) }}" alt="{{ asset('styles/img/' ~ reservation.event.getHomePageImage().getAlt()) }}" class="iconImage rounded-3">
+                                </td>
+                                <td class="align-middle">{{ reservation.event.title|capitalize }}</td>
+                                <td class="align-middle text-center">{{ reservation.event.date|date('d/m/Y') }}</td>
+                                <td class="align-middle text-center">{{ reservation.nbPlaces }} places</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             {% endif %}
 
         </turbo-frame>

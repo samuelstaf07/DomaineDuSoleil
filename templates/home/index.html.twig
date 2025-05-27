@@ -12,14 +12,13 @@
     <section id="discount" class="d-flex flex-column justify-content-center align-items-center gap-3">
         <h2 class="mt-5">Nos logements en promotions</h2>
 
-        <div id="logementCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div id="logementCarousel" class="carousel slide d-none d-xl-block" data-bs-ride="carousel">
             <div class="carousel-inner">
-
-                {% for rental in rentals|batch(3) %}
+                {% for rental in rentals|batch(3, '') %}
                     <div class="carousel-item {% if loop.first %}active{% endif %} p-5">
-                        <div class="row">
+                        <div class="row g-4 px-4">
                             {% for item in rental %}
-                                <div class="col-sm-4">
+                                <div class="col-12 col-md-6 col-lg-4">
                                     <div class="rentalDiscount rounded-4">
                                         <div class="imageTop rounded-top-4" style="background: url({{ asset('uploads/' ~ item.getHomePageImage().src) }}); background-size: cover; background-position: center; background-repeat: no-repeat;">
                                             <div class="rate d-flex gap-2 align-items-center">
@@ -71,15 +70,15 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="titlePromotion px-4">
-                                                <div style="height: 75px;" class="d-flex align-items-center">
-                                                    <h3 class="fw-bold">{{ item.title|capitalize }}</h3>
+                                                <div class="d-flex align-items-center titleCardRental">
+                                                    <h3 class="fw-bold h5">{{ item.title|capitalize }}</h3>
                                                 </div>
                                                 {% if item.isOnPromotion %}
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 16 16"><path fill="#EB4034" fill-rule="evenodd" d="M9.744 2.072L7.818.917L5.892 2.072l-2.237.198l-.88 2.066l-1.693 1.475L1.585 8l-.503 2.189l1.693 1.475l.88 2.066l2.237.198l1.926 1.155l1.926-1.155l2.237-.198l.88-2.066l1.694-1.475L14.05 8l.504-2.189l-1.694-1.475l-.88-2.066zM5.5 6.5a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0M6 5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m-.146 5.854l5-5l-.708-.708l-5 5zM9.5 10a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0m.5-1.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3" clip-rule="evenodd"/></svg>
                                                 {% endif %}
                                             </div>
-                                            <div class="d-flex">
-                                                <div class="d-flex flex-column gap-1 w-50">
+                                            <div class="flex-column flex-xxl-row gap-2 d-flex align-items-center justify-content-end">
+                                                <div class="d-flex flex-column gap-1 col-xxl-6 col-12 my-2">
                                                     <p class="textPromotion m-0 px-4">{{ item.nbSimpleBed + (2 * item.nbDoubleBed) }} personne{% if (item.nbSimpleBed + (2 * item.nbDoubleBed))>1 %}s{% endif %} maximum</p>
                                                     <p class="textPromotion m-0 px-4">{{ item.nbSimpleBed }} lits simples</p>
                                                     <p class="textPromotion m-0 px-4">{{ item.nbDoubleBed }} lit double</p>
@@ -104,12 +103,12 @@
                                                         {% endif %}
                                                     </div>
                                                 </div>
-                                                <div class="d-flex flex-column gap-1 w-50 align-items-center justify-content-end">
-                                                    <div class="pricePromotion d-flex flex-column align-items-start">
+                                                <div class="d-flex flex-column gap-1 col-xxl-6 col-12 align-items-center justify-content-end">
+                                                    <div class="pricePromotion d-flex flex-column align-items-start my-2">
                                                         {% if item.isOnPromotion %}<span class="newPrice price h4">{{ (item.pricePerDay * 0.9)|number_format(2, ',', '') }}€</span>{% endif %}
                                                         <p class="price h4"><span {% if item.isOnPromotion %} class="strike" {% endif %}>{{ item.pricePerDay|number_format(2, ',', '') }}€</span>/nuit</p>
                                                     </div>
-                                                    <a href="{{ path('app_rental', {id:item.id}) }}" class="btn-yellow d-flex align-items-center justify-content-center">
+                                                    <a href="{{ path('app_rental', {id:item.id}) }}" class="my-2 btn-yellow d-flex align-items-center justify-content-center">
                                                         Voir plus
                                                     </a>
                                                 </div>
@@ -121,10 +120,7 @@
                         </div>
                     </div>
                 {% endfor %}
-
             </div>
-
-
             {% if rentals|length > 3 %}
                 <button class="carousel-control-prev" type="button" data-bs-target="#logementCarousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -133,25 +129,131 @@
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 </button>
             {% endif %}
+        </div>
 
+        <div class="container d-block d-xl-none">
+            {% for rental in rentals|slice(0, 3) %}
+                <div class="{% if loop.first %}active{% endif %} p-5">
+                    <div class="row g-4 px-4">
+                        <div class="col-12">
+                            <div class="rentalDiscount rounded-4">
+                                <div class="imageTop rounded-top-4" style="background: url({{ asset('uploads/' ~ rental.getHomePageImage().src) }}); background-size: cover; background-position: center; background-repeat: no-repeat;">
+                                    <div class="rate d-flex gap-2 align-items-center">
+                                        {% set averageData = rental.getAverageRateAndCommentCount() %}
+                                        {{ averageData.averageRate }}/5
+                                        ({{ averageData.commentCount }})
+                                        <div class="d-flex gap-1 align-items-center">
+                                            {% if averageData.commentCount > 0 %}
+
+                                                {% set fullStars = (averageData.averageRate // 1) %}
+                                                {% set decimalPart = averageData.averageRate - fullStars %}
+
+                                                {% if decimalPart <= 0.25 %}
+                                                    {% set hasHalfStar = false %}
+                                                {% elseif decimalPart > 0.25 and decimalPart < 0.75 %}
+                                                    {% set hasHalfStar = true %}
+                                                {% else %}
+                                                    {% set hasHalfStar = false %}
+                                                    {% set fullStars = fullStars + 1 %}
+                                                {% endif %}
+
+                                                {% set emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0) %}
+
+                                                {% if fullStars > 0 %}
+                                                    {% for i in 1..fullStars %}
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none"><path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"/><path fill="#F7D844" d="M10.92 2.868a1.25 1.25 0 0 1 2.16 0l2.795 4.798l5.428 1.176a1.25 1.25 0 0 1 .667 2.054l-3.7 4.141l.56 5.525a1.25 1.25 0 0 1-1.748 1.27L12 19.592l-5.082 2.24a1.25 1.25 0 0 1-1.748-1.27l.56-5.525l-3.7-4.14a1.25 1.25 0 0 1 .667-2.055l5.428-1.176z"/></g></svg>
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                                {% if hasHalfStar %}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 12 12"><path fill="#F7D844" d="m6 9.428l-2.223 1.169a.8.8 0 0 1-1.16-.844l.424-2.476l-1.799-1.753a.8.8 0 0 1 .444-1.365l2.486-.36l1.111-2.253A.79.79 0 0 1 6 1.1a.79.79 0 0 1 .718.446L7.83 3.798l2.486.361a.8.8 0 0 1 .443 1.365L8.96 7.277l.425 2.476a.8.8 0 0 1-1.16.844zm0-7.075v6.049a.8.8 0 0 1 .373.092l1.958 1.029l-.374-2.18a.8.8 0 0 1 .23-.708L9.771 5.09l-2.189-.318a.8.8 0 0 1-.602-.438L6 2.352z"/></svg>
+                                                {% endif %}
+
+                                                {% if averageData.averageRate <= 4 %}
+                                                    {% for i in 1..emptyStars %}
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="#F7D844" d="M7.194 2.102a.9.9 0 0 1 1.614 0l1.521 3.082l3.401.494a.9.9 0 0 1 .5 1.535l-2.462 2.4l.581 3.387a.9.9 0 0 1-1.306.948L8.001 12.35l-3.042 1.6A.9.9 0 0 1 3.653 13l.58-3.387l-2.46-2.399a.9.9 0 0 1 .499-1.535l3.4-.494zM8 2.726L6.546 5.673a.9.9 0 0 1-.677.493l-3.253.472L4.97 8.933a.9.9 0 0 1 .258.796l-.555 3.24l2.91-1.53a.9.9 0 0 1 .837 0l2.91 1.53l-.556-3.24a.9.9 0 0 1 .258-.796l2.354-2.295l-3.253-.472a.9.9 0 0 1-.677-.493z"/></svg>
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                            {% else %}
+
+                                                {% for i in 1..5 %}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="#F7D844" d="M7.194 2.102a.9.9 0 0 1 1.614 0l1.521 3.082l3.401.494a.9.9 0 0 1 .5 1.535l-2.462 2.4l.581 3.387a.9.9 0 0 1-1.306.948L8.001 12.35l-3.042 1.6A.9.9 0 0 1 3.653 13l.58-3.387l-2.46-2.399a.9.9 0 0 1 .499-1.535l3.4-.494zM8 2.726L6.546 5.673a.9.9 0 0 1-.677.493l-3.253.472L4.97 8.933a.9.9 0 0 1 .258.796l-.555 3.24l2.91-1.53a.9.9 0 0 1 .837 0l2.91 1.53l-.556-3.24a.9.9 0 0 1 .258-.796l2.354-2.295l-3.253-.472a.9.9 0 0 1-.677-.493z"/></svg>
+                                                {% endfor %}
+
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="titlePromotion px-4">
+                                        <div class="d-flex align-items-center titleCardRental">
+                                            <h3 class="fw-bold h5">{{ rental.title|capitalize }}</h3>
+                                        </div>
+                                        {% if rental.isOnPromotion %}
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 16 16"><path fill="#EB4034" fill-rule="evenodd" d="M9.744 2.072L7.818.917L5.892 2.072l-2.237.198l-.88 2.066l-1.693 1.475L1.585 8l-.503 2.189l1.693 1.475l.88 2.066l2.237.198l1.926 1.155l1.926-1.155l2.237-.198l.88-2.066l1.694-1.475L14.05 8l.504-2.189l-1.694-1.475l-.88-2.066zM5.5 6.5a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0M6 5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m-.146 5.854l5-5l-.708-.708l-5 5zM9.5 10a.5.5 0 1 1 1 0a.5.5 0 0 1-1 0m.5-1.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3" clip-rule="evenodd"/></svg>
+                                        {% endif %}
+                                    </div>
+                                    <div class="gap-2 d-flex flex-column flex-md-row align-items-center justify-content-center">
+                                        <div class="d-flex flex-column gap-1 col-12 col-md-6 my-2">
+                                            <p class="textPromotion m-0 px-4">{{ rental.nbSimpleBed + (2 * rental.nbDoubleBed) }} personne{% if (rental.nbSimpleBed + (2 * rental.nbDoubleBed))>1 %}s{% endif %} maximum</p>
+                                            <p class="textPromotion m-0 px-4">{{ rental.nbSimpleBed }} lits simples</p>
+                                            <p class="textPromotion m-0 px-4">{{ rental.nbDoubleBed }} lit double</p>
+                                            <div class="px-4 d-flex w-100 align-items-center gap-1">
+                                                {% if rental.hasShower %}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#212429" d="M8 18q-.425 0-.712-.288T7 17t.288-.712T8 16t.713.288T9 17t-.288.713T8 18m4 0q-.425 0-.712-.288T11 17t.288-.712T12 16t.713.288T13 17t-.288.713T12 18m4 0q-.425 0-.712-.288T15 17t.288-.712T16 16t.713.288T17 17t-.288.713T16 18M6 14q-.425 0-.712-.288T5 13v-1q0-2.65 1.7-4.6T11 5.1V4q0-.425.288-.713T12 3t.713.288T13 4v1.1q2.6.35 4.3 2.3T19 12v1q0 .425-.288.713T18 14zm2 7q-.425 0-.712-.288T7 20t.288-.712T8 19t.713.288T9 20t-.288.713T8 21m4 0q-.425 0-.712-.288T11 20t.288-.712T12 19t.713.288T13 20t-.288.713T12 21m4 0q-.425 0-.712-.288T15 20t.288-.712T16 19t.713.288T17 20t-.288.713T16 21"/></svg>
+                                                {% endif %}
+                                                {% if rental.hasToilet %}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 256 256"><path fill="#212429" d="M60 88h136a4 4 0 0 0 4-4V40a16 16 0 0 0-16-16H72a16 16 0 0 0-16 16v44a4 4 0 0 0 4 4m28-40h15.73a8.18 8.18 0 0 1 8.27 7.47a8 8 0 0 1-8 8.53H88.27A8.18 8.18 0 0 1 80 56.53A8 8 0 0 1 88 48m136 64.06a8 8 0 0 0-8-8.06H40a8 8 0 0 0-8 8.06a96.1 96.1 0 0 0 51.68 85.08l-3.47 24.27a16.43 16.43 0 0 0 1.63 10A16 16 0 0 0 96 240h63.66a16.52 16.52 0 0 0 9.72-3a16 16 0 0 0 6.46-15.23l-3.52-24.6A96.1 96.1 0 0 0 224 112.06M96 224l2.93-20.5a96.15 96.15 0 0 0 58.14 0L160 224Z"/></svg>
+                                                {% endif %}
+                                                {% if rental.hasKitchen %}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="33,75" height="30" viewBox="0 0 576 512"><path fill="#212429" d="M240 144a96 96 0 1 0-192 0a96 96 0 1 0 192 0m44.4 32c-14.5 64.1-71.9 112-140.4 112C64.5 288 0 223.5 0 144S64.5 0 144 0c68.5 0 125.9 47.9 140.4 112h71.8c8.8-9.8 21.6-16 35.8-16h104c26.5 0 48 21.5 48 48s-21.5 48-48 48H392c-14.2 0-27-6.2-35.8-16zM144 80a64 64 0 1 1 0 128a64 64 0 1 1 0-128m256 160c13.3 0 24 10.7 24 24v8h96c13.3 0 24 10.7 24 24s-10.7 24-24 24H280c-13.3 0-24-10.7-24-24s10.7-24 24-24h96v-8c0-13.3 10.7-24 24-24M288 464V352h224v112c0 26.5-21.5 48-48 48H336c-26.5 0-48-21.5-48-48M48 320h128c26.5 0 48 21.5 48 48s-21.5 48-48 48h-16c0 17.7-14.3 32-32 32H64c-17.7 0-32-14.3-32-32v-80c0-8.8 7.2-16 16-16m128 64c8.8 0 16-7.2 16-16s-7.2-16-16-16h-16v32zM24 464h176c13.3 0 24 10.7 24 24s-10.7 24-24 24H24c-13.3 0-24-10.7-24-24s10.7-24 24-24"/></svg>
+                                                {% endif %}
+                                                {% if rental.hasFridge %}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#212429" fill-rule="evenodd" d="M5.172 3.172C4 4.343 4 6.229 4 10v.75h16V10c0-3.771 0-5.657-1.172-6.828S15.771 2 12 2S6.343 2 5.172 3.172M17 6.25a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0V7a.75.75 0 0 1 .75-.75m-13 6V13c0 3.771 0 5.657 1.172 6.828a3.1 3.1 0 0 0 1.078.697V22c0 .414.336.75.75.75h1a.75.75 0 0 0 .75-.75v-1.047C9.645 21 10.712 21 12 21s2.355 0 3.25-.047V22c0 .414.336.75.75.75h1a.75.75 0 0 0 .75-.75v-1.475a3.1 3.1 0 0 0 1.078-.697C20 18.657 20 16.771 20 13v-.75zm13 1a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 1 .75-.75" clip-rule="evenodd"/></svg>
+                                                {% endif %}
+                                                {% if rental.hasHeating %}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#212429" fill-rule="evenodd" d="M20.4 21.75a1.35 1.35 0 0 0 1.35-1.35V3.6a1.35 1.35 0 0 0-1.35-1.35H3.6A1.35 1.35 0 0 0 2.25 3.6v16.8c0 .746.604 1.35 1.35 1.35zM7.424 12.48c.829.995 1.015 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 0 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.83-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 1 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862m8.924 2.736c.091-.82-.095-1.741-.924-2.736c-1.086-1.303-1.4-2.63-1.262-3.862c.133-1.198.686-2.241 1.214-3.034a.75.75 0 0 1 1.249.832c-.472.708-.877 1.515-.972 2.368c-.092.82.095 1.741.924 2.736c1.086 1.303 1.4 2.631 1.262 3.862c-.134 1.198-.686 2.242-1.214 3.034a.75.75 0 1 1-1.249-.832c.472-.707.877-1.515.972-2.368m-4.924-2.736c.829.995 1.016 1.917.924 2.736c-.095.853-.5 1.66-.972 2.368a.75.75 0 1 0 1.249.832c.528-.793 1.08-1.836 1.214-3.034c.137-1.231-.176-2.559-1.262-3.862c-.829-.995-1.016-1.917-.924-2.736c.095-.853.5-1.66.971-2.368a.75.75 0 0 0-1.248-.832c-.528.793-1.08 1.836-1.214 3.034c-.137 1.231.176 2.559 1.262 3.862" clip-rule="evenodd"/></svg>
+                                                {% endif %}
+                                                {% if rental.petsAccepted %}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#212429" d="M8.35 3c1.18-.17 2.43 1.12 2.79 2.9c.36 1.77-.29 3.35-1.47 3.53c-1.17.18-2.43-1.11-2.8-2.89c-.37-1.77.3-3.35 1.48-3.54m7.15 0c1.19.19 1.85 1.77 1.5 3.54c-.38 1.78-1.63 3.07-2.81 2.89c-1.19-.18-1.84-1.76-1.47-3.53c.36-1.78 1.61-3.07 2.78-2.9M3 7.6c1.14-.49 2.69.4 3.5 1.95c.76 1.58.5 3.24-.63 3.73s-2.67-.39-3.46-1.96S1.9 8.08 3 7.6m18 0c1.1.48 1.38 2.15.59 3.72s-2.33 2.45-3.46 1.96s-1.39-2.15-.63-3.73C18.31 8 19.86 7.11 21 7.6m-1.67 10.78c.04.94-.68 1.98-1.54 2.37c-1.79.82-3.91-.88-5.9-.88s-4.13 1.77-5.89.88c-1-.49-1.69-1.79-1.56-2.87c.18-1.49 1.97-2.29 3.03-3.38c1.41-1.41 2.41-4.06 4.42-4.06c2 0 3.06 2.61 4.41 4.06c1.11 1.22 2.96 2.25 3.03 3.88"/></svg>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column gap-1 col-12 col-md-6 align-items-center justify-content-end">
+                                            <div class="pricePromotion d-flex flex-column align-items-start my-2">
+                                                {% if rental.isOnPromotion %}<span class="newPrice price h4">{{ (rental.pricePerDay * 0.9)|number_format(2, ',', '') }}€</span>{% endif %}
+                                                <p class="price h4"><span {% if rental.isOnPromotion %} class="strike" {% endif %}>{{ rental.pricePerDay|number_format(2, ',', '') }}€</span>/nuit</p>
+                                            </div>
+                                            <a href="{{ path('app_rental', {id:rental.id}) }}" class="my-2 btn-yellow d-flex align-items-center justify-content-center">
+                                                Voir plus
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
         <a href="{{ path('app_rentals') }}" class="btn-outline-green btn-lg w-25 text-center">Voir tous les logements</a>
     </section>
     <section id="events" style="background: var(--myBlack)" class="mt-5 p-5">
         <h2 style="color: var(--myWhite)" class="text-center">Événements</h2>
-        <div class="mt-5">
+        <div class="mt-5 container">
             <div class="row justify-content-center">
 
                 {% for event in events %}
-                    <div class="eventsItem col-sm-4 mb-4 px-3">
-                        <div class="card event-card w-100 h-100 border-0 rounded-4 d-flex flex-column">
-                            <div class="row g-0 h-100">
-                                <div class="col-md-5 h-100">
-                                    <img src="{{ asset('img/imageAccueil.jpg') }}" class="img-fluid rounded-start-4 h-100 w-100 object-fit-cover" alt="Tir à l'arc">
+                    <div class="col-12 col-lg-4 mb-4 px-3">
+                        <div class="card event-card w-100 border-0 rounded-4 d-flex flex-column">
+                            <div class="h-100">
+                                <div class="col-12 h-100">
+                                    <img src="{{ asset('uploads/' ~ event.getHomePageImage().src) }}" class="img-fluid rounded-top-4 h-100 w-100 object-fit-cover" alt="Tir à l'arc">
                                 </div>
-                                <div class="col-md-7 d-flex flex-column">
+                                <div class="col-12 d-flex flex-column">
                                     <div class="card-body d-flex flex-column">
-                                        <h4 class="card-title">
+                                        <h4 class="card-title h5 fw-bold">
                                             {% set words = event.content|split(' ') %}
                                             {% if words|length <= 5 %}
                                                 {{ event.content }}
@@ -160,7 +262,7 @@
                                             {% endif %}
                                         </h4>
 
-                                        <ul class="d-flex flex-column list-unstyled gap-1">
+                                        <ul class="d-flex flex-column list-unstyled gap-1 descriptionEvent">
                                             <li>
                                                 {% if event.ageRequirement == 0 %}
                                                     <span class="fw-bold">Pour tout le monde !</span>
@@ -187,13 +289,13 @@
                                             </span>
                                             </li>
                                         </ul>
-                                        <div class="mt-auto">
+                                        <div>
                                             {% if event.isPast() %}
                                                 <p class="alert alert-warning">Événement déjà passé.</p>
                                             {% else %}
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <a href="{{ path('app_event', {id:event.id}) }}" class="btn-yellow">Voir plus</a>
+                                                <div class="d-flex flex-lg-column justify-content-between align-items-center w-100 gap-3">
                                                     <span class="price h4">{{ event.price|number_format(2, ',', '') }}€/pers</span>
+                                                    <a href="{{ path('app_event', {id:event.id}) }}" class="btn-yellow w-100 text-center">Voir plus</a>
                                                 </div>
                                             {% endif %}
                                         </div>
@@ -211,14 +313,15 @@
         </div>
     </section>
 
+
     <section id="news" class="py-5 d-flex flex-column gap-5" style="background: linear-gradient(to right, #006633, #95C11F);">
         <h2 class="text-light text-center">Notre actualité</h2>
-        <div class="d-flex justify-content-center">
-            <ul class="list-group w-50 rounded-4">
+        <div class="d-flex justify-content-center ">
+            <ul class="list-group col-12 col-xl-8 rounded-4">
                 {% for post in posts %}
                     <li class="list-group-item d-flex align-items-center px-2">
                         <div class="d-flex justify-content-between align-items-center w-100">
-                            <div class="d-flex align-items-center">
+                            <div class="d-md-flex align-items-center">
                                 <small class="text-muted me-3 font-weight-bold">{{ post.createdAt|date('d/m/Y') }}</small>
                                 <h6 class="m-0 text-truncate" style="max-width: 500px;">
                                     {% set words = post.title|split(' ') %}

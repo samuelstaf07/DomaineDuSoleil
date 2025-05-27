@@ -101,9 +101,17 @@ h2{
 }
 
 .imageTop {
-    height: 50%;
+    min-height: 250px;
     width: 100%;
     position: relative;
+}
+
+#events .card-title{
+    height: 50px;
+}
+
+.titleCardRental{
+    height: 75px;
 }
 
 .imageTop .rate {
@@ -119,7 +127,6 @@ h2{
 }
 
 .rentalDiscount{
-    height: 450px;
     -webkit-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.5);
     -moz-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.5);
     box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.5);
@@ -131,7 +138,7 @@ h2{
 }
 
 .imageTop img{
-    height: 30px;
+    height: 300px;
 }
 
 .description{
@@ -166,6 +173,10 @@ h2{
 
 .rentalDiscount {
     position: relative;
+}
+
+.descriptionEvent{
+    height: 150px;
 }
 
 .carousel-item{
@@ -401,6 +412,11 @@ h2{
     background: var(--myBlack);
 }
 
+.bg-myWhite{
+    background: var(--myWhite);
+    color: var(--myBlack);
+}
+
 .bg-darkGrey{
     color: var(--myWhite);
     background: var(--myDarkGrey);
@@ -470,7 +486,7 @@ h2{
 
 .myTitle{
     font-weight: bold;
-    background: linear-gradient(to right, var(--myLightGrey), var(--myDarkGreen));
+    background: linear-gradient(to right, var(--myDarkGrey), var(--myDarkGreen));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -650,4 +666,9 @@ h2{
 .star-rating label:hover~label,
 .star-rating input:checked~label {
     color: #ffc107;
+}
+
+.imageProfilSettings{
+    height: 300px;
+    width: 300px;
 }

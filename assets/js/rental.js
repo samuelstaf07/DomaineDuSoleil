@@ -122,7 +122,6 @@ $(document).ready(function() {
         return false;
     }
 
-
     function isGoodDates(){
 
         newReservedDates[0].start = dateStartPicker.getFullDate();
