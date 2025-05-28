@@ -72,7 +72,7 @@
                             <a href="{{ asset('uploads/' ~ imageRental.getSrc()) }}" title="{{ imageRental.getAlt() }}">
                                 <img src="{{ asset('uploads/' ~ imageRental.getSrc()) }}" alt="{{ imageRental.getAlt() }}" class="img-fluid rounded-4 smallImage">
                             </a>
-                            <a href="{{ path('app_images_change_home_image', {id:imageRental.id}) }}" class="btn-lightGreen2 text-center">Modifier l'image d'accueil</a>
+                            <a href="{{ path('app_images_change_home_image_rental', {id:imageRental.id}) }}" class="btn-lightGreen2 text-center">Modifier l'image d'accueil</a>
                         </div>
                     {% endif %}
 

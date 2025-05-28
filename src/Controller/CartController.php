@@ -20,16 +20,21 @@ use Symfony\Component\Routing\Attribute\Route;
 final class CartController extends AbstractController
 {
     #[Route('/cart', name: 'app_cart')]
-    public function index(SessionInterface $session, Request $request): Response
+    public function index(SessionInterface $session, Request $request, RentalsRepository $rentalsRepository, EventsRepository $eventsRepository): Response
     {
         $newReservationRental = $session->get('newReservationRental');
         $newReservationEvent = $session->get('newReservationEvent');
+
         $myCart = $session->get('myCart', []);
         $idCounter = $session->get('cartIdCounter', 0);
 
         if ($newReservationRental !== null) {
             $idCounter++;
             $newReservationRental['id'] = $idCounter;
+            $rental = $rentalsRepository->find($newReservationRental['rentalId']);
+            $newReservationRental['rentalTitle'] = $rental->getTitle();
+            $newReservationRental['rentalPricePerDay'] = $rental->getPricePerDay();
+            $newReservationRental['rentalIsOnPromotion'] = $rental->isOnPromotion();
             $myCart[] = $newReservationRental;
 
             $session->set('myCart', $myCart);
@@ -39,6 +44,9 @@ final class CartController extends AbstractController
         if ($newReservationEvent !== null) {
             $idCounter++;
             $newReservationEvent['id'] = $idCounter;
+            $event = $eventsRepository->find($newReservationEvent['eventId']);
+            $newReservationEvent['eventTitle'] = $event->getTitle();
+            $newReservationEvent['eventPrice'] = $event->getPrice();
             $myCart[] = $newReservationEvent;
 
             $session->set('myCart', $myCart);
@@ -47,10 +55,29 @@ final class CartController extends AbstractController
 
         $session->set('cartIdCounter', $idCounter);
 
+        foreach ($myCart as $index => $item) {
+            if (isset($item['rentalId'])) {
+                $rental = $rentalsRepository->find($item['rentalId']);
+                if ($rental) {
+                    $myCart[$index]['rentalPricePerDay'] = $rental->getPricePerDay();
+                    $myCart[$index]['rentalIsOnPromotion'] = $rental->isOnPromotion();
+                    $myCart[$index]['rentalTitle'] = $rental->getTitle();
+                }
+            } elseif (isset($item['eventId'])) {
+                $event = $eventsRepository->find($item['eventId']);
+                if ($event) {
+                    $myCart[$index]['eventPrice'] = $event->getPrice();
+                    $myCart[$index]['eventTitle'] = $event->getTitle();
+                }
+            }
+        }
+
+        $session->set('myCart', $myCart);
+
         $form = $this->createForm(isAdultType::class);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $session->set('is_adult_confirmed', true);
             return $this->redirectToRoute('app_payment_stripe');
         }

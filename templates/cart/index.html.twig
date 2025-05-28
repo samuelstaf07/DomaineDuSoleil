@@ -44,7 +44,7 @@
                             <td class="align-middle text-center">{{ elem.dateEnd|date("d/m/Y") }}</td>
                             <td class="align-middle text-center">
                                 {% if elem.rentalIsOnPromotion %}
-                                    {{ (elem.rentalPricePerDay * 0.9)|round(2, 'floor')|number_format(2, ',', '') }}€
+                                    <span class="color-darkGreen" title="En promotion (-10%)">{{ (elem.rentalPricePerDay * 0.9)|round(2, 'floor')|number_format(2, ',', '') }}€</span>
                                 {% else %}
                                     {{ elem.rentalPricePerDay|round(2, 'floor')|number_format(2, ',', '') }}€
                                 {% endif %}
@@ -97,7 +97,7 @@
                                     <p class="mb-2">du {{ elem.dateStart|date("d/m/Y") }} au {{ elem.dateEnd|date("d/m/Y") }}</p>
                                     <p class="mb-2">Prix par jour:
                                         {% if elem.rentalIsOnPromotion %}
-                                            {{ (elem.rentalPricePerDay * 0.9)|round(2, 'floor')|number_format(2, ',', '') }}€
+                                            <span class="color-darkGreen">{{ (elem.rentalPricePerDay * 0.9)|round(2, 'floor')|number_format(2, ',', '') }}€</span>
                                         {% else %}
                                             {{ elem.rentalPricePerDay|round(2, 'floor')|number_format(2, ',', '') }}€
                                         {% endif %}
@@ -236,7 +236,7 @@
 
 
 
-            <div class="d-flex  flex-column gap-2">
+            <div class="d-flex flex-column gap-2 mb-4">
                 <a href="{{ path('app_reset_cart') }}" class="btn btn-red m-3">Vider le panier</a>
 
                 {{ form_start(form) }}

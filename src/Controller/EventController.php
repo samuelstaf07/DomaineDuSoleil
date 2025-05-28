@@ -85,8 +85,6 @@ final class EventController extends AbstractController
                 }
                 $session->set('newReservationEvent', [
                     'eventId' => $event->getId(),
-                    'eventTitle' => $event->getTitle(),
-                    'eventPrice' => $event->getPrice(),
                     'type' => 'event',
                     'image' => $event->getHomePageImage(),
                     'nbPlaces' => $reservation->getNbPlaces(),

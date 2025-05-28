@@ -123,20 +123,29 @@ $(document).ready(function() {
     }
 
     function isGoodDates(){
-
         newReservedDates[0].start = dateStartPicker.getFullDate();
         newReservedDates[0].end = dateEndPicker.getFullDate();
 
+        const startDate = dateStartPicker.getFullDate();
+        const endDate = dateEndPicker.getFullDate();
+
         let allDatesSelected = getAllDates(newReservedDates);
 
-        if((dateStartPicker == null || dateEndPicker == null) ||
-            (dateStartPicker.getFullDate() > dateEndPicker.getFullDate()) ||
-            checkBetweenDates(allDatesSelected)){
+        const diffTime = endDate - startDate;
+        const maxDiff = 60 * 24 * 60 * 60 * 1000;
+
+        if(
+            (startDate == null || endDate == null) ||
+            (startDate > endDate) ||
+            (diffTime > maxDiff) ||
+            checkBetweenDates(allDatesSelected)
+        ){
             notGood();
-        }else{
+        } else {
             good();
         }
     }
+
 
     function notGood(){
         let message = document.querySelector('#dates .alert');

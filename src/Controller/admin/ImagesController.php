@@ -80,7 +80,7 @@ final class ImagesController extends AbstractController
         ]);
     }
 
-    #[Route('/changeHomePage/{id}', name: 'app_images_change_home_image')]
+    #[Route('/changeHomePage/{id}', name: 'app_images_change_home_image_rental')]
     public function changeHomeImage(int $id, ImagesRepository $imagesRepository, EntityManagerInterface $entityManager, Request $request, SluggerInterface $slugger): Response {
         $image = $imagesRepository->find($id);
         $rental = $image->getRentals();
@@ -122,7 +122,7 @@ final class ImagesController extends AbstractController
                 $image->setSrc($newFilename);
                 $image->setAlt($originalFilename);
 
-                $rental->setHomePage($image);
+                $rental->setHomeImage($image);
 
                 $entityManager->flush();
 

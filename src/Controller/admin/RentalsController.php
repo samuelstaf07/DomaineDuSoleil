@@ -73,15 +73,17 @@ final class RentalsController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_rentals_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Rentals $rental, EntityManagerInterface $entityManager): Response
+    public function edit($id, Request $request, EntityManagerInterface $entityManager, RentalsRepository $rentalsRepository): Response
     {
+        $rental = $rentalsRepository->find($id);
         $form = $this->createForm(RentalsType::class, $rental);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_images_change_home_image', [
+            $this->addFlash('success', 'La location a bien été modifiée.');
+            return $this->redirectToRoute('app_rentals_edit', [
                 'id' => $rental->getId(),
             ], Response::HTTP_SEE_OTHER);
         }

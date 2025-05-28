@@ -85,6 +85,17 @@ final class RentalsController extends AbstractController
                 ]);
             }
 
+            $interval = $dateStart->diff($dateEnd);
+            if ($interval->m > 2 || ($interval->y > 0) || ($interval->m == 2 && $interval->d > 0)) {
+                $this->addFlash('danger', 'Les dates invalides : la durée entre la date de début et la date de fin ne peut pas dépasser 2 mois.');
+                return $this->render('rental/index.html.twig', [
+                    'rental' => $rental,
+                    'reservedDates' => $reservedDates,
+                    'comments' => $commentsRepository->findActiveCommentsByRental($rental->getId()),
+                    'form' => $form->createView(),
+                ]);
+            }
+
             $userDates = [];
             $allDatesUser = new \DatePeriod($dateStart, new \DateInterval('P1D'), (clone $dateEnd)->modify('+1 day'));
             foreach ($allDatesUser as $date) {
@@ -121,9 +132,6 @@ final class RentalsController extends AbstractController
 
             $session->set('newReservationRental', [
                 'rentalId' => $rental->getId(),
-                'rentalTitle' => $rental->getTitle(),
-                'rentalPricePerDay' => $rental->getPricePerDay(),
-                'rentalIsOnPromotion' => $rental->isOnPromotion(),
                 'type' => 'rental',
                 'image' => $rental->getHomePageImage(),
                 'dateStart' => $dateStart,
