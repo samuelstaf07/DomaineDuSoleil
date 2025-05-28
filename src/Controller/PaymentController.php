@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Bills;
-use App\Entity\Images;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use App\Entity\ReservationsEvents;
 use App\Entity\ReservationsRentals;
 use App\Repository\EventsRepository;
@@ -20,7 +21,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -312,6 +312,27 @@ final class PaymentController extends AbstractController
                 $entityManager->persist($newBill);
                 $entityManager->flush();
 
+                $options = new Options();
+                $options->set('defaultFont', 'Arial');
+                $dompdf = new Dompdf($options);
+
+                $html = $this->renderView('pdf/bill.html.twig', [
+                    'bill' => $newBill,
+                    'user' => $user,
+                    'events' => $allResEvents,
+                    'rentals' => $allResRentals,
+                ]);
+
+                $dompdf->loadHtml($html);
+                $dompdf->setPaper('A4', 'portrait');
+                $dompdf->render();
+
+                $filename = 'bill_' . $newBill->getId() . '.pdf';
+                $publicDirectory = $this->getParameter('kernel.project_dir') . '/public/bills';
+                if (!file_exists($publicDirectory)) {
+                    mkdir($publicDirectory, 0777, true);
+                }
+                file_put_contents($publicDirectory . '/' . $filename, $dompdf->output());
 
                 $mailerService->sendCommand(
                     $user->getEmail(),

@@ -44,7 +44,7 @@
                             {{ bill.totalPrice|number_format(2, ',', '') }}€
                         </td>
                         <td class="align-middle text-center">
-                            <a href="{{ path('app_bills', {id:bill.id}) }}" target="_blank" data-turbo="false">Voir la facture</a>
+                            <a href="{{ path('app_bill', {id: bill.id}) }}" target="_blank">Télécharger la facture</a>
                         </td>
                     </tr>
                 {% endfor %}

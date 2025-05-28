@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class BillsController extends AbstractController
 {
-    #[Route('/bill/{id}', name: 'app_bills')]
+    #[Route('/bill/{id}', name: 'app_bill')]
     public function index($id, BillsRepository $billsRepository, Security $security): Response
     {
         $bill = $billsRepository->find($id);
@@ -27,24 +27,17 @@ final class BillsController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        $options = new Options();
-        $options->set('defaultFont', 'Arial');
+        $filePath = $this->getParameter('kernel.project_dir') . '/public/bills/bill_' . $bill->getId() . '.pdf';
 
-        $dompdf = new Dompdf($options);
+        if (!file_exists($filePath)) {
+            $this->addFlash('danger', 'Le fichier de la facture est introuvable.');
+            return $this->redirectToRoute('app_home');
+        }
 
-        $html = $this->renderView('pdf/bill.html.twig', [
-            'bill' => $bill,
-            'user' => $bill->getUser(),
-            'events' => $bill->getReservationsEvents(),
-            'rentals' => $bill->getReservationsRentals(),
-        ]);
-
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-        $dompdf->render();
+        $pdfContent = file_get_contents($filePath);
 
         return new Response(
-            $dompdf->output(),
+            $pdfContent,
             200,
             [
                 'Content-Type' => 'application/pdf',
