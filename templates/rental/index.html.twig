@@ -203,11 +203,9 @@
                     {{ form_start(form, {'attr': {'class': 'd-flex flex-column gap-4 p-4 rounded-4 bg-myGreen', 'id': 'reservation-form', 'data-turbo': 'false'}}) }}
                     <div class="d-flex flex-column flex-xl-row justify-content-center gap-4">
                         <div class="col-12 col-xl-5 d-flex flex-column gap-1">
-                            <label for="dateStart" class="mx-2 fw-bold text-center">Date de début</label>
+                            <label for="reservations_rentals_date_start" class="mx-2 fw-bold text-center">Date de début</label>
                             {{ form_widget(form.date_start, {
                                 'attr': {
-                                    'id': 'dateStart',
-                                    'name': 'dateStart',
                                     'class': 'form-control text-center rounded-4',
                                     'placeholder': 'yyyy-mm-dd',
                                 },
@@ -215,11 +213,9 @@
                             }) }}
                         </div>
                         <div class="col-12 col-xl-5 d-flex flex-column gap-1">
-                            <label for="dateEnd" class="mx-2 fw-bold text-center">Date de fin</label>
+                            <label for="reservations_rentals_date_end" class="mx-2 fw-bold text-center">Date de fin</label>
                             {{ form_widget(form.date_end, {
                                 'attr': {
-                                    'id': 'dateEnd',
-                                    'name': 'dateEnd',
                                     'class': 'form-control text-center rounded-4',
                                     'placeholder': 'yyyy-mm-dd',
                                 },

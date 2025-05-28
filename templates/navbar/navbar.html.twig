@@ -9,30 +9,26 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center d-flex p-3 flex-md-row flex-column gap-md-3 flex-md-wrap gap-4">
-                <div class="d-flex gap-3">
-                    <li class="nav-item">
-                        <a class="btn-black" href="{{ path('app_posts') }}">Nouveautés</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn-yellow" href="{{ path('app_events') }}">Événements</a>
-                    </li>
-                </div>
-                <div class="d-flex gap-3">
-                    <li class="nav-item">
-                        <a class="btn-lightGreen" href="{{ path('app_rentals') }}">Logements</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn-lightGreen2" href="{{ path('app_cart') }}">
-                            <img src="{{ asset('styles/img/cart.svg') }}" alt="Accéder au panier">
-                        </a>
-                    </li>
-                </div>
+
+                <li class="nav-item d-flex gap-3">
+                    <a class="btn-black" href="{{ path('app_posts') }}">Nouveautés</a>
+                    <a class="btn-yellow" href="{{ path('app_events') }}">Événements</a>
+                </li>
+
+                <li class="nav-item d-flex gap-3">
+                    <a class="btn-lightGreen" href="{{ path('app_rentals') }}">Logements</a>
+                    <a class="btn-lightGreen2" href="{{ path('app_cart') }}">
+                        <img src="{{ asset('styles/img/cart.svg') }}" alt="Accéder au panier">
+                    </a>
+                </li>
 
                 {% if app.user %}
-                    <div class="dropdown">
+                    <li class="nav-item dropdown">
                         <button class="dropdown-toggle d-flex gap-2 align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             {% if app.user.image.src == "null" %}
-                                <svg class="rounded-circle" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="#F8F9FA" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"/></svg>
+                                <svg class="rounded-circle" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" role="img" aria-label="Utilisateur">
+                                    <path fill="#F8F9FA" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"/>
+                                </svg>
                             {% else %}
                                 <img class="rounded-circle" src="{{ asset('uploads/' ~ app.user.image.src) }}" alt="{{ app.user.image.alt }}" style="object-fit: cover; height: 25px; width: 25px">
                             {% endif %}
@@ -45,28 +41,25 @@
                             </li>
                             {% if is_granted('ROLE_ADMIN') %}
                                 <li class="mb-2">
-                                    <a href="{{ path('app_admin') }}" class="dropdown-item color-white rounded-3 text-center">
-                                        Administration
-                                    </a>
+                                    <a href="{{ path('app_admin') }}" class="dropdown-item color-white rounded-3 text-center">Administration</a>
                                 </li>
-                                <li class="mb-2"><hr class="dropdown-divider"></li>
+                                <li class="mb-2">
+                                    <hr class="dropdown-divider">
+                                </li>
                             {% endif %}
                             <li>
                                 <a href="{{ path('app_logout') }}" class="dropdown-item btn-red text-center">Déconnexion</a>
                             </li>
                         </ul>
-                    </div>
+                    </li>
                 {% else %}
-                    <div class="d-flex gap-3">
-                        <li class="nav-item">
-                            <a class="btn-green" href="{{ path('app_login') }}">Connexion</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn-signup" href="{{ path('app_register') }}">Inscription</a>
-                        </li>
-                    </div>
+                    <li class="nav-item d-flex gap-3">
+                        <a class="btn-green" href="{{ path('app_login') }}">Connexion</a>
+                        <a class="btn-signup" href="{{ path('app_register') }}">Inscription</a>
+                    </li>
                 {% endif %}
             </ul>
+
         </div>
     </nav>
 

@@ -83,28 +83,28 @@
                 </table>
                 <div class="d-flex flex-column gap-1 py-1 d-xl-none col-12 col-lg-8 bg-lightGreen">
                     {% for elem in rentals %}
-                        <div class="d-flex flex-column gap-4 p-4 bg-white">
-                            <div class="d-flex gap-4 p-4 bg-white">
-                                <div class="{% if elem.image %}col-6{% else %}col-0{% endif %}">
+                        <div class="d-flex flex-column gap-4 p-4 bg-myWhite">
+                            <div class="d-flex p-4 bg-lightGreen rounded-4">
+                                <div class="{% if elem.image %}col-6{% endif %}">
                                     {% if elem.image %}
-                                        <img src="{{ asset('uploads/' ~ elem.image.getSrc()) }}" alt="{{ asset('styles/img/' ~ elem.image.getAlt()) }}" class="h-100 object-fit-cover col-12 rounded-3">
+                                        <img src="{{ asset('uploads/' ~ elem.image.getSrc()) }}" alt="{{ asset('styles/img/' ~ elem.image.getAlt()) }}" class="h-100 rounded-start-4 rounded-end-0 object-fit-cover col-12 rounded-3">
                                     {% else %}
                                         Aucune image
                                     {% endif %}
                                 </div>
-                                <div class="{% if elem.image %}col-6{% else %}col-12{% endif %} d-flex flex-column">
-                                    <a href="{{ path('app_rental', {id: elem.rentalId }) }}">{{ elem.rentalTitle|capitalize }}</a>
-                                    <p>du {{ elem.dateStart|date("d/m/Y") }} au {{ elem.dateEnd|date("d/m/Y") }}</p>
-                                    <p>Prix par jour:
+                                <div class="{% if elem.image %}col-6{% else %}col-12{% endif %} d-flex flex-column bg-myWhite px-4 py-2 gap rounded-end-4">
+                                    <a href="{{ path('app_rental', {id: elem.rentalId }) }}" class="mb-2">{{ elem.rentalTitle|capitalize }}</a>
+                                    <p class="mb-2">du {{ elem.dateStart|date("d/m/Y") }} au {{ elem.dateEnd|date("d/m/Y") }}</p>
+                                    <p class="mb-2">Prix par jour:
                                         {% if elem.rentalIsOnPromotion %}
                                             {{ (elem.rentalPricePerDay * 0.9)|round(2, 'floor')|number_format(2, ',', '') }}€
                                         {% else %}
                                             {{ elem.rentalPricePerDay|round(2, 'floor')|number_format(2, ',', '') }}€
                                         {% endif %}
                                     </p>
-                                    <p>Frais de nettoyage: 50€</p>
-                                    <p>Caution: {{ (elem.rentalPricePerDay * 2)|number_format(2, ',', '') }}€</p>
-                                    <p>
+                                    <p class="mb-2">Frais de nettoyage: 50€</p>
+                                    <p class="mb-2">Caution: {{ (elem.rentalPricePerDay * 2)|number_format(2, ',', '') }}€</p>
+                                    <p class="mb-2">
                                         {% set days = elem.dateEnd.diff(elem.dateStart).days + 1 %}
                                         {% if elem.rentalPricePerDay %}
                                             {% set dailyPrice = (elem.rentalPricePerDay * 0.9)|round(2, 'floor') %}
@@ -175,8 +175,8 @@
                 </table>
                 <div class="d-flex flex-column gap-1 py-1 d-xl-none col-12 col-lg-8 bg-Yellow">
                     {% for elem in events %}
-                        <div class="d-flex flex-column gap-4 p-4 bg-white">
-                            <div class="d-flex gap-4 p-4 bg-white">
+                        <div class="d-flex flex-column gap-4 p-4 bg-myWhite">
+                            <div class="d-flex p-4 bg-lightGreen rounded-4">
                                 <div class="{% if elem.image %}col-6{% else %}col-0{% endif %}">
                                     {% if elem.image %}
                                         <img src="{{ asset('uploads/' ~ elem.image.getSrc()) }}" alt="{{ asset('styles/img/' ~ elem.image.getAlt()) }}" class="h-100 object-fit-cover col-12 rounded-3">
@@ -184,10 +184,10 @@
                                         Aucune image
                                     {% endif %}
                                 </div>
-                                <div class="{% if elem.image %}col-6{% else %}col-12{% endif %} d-flex flex-column">
-                                    <a href="{{ path('app_event', {id:elem.eventId }) }}">{{ elem.eventTitle|capitalize }}</a>
-                                    <p>Nombre de places: {{ elem.nbPlaces }}</p>
-                                    <p>Prix de l'événement: {{ elem.eventPrice|number_format(2, ',', '') }}€</p>
+                                <div class="{% if elem.image %}col-6{% else %}col-12{% endif %} d-flex flex-column bg-myWhite px-4 py-2 gap rounded-end-4">
+                                    <a href="{{ path('app_event', {id:elem.eventId }) }}" class="mb-2">{{ elem.eventTitle|capitalize }}</a>
+                                    <p class="mb-2">Nombre de places: {{ elem.nbPlaces }}</p>
+                                    <p class="mb-2">Prix de l'événement: {{ elem.eventPrice|number_format(2, ',', '') }}€</p>
                                 </div>
                             </div>
                             <div class="d-flex flex-column gap-3">
