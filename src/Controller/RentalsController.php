@@ -7,6 +7,7 @@ use App\Form\ReservationsRentalsType;
 use App\Repository\CommentsRepository;
 use App\Repository\RentalsRepository;
 use App\Repository\ReservationsRentalsRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +35,24 @@ final class RentalsController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response {
         $rental = $rentalsRepository->find($id);
+
+        $now = new \DateTimeImmutable('now');
+        $oneMonthAgo = $now->sub(new \DateInterval('P1M'));
+        $twoMonthsLater = $now->add(new \DateInterval('P2M'));
+
+        dump($rental->needToBeOnPromotion());
+
+        if($rental->getLastReservation()){
+            dump("last", $rental->getLastReservation()->getDateEnd()->format('d/m/Y'));
+            dump($rental->getLastReservation()->getDateEnd() <= $oneMonthAgo);
+        }
+
+        if($rental->getNextReservation()){
+            dump("next", $rental->getNextReservation()->getDateStart()->format('d/m/Y'));
+            dump($rental->getNextReservation()->getDateStart() >= $twoMonthsLater);
+        }
+
+
         $reservedDates = [];
 
         foreach ($rental->getUpcomingReservations() as $reservation) {

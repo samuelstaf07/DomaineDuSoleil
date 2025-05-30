@@ -1,6 +1,6 @@
 <?php
 
-// use "php bin/console app:anonymize-inactive-users" to do this command
+// use "php bin/console app:anonymize-inactive-users" to execute this command
 
 namespace App\Command;
 

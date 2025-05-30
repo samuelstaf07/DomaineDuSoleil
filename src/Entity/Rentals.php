@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\RentalsRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -410,4 +411,57 @@ class Rentals
 
         return false;
     }
+
+    public function getLastReservation(): ?ReservationsRentals
+    {
+        $now = new \DateTimeImmutable();
+        $lastReservation = null;
+
+        foreach ($this->reservations as $reservation) {
+            if ($reservation->getDateEnd() < $now && $reservation->getStatusReservation() === true) {
+                if ($lastReservation === null || $reservation->getDateEnd() > $lastReservation->getDateEnd()) {
+                    $lastReservation = $reservation;
+                }
+            }
+        }
+
+        return $lastReservation;
+    }
+
+    public function getNextReservation(): ?ReservationsRentals
+    {
+        $now = new \DateTimeImmutable();
+        $nextReservation = null;
+
+        foreach ($this->reservations as $reservation) {
+            if ($reservation->getDateStart() > $now && $reservation->getStatusReservation() === true) {
+                if ($nextReservation === null || $reservation->getDateStart() < $nextReservation->getDateStart()) {
+                    $nextReservation = $reservation;
+                }
+            }
+        }
+
+        return $nextReservation;
+    }
+
+
+    public function needToBeOnPromotion(): bool
+    {
+        $now = new \DateTimeImmutable('now');
+        $oneMonthAgo = $now->sub(new \DateInterval('P1M'));
+        $twoMonthsLater = $now->add(new \DateInterval('P2M'));
+
+        $lastReservation = $this->getLastReservation();
+        $nextReservation = $this->getNextReservation();
+
+        $lastReservationIsOld = $lastReservation == null || $lastReservation->getDateEnd() <= $oneMonthAgo;
+        $nextReservationIsFar = $nextReservation == null || $nextReservation->getDateStart() >= $twoMonthsLater;
+
+        if ($lastReservationIsOld && $nextReservationIsFar) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
