@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class BillsController extends AbstractController
 {
-    #[Route('/bill/{id}', name: 'app_bill')]
+    #[Route('/bill/{id}', name: 'app_bills')]
     public function index($id, BillsRepository $billsRepository, Security $security): Response
     {
         $bill = $billsRepository->find($id);
