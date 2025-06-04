@@ -37,7 +37,7 @@ class PromotionOldRentals extends Command
         $unPromotedRentalsCount = 0;
 
         foreach ($rentals as $rental) {
-            if($rental->needToBeOnPromotion()){
+            if($rental->needToBeOnPromotion() && !$rental->isOnPromotion()){
                 $rental->setIsOnPromotion(true);
                 $promotedRentalsCount++;
                 $this->entityManager->persist($rental);

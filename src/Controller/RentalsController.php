@@ -57,11 +57,6 @@ final class RentalsController extends AbstractController
             }
         }
 
-        $now = new \DateTimeImmutable();
-        dump($rental->getLastReservation());
-        dump($rental->getNextReservation());
-        dump($rental->needToBeOnPromotion());
-
         $reservation = new ReservationsRentals();
         $reservation->setRentals($rental);
 
