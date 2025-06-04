@@ -7,9 +7,19 @@
         {% include 'admin/navbar/index.html.twig' %}
         <h1>Tous les commentaires</h1>
 
+        <div class="d-flex gap-1 col-10 align-items-center justify-content-center">
+            <form method="get" action="{{ path('app_comments_index') }}" class="mb-4 col-6">
+                <div class="input-group">
+                    <input type="text" name="search" value="{{ app.request.get('search') }}" class="form-control" placeholder="Rechercher un commentaire...">
+                    <button class="btn btn-dark" type="submit">Rechercher</button>
+                    <a href="{{ path('app_comments_index') }}" class="btn btn-light">Réinitialiser</a>
+                </div>
+            </form>
+        </div>
+
         {% if comments|length > 0 %}
-            <div class="w-75">
-                <table class="table table-hover" id="myTable">
+            <div class="table-container col-10 d-flex justify-content-center align-items-center m-5">
+                <table class="table table-hover text-center align-middle" id="myTable">
                     <thead>
                     <tr>
                         <th class="text-center align-middle">
@@ -17,6 +27,9 @@
                         </th>
                         <th class="text-center align-middle">
                             {{ knp_pagination_sortable(comments, 'User', 'user.firstname') }}
+                        </th>
+                        <th class="text-center align-middle">
+                            {{ knp_pagination_sortable(comments, 'Location', 'rentals.title') }}
                         </th>
                         <th class="text-center">
                             {{ knp_pagination_sortable(comments, 'Contenu', 'comment.content') }}
@@ -45,6 +58,9 @@
                             <td class="text-center align-middle">{{ comment.id }}</td>
                             <td class="text-center align-middle">
                                 <a href="{{ path('app_users_show', {id:comment.user.id}) }}">{{ comment.user.firstname }} {{ comment.user.lastname }}</a>
+                            </td>
+                            <td class="text-center align-middle">
+                                <a href="{{ path('app_rental', {id:comment.rentals.id}) }}">{{ comment.rentals.title }}</a>
                             </td>
                             <td class="align-middle">{{ comment.content|slice(0, 40) ~ '...' }}</td>
                             <td class="text-center align-middle">{{ comment.createdAt ? comment.createdAt|date('d/m/Y') : '' }}</td>

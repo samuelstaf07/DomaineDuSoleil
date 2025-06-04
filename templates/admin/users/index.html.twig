@@ -7,9 +7,20 @@
         {% include 'admin/navbar/index.html.twig' %}
         <h1>Tous les utilisateurs</h1>
 
+        <div class="d-flex gap-1 col-10 align-items-center justify-content-center">
+            <form method="get" action="{{ path('app_users_index') }}" class="mb-4 col-6">
+                <div class="input-group">
+                    <input type="text" name="search" value="{{ app.request.get('search') }}" class="form-control" placeholder="Rechercher un utilisateur...">
+                    <button class="btn btn-dark" type="submit">Rechercher</button>
+                    <a href="{{ path('app_users_index') }}" class="btn btn-light">Réinitialiser</a>
+                </div>
+            </form>
+        </div>
+
+
         {% if users|length > 0 %}
-            <div class="w-75">
-                <table class="table table-hover w-75" id="myTable">
+            <div class="table-container col-10 d-flex justify-content-center align-items-center m-5">
+                <table class="table table-hover text-center align-middle" id="myTable">
                     <thead>
                     <tr>
                         <th class="align-middle text-center">

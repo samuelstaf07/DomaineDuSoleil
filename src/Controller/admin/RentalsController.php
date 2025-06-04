@@ -28,15 +28,26 @@ final class RentalsController extends AbstractController
     #[Route(name: 'app_rentals_index', methods: ['GET'])]
     public function index(RentalsRepository $rentalsRepository, PaginatorInterface $paginator, Request $request): Response
     {
-        $page = $request->query->getInt('page',1);
-        $sort = $request->query->getString('sort', 'null');
-        $direction = $request->query->getString('direction', 'null');
+        $page = $request->query->getInt('page', 1);
+        $sort = $request->query->get('sort');
+        $direction = $request->query->get('direction');
+        $search = $request->query->get('search', '');
 
-        $rentals = $rentalsRepository->createQueryBuilder('rental');
+        $queryBuilder = $rentalsRepository->createQueryBuilder('rental');
+
+        if (!empty($search)) {
+            $queryBuilder
+                ->andWhere('rental.title LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        if (!empty($sort) && !empty($direction) && in_array(strtolower($direction), ['asc', 'desc'])) {
+            $queryBuilder->orderBy($sort, $direction);
+        }
 
         $pagination = $paginator->paginate(
-            $rentals,
-            $request->query->getInt('page', $page),
+            $queryBuilder,
+            $page,
             20
         );
 
@@ -45,6 +56,7 @@ final class RentalsController extends AbstractController
             'sort' => $sort,
             'direction' => $direction,
         ]);
+
     }
 
     #[Route('/new', name: 'app_rentals_new', methods: ['GET', 'POST'])]

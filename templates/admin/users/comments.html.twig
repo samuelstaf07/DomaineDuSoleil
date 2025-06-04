@@ -2,18 +2,7 @@
 
 {% block title %}Tous les commentaires de {{ user.firstname }} {{ user.lastname }}{% endblock %}
 
-{% block javascripts %}
-    {% if comments|length > 0 %}
-        {{ parent() }}
-        <script src="{{ asset('js/admin/datatable.js') }}"></script>
-    {% endif %}
-{% endblock %}
-
 {% block body %}
-
-    {% if comments|length > 0 %}
-        <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.bootstrap5.css">
-    {% endif %}
 
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
         <div class="d-flex mb-3 w-75 justify-content-start gap-2">

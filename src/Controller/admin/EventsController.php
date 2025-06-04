@@ -30,11 +30,18 @@ final class EventsController extends AbstractController
         $page = $request->query->getInt('page',1);
         $sort = $request->query->getString('sort', 'null');
         $direction = $request->query->getString('direction', 'null');
+        $search = $request->query->get('search', '');
 
-        $events = $eventsRepository->createQueryBuilder('event');
+        $queryBuilder = $eventsRepository->createQueryBuilder('event');
+
+        if (!empty($search)) {
+            $queryBuilder
+                ->andWhere('event.title LIKE :search OR event.content LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
 
         $pagination = $paginator->paginate(
-            $events,
+            $queryBuilder,
             $request->query->getInt('page', $page),
             20
         );

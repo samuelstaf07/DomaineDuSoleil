@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>User Info</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        h1 { color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        td, th { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    </style>
+</head>
+<body>
+<h1>Données de {{ user.firstname|capitalize }} {{ user.lastname|capitalize }}</h1>
+<table>
+    <tr><th>ID</th><td>{{ user.id }}</td></tr>
+    <tr><th>Email</th><td>{{ user.email }}</td></tr>
+    <tr><th>Prénom</th><td>{{ user.firstname }}</td></tr>
+    <tr><th>Nom</th><td>{{ user.lastname ?? 'N/A' }}</td></tr>
+    <tr><th>Date de naissance</th><td>{{ user.birthDate ? user.birthDate.format('d/m/Y') : 'N/A' }}</td></tr>
+    <tr><th>Date de création</th><td>{{ user.createdAt.format('d/m/Y H:i') }}</td></tr>
+    <tr><th>Dernière connexion</th><td>{{ user.lastLogAt.format('d/m/Y H:i') }}</td></tr>
+    <tr><th>Compte actif</th><td>{{ user.isActive ? 'Oui' : 'Non' }}</td></tr>
+    <tr><th>Email vérifié</th><td>{{ user.isEmailAuthentificated ? 'Oui' : 'Non' }}</td></tr>
+    <tr><th>Rôles</th><td>{{ user.roles|join(', ') }}</td></tr>
+</table>
+</body>
+</html>

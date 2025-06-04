@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modification de post{% endblock %}
+{% block title %}Modification de {{ post.title|capitalize }}{% endblock %}
 
 {% block javascripts %}
     {{ parent() }}

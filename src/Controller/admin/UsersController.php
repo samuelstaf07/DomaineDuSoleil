@@ -8,6 +8,8 @@ use App\Repository\RentalsRepository;
 use App\Repository\UsersRepository;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,15 +22,24 @@ final class UsersController extends AbstractController
     #[Route(name: 'app_users_index', methods: ['GET'])]
     public function index(UsersRepository $usersRepository, PaginatorInterface $paginator, Request $request): Response
     {
-        $page = $request->query->getInt('page',1);
-        $sort = $request->query->getString('sort', 'null');
-        $direction = $request->query->getString('direction', 'null');
+        $page = $request->query->getInt('page', 1);
+        $sort = $request->query->getString('sort', 'user.id');
+        $direction = $request->query->getString('direction', 'asc');
+        $search = $request->query->get('search', '');
 
-        $users = $usersRepository->createQueryBuilder('user');
+        $queryBuilder = $usersRepository->createQueryBuilder('user');
+
+        if (!empty($search)) {
+            $queryBuilder
+                ->andWhere('user.email LIKE :search OR user.firstname LIKE :search OR user.lastname LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        $queryBuilder->orderBy($sort, $direction);
 
         $pagination = $paginator->paginate(
-            $users,
-            $request->query->getInt('page', $page),
+            $queryBuilder,
+            $page,
             20
         );
 
@@ -45,6 +56,31 @@ final class UsersController extends AbstractController
         return $this->render('admin/users/show.html.twig', [
             'user' => $user,
         ]);
+    }
+
+    #[Route('/{id}/data', name: 'app_users_data', methods: ['GET'])]
+    public function data(Users $user): Response
+    {
+        $options = new Options();
+        $options->set('defaultFont', 'Arial');
+        $dompdf = new Dompdf($options);
+
+        $html = $this->renderView('pdf/user.html.twig', [
+            'user' => $user,
+        ]);
+
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        return new Response(
+            $dompdf->output(),
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="user_' . $user->getId() . '.pdf"',
+            ]
+        );
     }
 
     #[Route('/{id}/changeActive', name: 'app_users_change_active')]

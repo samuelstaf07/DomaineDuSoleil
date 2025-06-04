@@ -6,7 +6,9 @@
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
         <h1>Administration</h1>
 
-        <div class="d-flex gap-3">
+        <p class="d-flex d-xl-none alert alert-danger">Vous ne pouvez pas utiliser l'administration sur téléphone/tablette !</p>
+
+        <div class="d-none d-xl-flex gap-3">
             <a href="{{ path('app_users_index') }}" class="btn-lightGreen2">Utilisateurs</a>
             <a href="{{ path('app_rentals_index') }}" class="btn-lightGreen2">Logements</a>
             <a href="{{ path('app_posts_index') }}" class="btn-lightGreen2">Actualités</a>
@@ -17,6 +19,6 @@
             <a href="{{ path('app_reservations_rentals_index') }}" class="btn-lightGreen2">Réservations locations</a>
         </div>
 
-        <img src="{{ asset('styles/img/imageAccueil.jpg') }}" alt="image d'accueil" class="imageAdmin rounded-4 mt-5">
+        <img src="{{ asset('styles/img/imageAccueil.jpg') }}" alt="image d'accueil" class="d-none d-xl-flex imageAdmin rounded-4 mt-5">
     </div>
 {% endblock %}

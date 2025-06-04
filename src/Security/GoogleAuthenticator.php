@@ -66,7 +66,13 @@ class GoogleAuthenticator implements AuthenticatorInterface
                     $user->setCreatedAt(new \DateTimeImmutable('now'));
                     $user->setLastLogAt(new \DateTimeImmutable('now'));
                     $user->setUpdatedAt(new \DateTimeImmutable('now'));
-                    $user->setRoles(['ROLE_USER']);
+
+                    if ($this->usersRepository->count([]) === 0) {
+                        $user->setRoles(['ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN']);
+                    } else {
+                        $user->setRoles(['ROLE_USER']);
+                    }
+
                     $user->setIsActive(true);
                     $user->setIsEmailAuthentificated(true);
                     $user->setImage($image);
