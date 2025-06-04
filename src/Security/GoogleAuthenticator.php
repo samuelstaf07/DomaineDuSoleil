@@ -80,6 +80,11 @@ class GoogleAuthenticator implements AuthenticatorInterface
                     $user->setPassword($this->passwordHasher->hashPassword($user, bin2hex(random_bytes(10))));
 
                     $this->entityManager->persist($user);
+
+                    $this->mailerService->sendWelcomeForGoogleAccount(
+                        $user->getEmail(),
+                        $user->getFirstname(),
+                    );
                 }
 
                 $this->entityManager->flush();

@@ -45,6 +45,21 @@ class MailerService extends AbstractController
         $this->mailer->send($email);
     }
 
+    public function sendWelcomeForGoogleAccount(string $to, string $username): void
+    {
+        $body = $this->twig->render('emails/welcomeForGoogleAccount.html.twig', [
+            'username' => $username,
+        ]);
+
+        $email = (new Email())
+            ->from(new Address('no-reply@domainedusoleil.com', 'Domaine du Soleil'))
+            ->to($to)
+            ->subject('Bienvenu sur le Domaine du Soleil !')
+            ->html($body);
+
+        $this->mailer->send($email);
+    }
+
     public function sendPasswordReset(string $to, string $username, string $signedUrl): void
     {
         $body = $this->twig->render('emails/passwordreset.html.twig', [
