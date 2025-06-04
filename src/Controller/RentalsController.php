@@ -36,23 +36,6 @@ final class RentalsController extends AbstractController
     ): Response {
         $rental = $rentalsRepository->find($id);
 
-        $now = new \DateTimeImmutable('now');
-        $oneMonthAgo = $now->sub(new \DateInterval('P1M'));
-        $twoMonthsLater = $now->add(new \DateInterval('P2M'));
-
-        dump($rental->needToBeOnPromotion());
-
-        if($rental->getLastReservation()){
-            dump("last", $rental->getLastReservation()->getDateEnd()->format('d/m/Y'));
-            dump($rental->getLastReservation()->getDateEnd() <= $oneMonthAgo);
-        }
-
-        if($rental->getNextReservation()){
-            dump("next", $rental->getNextReservation()->getDateStart()->format('d/m/Y'));
-            dump($rental->getNextReservation()->getDateStart() >= $twoMonthsLater);
-        }
-
-
         $reservedDates = [];
 
         foreach ($rental->getUpcomingReservations() as $reservation) {
@@ -73,6 +56,11 @@ final class RentalsController extends AbstractController
                 ];
             }
         }
+
+        $now = new \DateTimeImmutable();
+        dump($rental->getLastReservation());
+        dump($rental->getNextReservation());
+        dump($rental->needToBeOnPromotion());
 
         $reservation = new ReservationsRentals();
         $reservation->setRentals($rental);
@@ -159,6 +147,7 @@ final class RentalsController extends AbstractController
 
             return $this->redirectToRoute('app_cart');
         }
+
 
         return $this->render('rental/index.html.twig', [
             'rental' => $rental,

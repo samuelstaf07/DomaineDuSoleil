@@ -34,11 +34,16 @@ class PromotionOldRentals extends Command
         $rentals = $this->rentalsRepository->findAll();
 
         $promotedRentalsCount = 0;
+        $unPromotedRentalsCount = 0;
 
         foreach ($rentals as $rental) {
-            if($rental->isActive() && !$rental->isOnPromotion() && $rental->needToBeOnPromotion()){
+            if($rental->needToBeOnPromotion()){
                 $rental->setIsOnPromotion(true);
                 $promotedRentalsCount++;
+                $this->entityManager->persist($rental);
+            }else{
+                $rental->setIsOnPromotion(false);
+                $unPromotedRentalsCount++;
                 $this->entityManager->persist($rental);
             }
         }
@@ -46,6 +51,7 @@ class PromotionOldRentals extends Command
         $this->entityManager->flush();
 
         $output->writeln($promotedRentalsCount . ' rentals have been promoted.');
+        $output->writeln($unPromotedRentalsCount . ' rentals have been unpromoted.');
 
         return Command::SUCCESS;
     }
