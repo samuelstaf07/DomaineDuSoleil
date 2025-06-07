@@ -88,6 +88,10 @@ class RentalsType extends AbstractType
                 'label' => 'Animaux acceptés',
                 'required' => false,
             ])
+            ->add('is_active', CheckboxType::class, [
+                'label' => 'Est actif',
+                'required' => false,
+            ])
         ;
     }
 

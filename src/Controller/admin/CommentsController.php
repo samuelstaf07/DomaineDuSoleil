@@ -22,13 +22,22 @@ final class CommentsController extends AbstractController
         $page = $request->query->getInt('page',1);
         $sort = $request->query->getString('sort', 'null');
         $direction = $request->query->getString('direction', 'null');
+        $search = $request->query->get('search', '');
 
-        $comments = $commentsRepository->createQueryBuilder('comment')
+        $queryBuilder = $commentsRepository->createQueryBuilder('comment')
             ->leftJoin('comment.user', 'user')
-            ->addSelect('user');
+            ->addSelect('user')
+            ->leftJoin('comment.rentals', 'rentals')
+            ->addSelect('rentals');
+
+        if (!empty($search)) {
+            $queryBuilder
+                ->andWhere('user.firstname LIKE :search OR user.firstname LIKE :search OR rentals.title LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
 
         $pagination = $paginator->paginate(
-            $comments,
+            $queryBuilder,
             $request->query->getInt('page', $page),
             20
         );

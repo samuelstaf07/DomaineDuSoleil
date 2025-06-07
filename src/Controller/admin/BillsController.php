@@ -21,13 +21,20 @@ final class BillsController extends AbstractController
         $page = $request->query->getInt('page',1);
         $sort = $request->query->getString('sort', 'null');
         $direction = $request->query->getString('direction', 'null');
+        $search = $request->query->get('search', '');
 
-        $bills = $billsRepository->createQueryBuilder('bill')
+        $queryBuilder = $billsRepository->createQueryBuilder('bill')
                                 ->leftJoin('bill.user', 'user')
                                 ->addSelect('user');
 
+        if (!empty($search)) {
+            $queryBuilder
+                ->andWhere('user.lastname LIKE :search OR user.firstname LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
         $pagination = $paginator->paginate(
-            $bills,
+            $queryBuilder,
             $request->query->getInt('page', $page),
             20
         );

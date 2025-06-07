@@ -11,9 +11,9 @@
         <h2 class="my-4">Réservations de {{ user.firstname }} {{ user.lastname }}</h2>
 
         {% if reservationsRentals|length > 0 %}
-            <div class="w-75 bg-darkGreen p-3 rounded-4 my-4">
+            <div class="col-11 bg-darkGreen p-3 rounded-4 my-4">
                 <h3 class="text-center py-3">Réservations de logements</h3>
-                <table class="table table-hover w-100 my-5" id="myTable">
+                <table class="table table-hover col-12 my-5" id="myTable">
                     <thead>
                     <tr>
                         <th class="text-center align-middle">ID</th>
@@ -92,7 +92,7 @@
         {% endif %}
 
         {% if reservationsEvents|length > 0 %}
-            <div class="w-75 bg-lightGreen p-3 rounded-4">
+            <div class="col-11 bg-lightGreen p-3 rounded-4">
                 <h3 class="text-center py-3">Réservations d'événements</h3>
                 <table class="table table-hover w-100 my-5" id="myTable2">
                     <thead>
@@ -169,7 +169,7 @@
             <p class="alert alert-secondary my-3">Aucune réservations d'événements trouvées</p>
         {% endif %}
 
-        <div class="w-75 my-4">
+        <div class="col-10 my-4">
             <div id="calendar" data-reservations='{{ reservationsMin|json_encode() }}'></div>
         </div>
     </div>

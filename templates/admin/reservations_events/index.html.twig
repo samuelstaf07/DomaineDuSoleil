@@ -8,8 +8,8 @@
         <h1>Toutes les réservations d'événements</h1>
 
         {% if reservations_events|length > 0 %}
-        <div class="w-75">
-            <table class="table table-hover" id="myTable">
+        <div class="table-container col-10 d-flex justify-content-center align-items-center m-5">
+            <table class="table table-hover text-center align-middle" id="myTable">
             <thead>
             <tr>
                 <th class="text-center align-middle">
@@ -91,7 +91,7 @@
                 </tr>
             {% endfor %}
             </tbody>
-        </table>
+            </table>
         </div>
         {% else %}
             <p class="alert alert-secondary">Aucune réservation</p>

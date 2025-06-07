@@ -31,11 +31,18 @@ final class PostsController extends AbstractController
         $page = $request->query->getInt('page',1);
         $sort = $request->query->getString('sort', 'null');
         $direction = $request->query->getString('direction', 'null');
+        $search = $request->query->get('search', '');
 
-        $posts = $postsRepository->createQueryBuilder('post');
+        $queryBuilder = $postsRepository->createQueryBuilder('post');
+
+        if (!empty($search)) {
+            $queryBuilder
+                ->andWhere('post.title LIKE :search OR post.content LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
 
         $pagination = $paginator->paginate(
-            $posts,
+            $queryBuilder,
             $request->query->getInt('page', $page),
             20
         );

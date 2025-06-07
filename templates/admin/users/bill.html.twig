@@ -4,7 +4,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/admin/datatable.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const deleteModal = document.getElementById('deleteModal');
@@ -19,7 +18,6 @@
 {% endblock %}
 
 {% block body %}
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.bootstrap5.css">
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
         <div class="d-flex w-75 justify-content-start gap-2">
             <a href="{{ path('app_admin') }}" class="btn-yellow mb-4">Revenir à l'administration</a>
@@ -32,16 +30,18 @@
                 <thead>
                 <tr>
                     <th class="align-middle text-center">Id</th>
+                    <th class="align-middle text-center">Voir la facture</th>
                     <th class="align-middle text-center">Date</th>
-                    <th class="align-middle text-center">Total_price</th>
-                    <th class="align-middle text-center">Status</th>
-                    <th class="align-middle text-center">actions</th>
+                    <th class="align-middle text-center">Prix total</th>
+                    <th class="align-middle text-center">Statut</th>
+                    <th class="align-middle text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for bill in bills %}
                     <tr {% if not bill.status %}class="table-warning"{% endif %}>
                         <td class="align-middle text-center">{{ bill.id }}</td>
+                        <td class="align-middle text-center"><a href="{{ path('app_bills', {'id': bill.id}) }}" class="btn btn-dark" target="_blank" title="Voir la facture">Voir</a></td>
                         <td class="align-middle text-center">{{ bill.date ? bill.date|date('d/m/Y') : '' }}</td>
                         <td class="align-middle text-center">{{ bill.totalPrice|number_format(2, ',', '') }}€</td>
                         <td class="align-middle text-center">{{ bill.status ? '✅️' : '❌' }}</td>
@@ -62,7 +62,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="6">no records found</td>
+                        <td colspan="6">Aucune facture</td>
                     </tr>
                 {% endfor %}
                 </tbody>

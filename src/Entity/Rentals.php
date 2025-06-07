@@ -383,7 +383,8 @@ class Rentals
         foreach ($this->reservations as $reservation) {
             if (
                 $reservation->getStatusReservation() === true &&
-                $reservation->getDateEnd() >= $now
+                $reservation->getDateEnd() >= $now &&
+                $reservation->getStatusBaseDeposit() == 0
             ) {
                 $upcomingReservations[] = $reservation;
             }
@@ -419,14 +420,18 @@ class Rentals
 
         foreach ($this->reservations as $reservation) {
             if ($reservation->getDateEnd() < $now && $reservation->getStatusReservation() === true) {
-                if ($lastReservation === null || $reservation->getDateEnd() > $lastReservation->getDateEnd()) {
+                if (
+                    $lastReservation === null ||
+                    $reservation->getDateEnd() > $lastReservation->getDateEnd()
+                ) {
                     $lastReservation = $reservation;
                 }
             }
         }
 
-        return $lastReservation;
+        return $lastReservation ?? null;
     }
+
 
     public function getNextReservation(): ?ReservationsRentals
     {
@@ -435,33 +440,33 @@ class Rentals
 
         foreach ($this->reservations as $reservation) {
             if ($reservation->getDateStart() > $now && $reservation->getStatusReservation() === true) {
-                if ($nextReservation === null || $reservation->getDateStart() < $nextReservation->getDateStart()) {
+                if (
+                    $nextReservation === null ||
+                    $reservation->getDateStart() < $nextReservation->getDateStart()
+                ) {
                     $nextReservation = $reservation;
                 }
             }
         }
 
-        return $nextReservation;
+        return $nextReservation ?? null;
     }
+
 
 
     public function needToBeOnPromotion(): bool
     {
-        $now = new \DateTimeImmutable('now');
-        $oneMonthAgo = $now->sub(new \DateInterval('P1M'));
-        $twoMonthsLater = $now->add(new \DateInterval('P2M'));
+        $now = new \DateTimeImmutable();
 
         $lastReservation = $this->getLastReservation();
         $nextReservation = $this->getNextReservation();
 
-        $lastReservationIsOld = $lastReservation == null || $lastReservation->getDateEnd() <= $oneMonthAgo;
-        $nextReservationIsFar = $nextReservation == null || $nextReservation->getDateStart() >= $twoMonthsLater;
+        $oneMonthAgo = $now->sub(new \DateInterval('P1M'));
+        $twoMonthsLater = $now->add(new \DateInterval('P2M'));
 
-        if ($lastReservationIsOld && $nextReservationIsFar) {
-            return true;
-        }
+        $isLastReservationOld = $lastReservation === null || $lastReservation->getDateEnd() < $oneMonthAgo;
+        $isNextReservationFar = $nextReservation === null || $nextReservation->getDateStart() > $twoMonthsLater;
 
-        return false;
+        return $isLastReservationOld && $isNextReservationFar;
     }
-
 }

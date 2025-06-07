@@ -3,21 +3,30 @@
 {% block title %}Toutes les factures{% endblock %}
 
 {% block body %}
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.bootstrap5.css">
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
         {% include 'admin/navbar/index.html.twig' %}
         <h1>Toutes les factures</h1>
 
+        <div class="d-flex gap-1 col-10 align-items-center justify-content-center">
+            <form method="get" action="{{ path('app_bills_index') }}" class="mb-4 col-6">
+                <div class="input-group">
+                    <input type="text" name="search" value="{{ app.request.get('search') }}" class="form-control" placeholder="Rechercher une facture par utilisateur...">
+                    <button class="btn btn-dark" type="submit">Rechercher</button>
+                    <a href="{{ path('app_bills_index') }}" class="btn btn-light">Réinitialiser</a>
+                </div>
+            </form>
+        </div>
+
         {% if bills|length > 0 %}
-            <div class="w-75 p-4 rounded-4 d-flex flex-column justify-content-center align-items-cente">
-                <table class="table table-hover w-75r" id="myTable">
+            <div class="table-container col-10 d-flex justify-content-center align-items-center m-5">
+                <table class="table table-hover text-center align-middle" id="myTable">
                     <thead>
                     <tr>
                         <th class="align-middle text-center {% if bills.isSorted('bill.id') %}sorted{% endif %}">
                             {{ knp_pagination_sortable(bills, 'ID', 'bill.id') }}
                         </th>
                         <th class="align-middle text-center {% if bills.isSorted('user.firstname') %}sorted{% endif %}">
-                            {{ knp_pagination_sortable(bills, 'User', 'user.firstname') }}
+                            {{ knp_pagination_sortable(bills, 'Utilisateur', 'user.firstname') }}
                         </th>
                         <th class="align-middle text-center {% if bills.isSorted('bill.date') %}sorted{% endif %}">
                             {{ knp_pagination_sortable(bills, 'Date', 'bill.date') }}

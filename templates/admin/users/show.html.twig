@@ -62,6 +62,9 @@
                 <a href="{{ path('app_users_bills', {'id': user.id}) }}" class="btn-black">
                     Voir les factures
                 </a>
+                <a href="{{ path('app_users_data', {'id': user.id}) }}" class="btn-lightGreen" target="_blank">
+                    Données en PDF
+                </a>
             </div>
             {% if not is_granted('ROLE_SUPER_ADMIN') %}
             <p class="alert alert-warning">Vous ne pouvez pas changer le rôle de l'utilisateur car vous n'êtes pas Super Admin.</p>

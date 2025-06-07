@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ reservations_event.id }}: Réservation de <a href="{{ path('app_users_show', {id:reservations_event.user.id}) }}">{{ reservations_event.user.firstname }} {{ reservations_event.user.lastname }}{% endblock %}
+{% block title %}Réservation de {{ reservations_event.user.firstname }} {{ reservations_event.user.lastname }}{% endblock %}
 
 {% block body %}
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5 gap-2">

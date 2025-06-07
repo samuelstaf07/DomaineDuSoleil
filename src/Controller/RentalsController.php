@@ -36,10 +36,6 @@ final class RentalsController extends AbstractController
     ): Response {
         $rental = $rentalsRepository->find($id);
 
-        $now = new \DateTimeImmutable('now');
-        $oneMonthAgo = $now->sub(new \DateInterval('P1M'));
-        $twoMonthsLater = $now->add(new \DateInterval('P2M'));
-
         $reservedDates = [];
 
         foreach ($rental->getUpcomingReservations() as $reservation) {
@@ -146,6 +142,7 @@ final class RentalsController extends AbstractController
 
             return $this->redirectToRoute('app_cart');
         }
+
 
         return $this->render('rental/index.html.twig', [
             'rental' => $rental,
