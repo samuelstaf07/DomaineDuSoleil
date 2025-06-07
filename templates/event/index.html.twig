@@ -12,6 +12,7 @@
 {% block body %}
     <div class="contentMargin popup-gallery d-flex flex-column align-items-center gap-5 mb-4">
         <h3 class="myTitle fs-2 text-center">{{ event.title|capitalize }}</h3>
+        {% if not event.isActive %}<p class="alert alert-danger">Cet événement est inactif, il n'est pas disponible.</p>{% endif %}
 
         <header class="w-75 d-flex flex-column gap-3 align-items-center">
             <div class="d-block d-xl-flex gap-3">
@@ -25,7 +26,7 @@
                 <div class="{% if event.getHomePageImage() %}col-xl-6{% else %}col-12{% endif %}">
                     <p class="bg-lightGreen rounded-4 p-2">{{ event.content|capitalize }}</p>
 
-                    {% if not event.isPast() %}
+                    {% if (not event.isPast()) and event.isActive %}
                         {% if event.getRemainingPlaces() <= 0 %}
                             <div class="bg-black rounded-4 p-2 d-flex flex-column justify-content-between p-3">
                                 <div class="d-flex justify-content-between">
@@ -75,7 +76,8 @@
                                 <p>{{ event.nbPlaces }} places</p>
                                 <h4><span class="color-lightGreen">{{ event.price|number_format(2, ',', '') }}€</span>/personne</h4>
                             </div>
-                            <p class="alert alert-warning text-center fw-bold">Événement déjà passé.</p>
+                            {% if event.isPast() %}<p class="alert alert-warning text-center fw-bold">Événement déjà passé.</p>{% endif %}
+                            {% if not event.isActive %}<p class="alert alert-warning text-center fw-bold">Événement inactif.</p>{% endif %}
                         </div>
                     {% endif %}
 

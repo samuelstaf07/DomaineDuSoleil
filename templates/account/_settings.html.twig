@@ -33,7 +33,7 @@
                         <a href="{{ path('app_account_section', {section: 'modify'}) }}" data-turbo-frame="account-section" class="text-center btn-yellow">Modifier votre compte</a>
                         <a href="{{ path('app_account_section', {section: 'passwordmodify'}) }}" data-turbo-frame="account-section" class="text-center btn-lightGreen">Changer le mot de passe</a>
                         <a href="{{ path('app_account_section', {section: 'deleteaccount'}) }}" data-turbo-frame="account-section" class="text-center btn-red {% if is_granted('ROLE_ADMIN') %}disabledItem{% endif %}">Supprimer le compte</a>
-                        <a href="{{ path('app_account_section', {section: 'sendVerifyEmail'}) }}" data-turbo-frame="account-section" class="text-center btn-yellow">Vérifier votre mail</a>
+                        <a href="{{ path('app_account_section', {section: 'sendVerifyEmail'}) }}" data-turbo-frame="account-section" class="text-center btn-yellow {% if app.user.isEmailAuthentificated %}disabledItem{% endif %}">Vérifier votre mail</a>
                     </div>
                 </div>
             </div>

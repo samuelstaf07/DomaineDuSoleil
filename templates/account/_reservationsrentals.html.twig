@@ -1,5 +1,5 @@
 <turbo-frame id="account-section">
-    <h4 class="text-center">Vos réservations de logements</h4>
+    <h4 class="text-center">Vos réservations de locations</h4>
 
     {% set reservationCount = 0 %}
     {% for bill in bills %}
@@ -12,9 +12,9 @@
             <table class="table mt-4 table-bordered table-striped table-hover">
                 <thead>
                 <tr>
-                    <th class="align-middle text-center">Id</th>
                     <th class="align-middle text-center">Id de la facture</th>
-                    <th class="align-middle text-center">Logement</th>
+                    <th class="align-middle text-center">Id</th>
+                    <th class="align-middle text-center">location</th>
                     <th class="align-middle text-center">Date de début</th>
                     <th class="align-middle text-center">Date de fin</th>
                     <th class="align-middle text-center">Date de réservation</th>
@@ -79,6 +79,6 @@
             </table>
         </div>
     {% else %}
-        <p class="alert alert-secondary text-center">Aucune réservations de logements</p>
+        <p class="alert alert-secondary text-center">Aucune réservations de locations</p>
     {% endif %}
 </turbo-frame>

@@ -3,7 +3,6 @@ framework:
         paths:
             - assets/
         missing_import_mode: strict
-        importmap_polyfill: false
 
 when@prod:
     framework:

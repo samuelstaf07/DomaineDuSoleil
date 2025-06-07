@@ -18,7 +18,7 @@
 
     <div class="contentMargin popup-gallery d-flex flex-column align-items-center gap-5">
         <h3 class="myTitle fs-2 text-center">{{ rental.title|capitalize }}</h3>
-        {% if not rental.isActive %}<p class="alert alert-danger">Ce logement est inactif, il n'est pas disponible.</p>{% endif %}
+        {% if not rental.isActive %}<p class="alert alert-danger">Cette location est inactive, elle n'est pas disponible.</p>{% endif %}
 
         <header class="w-75 d-flex flex-column gap-3 align-items-center">
             <div class="d-block d-xl-flex gap-3">
@@ -181,7 +181,7 @@
         {% set images = rental.getImages() %}
         {% if images|length > 1 %}
             <section id="galleryRental" class="d-flex flex-column align-items-center gap-3 py-4 px-5 rounded-4 bg-lightGreen">
-                <h3>Gallerie photo du logement</h3>
+                <h3>Gallerie photo du location</h3>
                 <div class="d-flex flex-column flex-xl-row popup-gallery w-75 justify-content-center gap-3">
                     {% for imageRental in images %}
                         {% if not imageRental.isHomePage %}
