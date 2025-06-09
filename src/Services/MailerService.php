@@ -108,7 +108,7 @@ class MailerService extends AbstractController
         $this->mailer->send($email);
     }
 
-    public function sendChangeMail(string $to, string $username, string $newEmail): void
+    public function changeMail(string $to, string $username, string $newEmail): void
     {
         $body = $this->twig->render('emails/changemail.html.twig', [
             'username' => $username,
@@ -119,6 +119,23 @@ class MailerService extends AbstractController
             ->from(new Address('no-reply@domainedusoleil.com', 'Domaine du Soleil'))
             ->to($to)
             ->subject('Adresse mail changée')
+            ->html($body);
+
+        $this->mailer->send($email);
+    }
+
+    public function sendChangeMail(string $to, string $username, string $newEmail, string $signedUrl): void
+    {
+        $body = $this->twig->render('emails/sendChangeMail.html.twig', [
+            'username' => $username,
+            'newEmail' => $newEmail,
+            'confirmationUrl' => $signedUrl,
+        ]);
+
+        $email = (new Email())
+            ->from(new Address('no-reply@domainedusoleil.com', 'Domaine du Soleil'))
+            ->to($to)
+            ->subject('Demande de changement de mail')
             ->html($body);
 
         $this->mailer->send($email);

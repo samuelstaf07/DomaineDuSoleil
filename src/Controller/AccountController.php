@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -30,6 +31,53 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 final class AccountController extends AbstractController
 {
+
+    #[Route('/account/confirm-email', name: 'app_confirm_change_email')]
+    public function confirmChangeMail(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        VerifyEmailHelperInterface $verifyEmailHelper,
+        UsersRepository $usersRepository
+    ): Response {
+        $userId = $request->query->get('id');
+        $signedUrl = $request->getUri();
+
+        if (!$userId) {
+            throw new NotFoundHttpException('ID manquant.');
+        }
+
+        $user = $usersRepository->find($userId);
+
+        if (!$user) {
+            throw $this->createNotFoundException('Utilisateur introuvable.');
+        }
+
+        try {
+            $verifyEmailHelper->validateEmailConfirmation($signedUrl, $user->getId(), $user->getEmail());
+        } catch (\Exception $e) {
+            $this->addFlash('danger', 'Le lien de confirmation est invalide ou expiré.');
+            return $this->redirectToRoute('app_account');
+        }
+
+        $form = $this->createForm(ChangeMailType::class);
+        $form->handleRequest($request);
+
+        $newEmail = $request->query->get('newEmail');
+
+        if (!$newEmail) {
+            $this->addFlash('danger', 'Aucune nouvelle adresse e-mail fournie.');
+            return $this->redirectToRoute('app_account');
+        }
+
+        $user->setEmail($newEmail);
+        $user->setUpdatedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Brussels')));
+
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Votre adresse e-mail a bien été mise à jour.');
+        return $this->redirectToRoute('app_account');
+    }
+
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/account', name: 'app_account')]
     public function index(ReservationsRentalsRepository $reservationsRentalsRepository, ReservationsEventsRepository $reservationsEventsRepository): Response
@@ -234,22 +282,25 @@ final class AccountController extends AbstractController
                     $this->addFlash('danger', 'Email déja utilisé.');
                     return $this->redirectToRoute('app_account');
                 }else {
+
+                    $signatureComponents = $verifyEmailHelper->generateSignature(
+                        'app_confirm_change_email',
+                        $user->getId(),
+                        $user->getEmail(),
+                        [
+                            'id' => $user->getId(),
+                            'newEmail' => $data['newEmail']
+                        ]
+                    );
+
                     $mailerService->sendChangeMail(
                         $user->getEmail(),
                         $user->getFirstname(),
                         $data['newEmail'],
-                    );
-                    $mailerService->sendChangeMail(
-                        $data['newEmail'],
-                        $user->getFirstname(),
-                        $data['newEmail'],
+                        $signatureComponents->getSignedUrl()
                     );
 
-                    $user->setEmail($data['newEmail']);
-                    $user->setUpdatedAt(new \DateTimeImmutable('now', new DateTimeZone('Europe/Brussels')));
-                    $entityManager->flush();
-
-                    $this->addFlash('success', 'Votre adresse e-mail a été modifiée.');
+                    $this->addFlash('success', 'Un mail pour changer l\'adresse mail a été envoyé.');
                     return $this->redirectToRoute('app_account');
                 }
             }

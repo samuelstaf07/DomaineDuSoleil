@@ -156,7 +156,7 @@ final class ReservationsEventsController extends AbstractController
     {
         $reservationsEventUser = $reservationsEventsRepository->find($id);
 
-        if($reservationsEventUser->getBill()->getPaymentIntentId()){
+        if($reservationsEventUser->getBill()){
             $this->addFlash('danger', 'Vous ne pouvez pas modifier une réservation fait par un utilisateur.');
             return $this->redirectToRoute('app_reservations_events_index', [], Response::HTTP_SEE_OTHER);
         }

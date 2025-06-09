@@ -17,6 +17,7 @@ class ImageUserType extends AbstractType
             ->add('image', DropzoneType::class, [
                 'mapped' => false,
                 'required' => false,
+                'multiple' => false,
                 'attr' => [
                     'accept' => 'image/*',
                     'placeholder' => 'Déposer votre nouvelle image de profil',

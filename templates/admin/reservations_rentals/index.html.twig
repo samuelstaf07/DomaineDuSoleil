@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Toutes les réservations de logements{% endblock %}
+{% block title %}Toutes les réservations de locations{% endblock %}
 
 {% block body %}
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
         {% include 'admin/navbar/index.html.twig' %}
-        <h1>Toutes les réservations de logements</h1>
+        <h1>Toutes les réservations de locations</h1>
 
         {% if reservations_rentals|length > 0 %}
             <div class="table-container col-10 d-flex justify-content-center align-items-center m-5">
@@ -19,7 +19,7 @@
                             {{ knp_pagination_sortable(reservations_rentals, 'Utilisateur', 'user.firstname') }}
                         </th>
                         <th class="text-center align-middle">
-                            {{ knp_pagination_sortable(reservations_rentals, 'Logement', 'rentals.title') }}
+                            {{ knp_pagination_sortable(reservations_rentals, 'Location', 'rentals.title') }}
                         </th>
                         <th class="text-center align-middle">
                             {{ knp_pagination_sortable(reservations_rentals, 'Date de réservation', 'reservations_rental.date_reservation') }}

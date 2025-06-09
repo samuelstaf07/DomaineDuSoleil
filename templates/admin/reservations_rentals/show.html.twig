@@ -14,7 +14,7 @@
             <div class="d-flex flex-column gap-2 w-75 justify-content-center align-items-center">
                 <ul class="w-75 list-group rounded-4">
                     <li class="list-group-item">
-                        <p>Logement: <a href="{{ path('app_rental', {id:reservations_rental.rentals.id}) }}" data-turbo="false">{{ reservations_rental.rentals.title|capitalize }}</a></p>
+                        <p>Location: <a href="{{ path('app_rental', {id:reservations_rental.rentals.id}) }}" data-turbo="false">{{ reservations_rental.rentals.title|capitalize }}</a></p>
                     </li>
                     <li class="list-group-item">
                         <p>Utilisateur: <a href="{{ path('app_users_show', {id:reservations_rental.user.id}) }}">{{ reservations_rental.user.firstname }} {{ reservations_rental.user.lastname }}</a></p>

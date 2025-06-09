@@ -12,7 +12,7 @@
     --myLightGreen: #95C11F;
     --myDarkGreen: #006633;
     --myYellow: #F7D844;
-    --myBlack: #212429;
+    --myBlack: #16191c;
     --myRed: #CE1104;
     --myOrange: #b5713a;
 }
@@ -98,9 +98,7 @@ h2{
     font-weight: bold;
     background: linear-gradient(to right, var(--myLightGrey), var(--myDarkGreen));
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-fill-color: transparent;
     display: inline-block;
 }
 
@@ -492,9 +490,7 @@ h2{
     font-weight: bold;
     background: linear-gradient(to right, var(--myDarkGrey), var(--myDarkGreen));
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-fill-color: transparent;
     display: inline-block;
 }
 
@@ -675,4 +671,8 @@ h2{
 .imageProfilSettings{
     height: 300px;
     width: 300px;
+}
+
+.imageEventHome{
+    height: 300px;
 }

@@ -12,13 +12,13 @@
 
         {% if reservationsRentals|length > 0 %}
             <div class="col-11 bg-darkGreen p-3 rounded-4 my-4">
-                <h3 class="text-center py-3">Réservations de logements</h3>
+                <h3 class="text-center py-3">Réservations de locations</h3>
                 <table class="table table-hover col-12 my-5" id="myTable">
                     <thead>
                     <tr>
                         <th class="text-center align-middle">ID</th>
-                        <th class="text-center align-middle">Utilisateur</th>
-                        <th class="text-center align-middle">Logement</th>
+                        <th class="text-center align-middle">Facture</th>
+                        <th class="text-center align-middle">Location</th>
                         <th class="text-center align-middle">Date de réservation</th>
                         <th class="text-center align-middle">Date début</th>
                         <th class="text-center align-middle">Date fin</th>
@@ -34,8 +34,10 @@
                     {% for reservation in reservationsRentals %}
                         <tr>
                             <td class="text-center align-middle">{{ reservation.id }}</td>
-                            <td class="text-center align-middle">
-                                <a href="{{ path('app_users_show', {id:reservation.user.id}) }}">{{ reservation.user.firstname }} {{ reservation.user.lastname }}</a>
+                            <td class="align-middle text-center">
+                                <a href="{{ path('app_bills', {'id': reservation.bill.id}) }}">
+                                    Voir la facture
+                                </a>
                             </td>
                             <td class="align-middle">
                                 <a href="{{ path('app_rental', {id:reservation.rentals.id}) }}">
@@ -88,7 +90,7 @@
                 </table>
             </div>
         {% else %}
-            <p class="alert alert-secondary my-3">Aucune réservations de logements trouvées</p>
+            <p class="alert alert-secondary my-3">Aucune réservations de locations trouvées</p>
         {% endif %}
 
         {% if reservationsEvents|length > 0 %}

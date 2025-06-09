@@ -8,16 +8,7 @@
 
         <p class="d-flex d-xl-none alert alert-danger">Vous ne pouvez pas utiliser l'administration sur téléphone/tablette !</p>
 
-        <div class="d-none d-xl-flex gap-3">
-            <a href="{{ path('app_users_index') }}" class="btn-lightGreen2">Utilisateurs</a>
-            <a href="{{ path('app_rentals_index') }}" class="btn-lightGreen2">Logements</a>
-            <a href="{{ path('app_posts_index') }}" class="btn-lightGreen2">Actualités</a>
-            <a href="{{ path('app_bills_index') }}" class="btn-lightGreen2">Factures</a>
-            <a href="{{ path('app_events_index') }}" class="btn-lightGreen2">Événements</a>
-            <a href="{{ path('app_comments_index') }}" class="btn-lightGreen2">Commentaires</a>
-            <a href="{{ path('app_reservations_events_index') }}" class="btn-lightGreen2">Réservations événements</a>
-            <a href="{{ path('app_reservations_rentals_index') }}" class="btn-lightGreen2">Réservations locations</a>
-        </div>
+        {% include './admin/navbar/index.html.twig' %}
 
         <img src="{{ asset('styles/img/imageAccueil.jpg') }}" alt="image d'accueil" class="d-none d-xl-flex imageAdmin rounded-4 mt-5">
     </div>
