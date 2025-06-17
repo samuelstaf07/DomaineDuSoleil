@@ -22,9 +22,9 @@
                         </div>
                         {% endif %}
                         <div class="card event-card w-100 h-100 border-0 rounded-4 d-flex flex-column flex-xl-row">
-                            <div class="row g-0 h-100">
+                            <div class="row g-0 h-100 w-100">
                                 {% if event.getHomePageImage %}
-                                <div class="col-md-5 col-1 h-100">
+                                <div class="col-md-5 col-1">
                                     <img src="{{ asset('uploads/' ~ event.getHomePageImage().src) }}" class="d-none d-md-flex object-fit-cover rounded-start-4 imageEvents w-100 h-100" alt="{{ asset('uploads/' ~ event.getHomePageImage().alt) }}">
                                 </div>
                                 {% endif %}

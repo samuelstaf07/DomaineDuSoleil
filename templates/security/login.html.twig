@@ -4,7 +4,7 @@
 
 {% block body %}
     <form method="post" class="contentMargin d-flex justify-content-center align-items-center">
-        <div class="bg-lightGreen col-10 col-md-8 col-xl-6 col-xxl-4 p-5 rounded-4 d-flex flex-column gap-4">
+        <div class="bg-lightGreen col-10 col-md-8 col-xl-6 col-xxl-4 p-5 rounded-4 d-flex flex-column gap-4 mb-3">
             {% if app.user %}
                 <div class="mb-3">
                     Vous êtes connecté avec {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Se déconnecter</a>

@@ -17,6 +17,7 @@
 
         <div class="text-center alert alert-{% if date(rental_start) >= date(now) and days_diff >= 3 %}info{% else %}warning{% endif %}">
             <p>Le logement est dans {{ days_diff }} jour(s) !</p>
+            <p>La prix de la caution est de <b>{{ (rental.pricePerDay * 2)|number_format(2, ',', '') }}€</b> ({{ rental.pricePerDay|number_format(2, ',', '') }}€ x 2)</p>
             {% if date(rental_start) >= date(now) and days_diff > 30 %}
                 <p>Il est recommandé de rembourser à 90% ({{ (reservation.totalPrice * 0.9)|number_format(2, ',', '') }}€) l'utilisateur.</p>
             {% elseif date(rental_start) >= date(now) and days_diff <= 30 and days_diff >= 15 %}

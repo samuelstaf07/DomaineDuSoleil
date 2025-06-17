@@ -67,7 +67,6 @@ final class RentalsController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $rental->setIsActive(false);
             $rental->setIsOnPromotion(false);
             $entityManager->persist($rental);
             $entityManager->flush();

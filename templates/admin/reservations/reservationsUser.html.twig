@@ -35,9 +35,13 @@
                         <tr>
                             <td class="text-center align-middle">{{ reservation.id }}</td>
                             <td class="align-middle text-center">
-                                <a href="{{ path('app_bills', {'id': reservation.bill.id}) }}">
-                                    Voir la facture
-                                </a>
+                                {% if reservation.bill %}
+                                    <a href="{{ path('app_bills', {'id': reservation.bill.id}) }}">
+                                        Voir la facture
+                                    </a>
+                                {% else %}
+                                    Aucune Facture
+                                {% endif %}
                             </td>
                             <td class="align-middle">
                                 <a href="{{ path('app_rental', {id:reservation.rentals.id}) }}">
@@ -104,6 +108,7 @@
                         <th class="align-middle text-center">Événement</th>
                         <th class="align-middle text-center">Date réservation</th>
                         <th class="align-middle text-center">Date Événement</th>
+                        <th class="text-center align-middle">Ajouté manuellement</th>
                         <th class="align-middle text-center">Nb places</th>
                         <th class="align-middle text-center">Total</th>
                         <th class="align-middle text-center">Active</th>
@@ -116,9 +121,13 @@
 
                             <td class="align-middle text-center">{{ reservation.id }}</td>
                             <td class="align-middle text-center">
-                                <a href="{{ path('app_bills', {'id': reservation.bill.id}) }}">
-                                    Voir la facture
-                                </a>
+                                {% if reservation.bill %}
+                                    <a href="{{ path('app_bills', {'id': reservation.bill.id}) }}">
+                                        Voir la facture
+                                    </a>
+                                {% else %}
+                                    Aucune Facture
+                                {% endif %}
                             </td>
                             <td class="align-middle">
                                 <a href="{{ path('app_rental', {id:reservation.event.id}) }}">{{ reservation.event.title|slice(0, 50) ~ '...'|capitalize }}</a>
@@ -129,6 +138,7 @@
                             <td class="align-middle text-center">
                                 {{ reservation.event.date|date('d/m/Y') }}
                             </td>
+                            <td class="text-center align-middle">{{ reservation.bill is null ? '✅️' : '❌' }}</td>
                             <td class="align-middle text-center">
                                 {{ reservation.nbPlaces }}
                             </td>
@@ -144,10 +154,10 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="#F7D844" d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1m0 5.25a.749.749 0 1 0 0-1.5a.749.749 0 0 0 0 1.498m.5 1.25a.5.5 0 0 0-1 0v3a.5.5 0 0 0 1 0z"/></svg>
                                     </a>
                                     <a href="{{ path('app_reservations_events_edit', {'id': reservation.id}) }}" class="btn btn-dark
-                            {% if reservation.bill.PaymentIntentId %}disabledItem{% endif %}" title="Modifier la réservation">
+                            {% if reservation.bill %}disabledItem{% endif %}" title="Modifier la réservation">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="#006633" fill-rule="evenodd" clip-rule="evenodd"><path d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352z"/><path d="M19.846 4.318a2.2 2.2 0 0 0-.437-.692a2 2 0 0 0-.654-.463a1.92 1.92 0 0 0-1.544 0a2 2 0 0 0-.654.463l-.546.578l2.852 3.02l.546-.579a2.1 2.1 0 0 0 .437-.692a2.24 2.24 0 0 0 0-1.635M17.45 8.721L14.597 5.7L9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.5.5 0 0 0 .255-.145l4.778-5.06Z"/></g></svg>
                                     </a>
-                                    <a href="{{ path('app_reservations_events_refund', {'id': reservation.id}) }}" class="btn btn-dark {% if reservation.bill.PaymentIntentId is null or reservation.totalDepositReturned >= reservation.totalDeposit %}disabledItem{% endif %}" title="Rembourser la réservation">
+                                    <a href="{{ path('app_reservations_events_refund', {'id': reservation.id}) }}" class="btn btn-dark {% if reservation.bill is null or reservation.totalDepositReturned >= reservation.totalDeposit %}disabledItem{% endif %}" title="Rembourser la réservation">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#95C11F" d="M18 11H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2m0 6H6v-3h12m-1-9v5h-1.5V6.5H9.88l2.42 2.43L11.24 10L7 5.75l4.24-4.25l1.06 1.07L9.88 5Z"/></svg>
                                     </a>
                                     <a href="{{ path('app_reservations_events_change_active', {'id': reservation.id}) }}" class="btn btn-dark

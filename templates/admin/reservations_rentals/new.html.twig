@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ajout d'une nouvelle réservation de logement{% endblock %}
+{% block title %}Ajout d'une nouvelle réservation de location{% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
@@ -16,7 +16,7 @@
         <div class="d-flex w-75 justify-content-start gap-2">
             <a href="{{ path('app_admin') }}" class="btn-yellow mb-4">Revenir à l'administration</a>
         </div>
-        <h1>Ajout d'une nouvelle réservation de logement</h1>
+        <h1>Ajout d'une nouvelle réservation de location</h1>
 
         {% if user is defined and rentals is defined %}
         <h3>Réservation pour <span class="color-darkGreen">{{ user.firstname }} {{ user.lastname }}</span> à <span class="color-darkGreen">{{ rentals.title|capitalize }}</span></h3>

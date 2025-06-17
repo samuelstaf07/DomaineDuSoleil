@@ -290,6 +290,7 @@ final class ReservationsRentalsController extends AbstractController
                     if($reservationsRentals->getTotalPrice() <= $reservationsRentals->getTotalDepositReturned()){
                         $reservationsRentals->setIsActive(false);
                     }
+                    $reservationsRentals->setIsRefund(0);
 
                     $entityManager->persist($reservationsRentals);
                     $entityManager->flush();
