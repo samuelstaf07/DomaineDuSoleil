@@ -53,30 +53,72 @@
                     <a href="{{ path('app_reservations_events_edit', {'id': reservations_event.id}) }}" class="btn-yellow {% if reservations_event.bill is not null %}disabledItem{% endif %}" title="Modifier la réservation">
                         Modifier
                     </a>
+
                     <a href="{{ path('app_reservations_events_refund', {'id': reservations_event.id}) }}" class="btn-lightGreen
-                    {% if reservations_event.bill is null or reservations_event.totalDepositReturned >= reservations_event.totalDeposit %}
-                        disabledItem
-                    {% endif %}
-                        " title="Rembourser la réservation">
+                        {% if reservations_event.bill is null or reservations_event.totalDepositReturned >= reservations_event.totalDeposit %}
+                            disabledItem
+                        {% endif %}
+                            " title="Rembourser la réservation">
                         Rembourser l'utilisateur
                     </a>
-                    <a href="{{ path('app_reservations_events_change_active', {'id': reservations_event.id}) }}" class="
-                            {% if reservations_event.isActive %}
-                                btn-red
-                            {% else %}
-                                btn-lightGreen2
-                            {% endif %}
-                            {% if not reservations_event.isActive and reservations_event.bill is not null %}
-                                disabledItem
-                            {% endif %}" title="Changer le type actif">
+
+                    <button type="button" class="{% if reservations_event.isActive %}btn-red{% else %}btn-lightGreen2{% endif %}
+                        {% if not reservations_event.isActive and reservations_event.bill is not null %} disabledItem{% endif %}"
+                            data-bs-toggle="modal" data-bs-target="#confirmActiveModal"
+                            {% if not reservations_event.isActive and reservations_event.bill is not null %} disabled {% endif %}>
                         {% if reservations_event.isActive %}
                             Désactiver
                         {% else %}
                             Activer
                         {% endif %}
-                    </a>
+                    </button>
 
-                    <a href="{{ path('app_reservations_events_delete', {id:reservations_event.id}) }}" class="btn-red {% if reservations_event.bill %}disabledItem{% endif %}">Supprimer</a>
+                    <button type="button" class="btn-red {% if reservations_event.bill %}disabledItem{% endif %}"
+                            data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                            {% if reservations_event.bill %} disabled {% endif %}>
+                        Supprimer
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmActiveModal" tabindex="-1" aria-labelledby="confirmActiveModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="confirmActiveModalLabel">
+                        {% if reservations_event.isActive %}Désactiver{% else %}Activer{% endif %} la réservation ?
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir {% if reservations_event.isActive %}désactiver{% else %}activer{% endif %} cette réservation ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <a href="{{ path('app_reservations_events_change_active', {'id': reservations_event.id}) }}" class="btn btn-danger">
+                        Confirmer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Supprimer la réservation ?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    Cette action est irréversible. Êtes-vous sûr de vouloir supprimer cette réservation ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <a href="{{ path('app_reservations_events_delete', {'id': reservations_event.id}) }}" class="btn btn-danger">Supprimer</a>
                 </div>
             </div>
         </div>

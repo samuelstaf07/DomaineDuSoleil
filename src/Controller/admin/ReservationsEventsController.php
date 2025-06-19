@@ -183,7 +183,7 @@ final class ReservationsEventsController extends AbstractController
     {
         $reservationsEvents = $reservationsEventsRepository->find($id);
 
-        if($reservationsEvents->getBill()->getPaymentIntentId()){
+        if($reservationsEvents->getBill()){
             $this->addFlash('danger', 'Vous ne pouvez pas supprimer une réservation fait par un utilisateur.');
             return $this->redirectToRoute('app_reservations_events_show', [
                 'id' => $reservationsEvents->getId(),
@@ -299,7 +299,7 @@ final class ReservationsEventsController extends AbstractController
 
             $this->addFlash('success', 'La réservation a été désactivé');
         }else{
-            if($reservationsEvents->getBill()->getPaymentIntentId() == null){
+            if($reservationsEvents->getBill() == null){
                 $reservationsEvents->setIsActive(!$reservationsEvents->getIsActive());
 
                 $entityManager->persist($reservationsEvents);
