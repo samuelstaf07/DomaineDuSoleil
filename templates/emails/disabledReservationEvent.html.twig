@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Réinitialisation de votre mot de passe</title>
+    <title>Réservation d'événement désactivée</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -19,7 +19,7 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         h1 {
-            color: #006633;
+            color: #cc0000;
         }
         p {
             line-height: 1.6;
@@ -29,7 +29,7 @@
             display: inline-block;
             margin-top: 20px;
             padding: 12px 25px;
-            background-color: #e74c3c;
+            background-color: #0066cc;
             color: #ffffff;
             text-decoration: none;
             border-radius: 5px;
@@ -44,13 +44,13 @@
 </head>
 <body>
 <div class="container">
-    <h1>Réinitialisation de votre mot de passe</h1>
+    <h1>Votre réservation d'événement a été désactivée</h1>
     <p>Bonjour {{ username }},</p>
-    <p>Vous avez demandé une réinitialisation de votre mot de passe. Pour créer un nouveau mot de passe, veuillez cliquer sur le lien ci-dessous :</p>
-    <a href="{{ confirmationUrl }}" class="button">Réinitialiser mon mot de passe</a>
-    <p>Ce lien est valide pendant une durée limitée. Si vous n'avez pas demandé cette réinitialisation, vous pouvez ignorer ce message. Votre mot de passe restera inchangé.</p>
+    <p>Nous vous informons que votre réservation de location de "{{ reservationsEvents.event.title }}" a été désactivée. </p>
+    <p>Si vous pensez qu’il s’agit d’une erreur ou si vous souhaitez obtenir plus d’informations, nous vous invitons à contacter notre support.</p>
+    <a href="mailto:support@votresite.com" class="button">Contacter le support</a>
     <div class="footer">
-        Merci de votre confiance.<br>
+        Merci de votre compréhension.<br>
         Domaine Du Soleil.
     </div>
 </div>

@@ -5,6 +5,7 @@ namespace App\Controller\admin;
 use App\Entity\Comments;
 use App\Form\CommentsType;
 use App\Repository\CommentsRepository;
+use App\Services\MailerService;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -47,51 +48,11 @@ final class CommentsController extends AbstractController
             'sort' => $sort,
             'direction' => $direction,
         ]);
-    }
-
-    #[Route('/new', name: 'app_comments_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $comment = new Comments();
-        $form = $this->createForm(CommentsType::class, $comment);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($comment);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_comments_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('admin/comments/new.html.twig', [
-            'comment' => $comment,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_comments_show')]
+    }#[Route('/{id}', name: 'app_comments_show')]
     public function show(Comments $comment): Response
     {
         return $this->render('admin/comments/show.html.twig', [
             'comment' => $comment,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_comments_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Comments $comment, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(CommentsType::class, $comment);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_comments_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('admin/comments/edit.html.twig', [
-            'comment' => $comment,
-            'form' => $form,
         ]);
     }
 
@@ -107,7 +68,7 @@ final class CommentsController extends AbstractController
     }
 
     #[Route('/{id}/changeActive', name: 'app_comments_change_active')]
-    public function changeActive($id, CommentsRepository $commentsRepository, EntityManagerInterface $entityManager, Request $request): Response
+    public function changeActive($id, CommentsRepository $commentsRepository, EntityManagerInterface $entityManager, Request $request, MailerService $mailerService): Response
     {
         $comment = $commentsRepository->find($id);
         $comment->setIsActive(!$comment->getIsActive());
@@ -116,6 +77,11 @@ final class CommentsController extends AbstractController
             $comment->setDisabledAt(null);
         }else{
             $comment->setDisabledAt(new \DateTimeImmutable('now', new DateTimeZone('Europe/Brussels')));
+            $mailerService->sendDisabledComment(
+                $comment->getUser()->getEmail(),
+                $comment->getUser()->getFirstname(),
+                $comment
+            );
         }
 
         $entityManager->persist($comment);

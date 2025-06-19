@@ -50,9 +50,14 @@
         <div class="d-flex flex-column gap-4 align-items-center mb-4">
             <div class="d-flex gap-2">
                 <a href="{{ path('app_users_index') }}" class="btn-yellow">Retour à la liste</a>
-                <a href="{{ path('app_users_change_active', {id:user.id}) }}" class="btn-{% if user.isActive %}red{% else %}lightGreen2{% endif %}">
+                <button class="btn-{% if user.isActive %}red{% else %}lightGreen2{% endif %}
+                    {% if user.roles|last == "ROLE_ADMIN" %} disabledItem{% endif %}"
+                        data-bs-toggle="modal"
+                        data-bs-target="#confirmActiveToggleModal"
+                        {% if user.roles|last == "ROLE_ADMIN" %} disabled{% endif %}>
                     {% if user.isActive %}Désactiver{% else %}Activer{% endif %}
-                </a>
+                </button>
+
                 <a href="{{ path('app_users_comments', {'id': user.id}) }}" class="btn-lightGreen2">
                     Voir les commentaires
                 </a>
@@ -121,5 +126,33 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="confirmActiveToggleModal" tabindex="-1" aria-labelledby="confirmActiveToggleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4">
+                <div class="modal-header {% if user.isActive %}bg-red{% else %}bg-lightGreen{% endif %}">
+                    <h5 class="modal-title" id="confirmActiveToggleModalLabel">
+                        Confirmation de {% if user.isActive %}désactivation{% else %}réactivation{% endif %}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir {% if user.isActive %}désactiver{% else %}réactiver{% endif %} le compte de
+                    <strong>{{ user.firstname }} {{ user.lastname }}</strong> ?
+                    {% if user.isActive %}
+                        <p class="alert alert-warning mt-2">Le compte sera anonymisé 30 jours après désactivation.</p>
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-signup" data-bs-dismiss="modal">Annuler</button>
+                    <a href="{{ path('app_users_change_active', {id:user.id}) }}"
+                       class="btn-{% if user.isActive %}red{% else %}lightGreen2{% endif %}">
+                        Confirmer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 {% endblock %}

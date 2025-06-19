@@ -63,4 +63,36 @@ final class CommentsController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    #[Route('/comment/{id}/edit', name: 'app_edit_comment')]
+    public function edit(
+        Comments $comment,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response {
+        if ($comment->getUser() !== $this->getUser() && !$comment->getIsActive()) {
+            $this->addFlash('danger', 'Vous n\'avez pas le droit de modifier ce commentaire.');
+            return $this->redirectToRoute('app_account');
+        }
+
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setChangedAt(new \DateTimeImmutable('now', new \DateTimeZone('Europe/Brussels')));
+            $comment->setIsActive(true);
+            $comment->setDisabledAt(null);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Le commentaire a été modifié avec succès.');
+            return $this->redirectToRoute('app_account');
+        }
+
+        return $this->render('comments/edit.html.twig', [
+            'form' => $form->createView(),
+            'comment' => $comment,
+            'rentals' => $comment->getRentals(),
+        ]);
+    }
+
 }

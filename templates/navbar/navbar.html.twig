@@ -72,6 +72,15 @@
                 </div>
             {% endfor %}
         {% endfor %}
+
+        {% if InactivCommentUser is defined %}
+            {% for comment in InactivCommentUser %}
+                <div class="alert alert-warning alert-dismissible fade show mt-3 w-75 mx-auto" role="alert">
+                    Vous avez un commentaire sur <a href="{{ path('app_rental', {id:comment.rentals.id}) }}">{{ comment.rentals.title }}</a> a été désactivé ! <a href="{{ path('app_edit_comment', {id: comment.id}) }}">Cliquer ici</a> pour le modifier
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
     </div>
 
 {% endblock %}

@@ -9,6 +9,7 @@ use App\Form\ReservationsEventsType;
 use App\Repository\EventsRepository;
 use App\Repository\ReservationsEventsRepository;
 use App\Repository\UsersRepository;
+use App\Services\MailerService;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -278,12 +279,20 @@ final class ReservationsEventsController extends AbstractController
         ]);
     }
     #[Route('/{id}/changeActive', name: 'app_reservations_events_change_active')]
-    public function changeActive($id, ReservationsEventsRepository $reservationsEventsRepository, EntityManagerInterface $entityManager, Request $request): Response
+    public function changeActive($id, ReservationsEventsRepository $reservationsEventsRepository, EntityManagerInterface $entityManager, Request $request, MailerService $mailerService): Response
     {
         $reservationsEvents = $reservationsEventsRepository->find($id);
 
         if($reservationsEvents->getIsActive()){
             $reservationsEvents->setIsActive(!$reservationsEvents->getIsActive());
+
+            if(!$reservationsEvents->getIsActive()){
+                $mailerService->sendDisabledReservationEvent(
+                    $reservationsEvents->getUser()->getEmail(),
+                    $reservationsEvents->getUser()->getFirstname(),
+                    $reservationsEvents
+                );
+            }
 
             $entityManager->persist($reservationsEvents);
             $entityManager->flush();

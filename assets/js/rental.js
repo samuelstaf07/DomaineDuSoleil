@@ -57,7 +57,7 @@ $(document).ready(function() {
 
     const dateStartPicker = MCDatepicker.create({
         el: '#reservations_rentals_date_start',
-        dateFormat: 'yyyy-mm-dd',
+        dateFormat: 'dd/mm/yyyy',
         autoClose: true,
         closeOnBlur: true,
         selectedDate: today,
@@ -75,7 +75,7 @@ $(document).ready(function() {
 
     const dateEndPicker = MCDatepicker.create({
         el: '#reservations_rentals_date_end',
-        dateFormat: 'yyyy-mm-dd',
+        dateFormat: 'dd/mm/yyyy',
         autoClose: true,
         closeOnBlur: true,
         selectedDate: today,
@@ -172,6 +172,4 @@ $(document).ready(function() {
             addToCart.classList.remove('disabledItem');
         }
     }
-
-
 })

@@ -17,9 +17,15 @@ class ReservationsRentalsType extends AbstractType
     {
         $builder
             ->add('date_start', DateType::class, [
+                'widget' => 'single_text',
+                'html5' => false,
+                'format' => 'dd/MM/yyyy',
                 'required' => true,
             ])
             ->add('date_end', DateType::class, [
+                'widget' => 'single_text',
+                'html5' => false,
+                'format' => 'dd/MM/yyyy',
                 'required' => true,
             ])
             ->add('save', SubmitType::class, [

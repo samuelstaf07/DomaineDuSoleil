@@ -19,6 +19,7 @@ $(document).ready(function() {
     let filtres = Object.assign({}, filtreBase);
     let nbLogement = 9;
     let nbLocationFiltre = 0;
+    let countRentals = $('.countRentals');
 
     // Click events for filters
     $('.filtre').click(function() {
@@ -206,7 +207,6 @@ $(document).ready(function() {
                 $(this).hide();
             }
         });
-
         if (nbLocationFiltre === 0) {
             if ($('#logementsContainer p.alertRentals').length === 0) {
                 $('#logementsContainer').append('<p class="alert alert-secondary alertRentals text-center mt-3 font-weight-bolder p-2">Aucune location ne correspond aux critères de recherche.</p>');
@@ -220,6 +220,7 @@ $(document).ready(function() {
                 $('.voir-plus').hide();
             }
         }
+        countRentals.text(nbLocationFiltre);
     }
 
     afficherLocations(nbLogement);

@@ -10,6 +10,7 @@ use App\Form\StatusReservationType;
 use App\Repository\RentalsRepository;
 use App\Repository\ReservationsRentalsRepository;
 use App\Repository\UsersRepository;
+use App\Services\MailerService;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -316,17 +317,23 @@ final class ReservationsRentalsController extends AbstractController
     }
 
     #[Route('/{id}/changeActive', name: 'app_reservations_rentals_change_active')]
-    public function changeActive($id, Request $request, ReservationsRentalsRepository $reservationsRentalsRepository, EntityManagerInterface $entityManager): Response
+    public function changeActive($id, Request $request, ReservationsRentalsRepository $reservationsRentalsRepository, EntityManagerInterface $entityManager, MailerService $mailerService): Response
     {
         $reservationsRentals = $reservationsRentalsRepository->find($id);
 
         $reservationsRentals->setStatusReservation(!$reservationsRentals->getStatusReservation());
 
+        if(!$reservationsRentals->getStatusReservation()){
+            $mailerService->sendDisabledReservationRental(
+                $reservationsRentals->getUser()->getEmail(),
+                $reservationsRentals->getUser()->getFirstname(),
+                $reservationsRentals
+            );
+        }
+
         $entityManager->persist($reservationsRentals);
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_reservations_rentals_show', [
-            'id' => $reservationsRentals->getId()
-        ]);
+        return $this->redirectToRoute('app_reservations_rentals_index');
     }
 }

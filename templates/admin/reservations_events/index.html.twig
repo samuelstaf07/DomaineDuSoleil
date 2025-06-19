@@ -76,16 +76,36 @@
                             <a href="{{ path('app_reservations_events_refund', {'id': reservations_event.id}) }}" class="btn btn-dark {% if reservations_event.bill is not null and reservations_event.bill.PaymentIntentId is null or reservations_event.totalDepositReturned >= reservations_event.totalDeposit %}disabledItem{% endif %}" title="Rembourser la réservation">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#95C11F" d="M18 11H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2m0 6H6v-3h12m-1-9v5h-1.5V6.5H9.88l2.42 2.43L11.24 10L7 5.75l4.24-4.25l1.06 1.07L9.88 5Z"/></svg>
                             </a>
-                            <a href="{{ path('app_reservations_events_change_active', {'id': reservations_event.id}) }}" class="btn btn-dark
+                            <button type="button" class="btn btn-dark
                             {% if not reservations_event.isActive and reservations_event.bill is not null and reservations_event.bill.PaymentIntentId is not null %}
                                 disabledItem
-                            {% endif %}" title="Changer le type actif">
+                            {% endif %}" data-bs-toggle="modal" data-bs-target="#modalChangeActive{{ reservations_event.id }}" title="Changer le type actif">
                                 {% if reservations_event.isActive %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#006633" fill-rule="evenodd" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10m-4.906-3.68L18.32 7.094A8 8 0 0 1 7.094 18.32M5.68 16.906A8 8 0 0 1 16.906 5.68z"/></svg>
                                 {% else %}
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#CE1104" fill-rule="evenodd" d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10m-4.906-3.68L18.32 7.094A8 8 0 0 1 7.094 18.32M5.68 16.906A8 8 0 0 1 16.906 5.68z"/></svg>
                                 {% endif %}
-                            </a>
+                            </button>
+
+                            <div class="modal fade" id="modalChangeActive{{ reservations_event.id }}" tabindex="-1" aria-labelledby="modalChangeActiveLabel{{ reservations_event.id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-{% if reservations_event.isActive %}danger{% else %}success{% endif %} text-white">
+                                            <h5 class="modal-title" id="modalChangeActiveLabel{{ reservations_event.id }}">Confirmation</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Êtes-vous sûr de vouloir {{ reservations_event.isActive ? 'désactiver' : 'activer' }} cette réservation (ID #{{ reservations_event.id }}) ?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                            <a href="{{ path('app_reservations_events_change_active', {'id': reservations_event.id}) }}" class="btn btn-{% if reservations_event.isActive %}danger{% else %}success{% endif %}">
+                                                Confirmer
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </td>
                 </tr>

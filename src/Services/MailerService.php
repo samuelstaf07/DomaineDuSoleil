@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use App\Entity\Bills;
+use App\Entity\Comments;
+use App\Entity\ReservationsEvents;
+use App\Entity\ReservationsRentals;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -71,6 +74,87 @@ class MailerService extends AbstractController
             ->from(new Address('no-reply@domainedusoleil.com', 'Domaine du Soleil'))
             ->to($to)
             ->subject('Changer votre mot de passe')
+            ->html($body);
+
+        $this->mailer->send($email);
+    }
+
+    public function sendDisabledAccount(string $to, string $username, bool $isActive): void
+    {
+        $isActive == true ? $message = 'activé' : $message = 'désactivé';
+        $body = $this->twig->render('emails/disabledAccount.html.twig', [
+            'username' => $username,
+            'message' => $message,
+        ]);
+
+        $email = (new Email())
+            ->from(new Address('no-reply@domainedusoleil.com', 'Domaine du Soleil'))
+            ->to($to)
+            ->subject('Votre compte a été désactivé.')
+            ->html($body);
+
+        $this->mailer->send($email);
+    }
+
+    public function sendDisabledComment(string $to, string $username, Comments $comment): void
+    {
+        $body = $this->twig->render('emails/disabledComment.html.twig', [
+            'username' => $username,
+            'comment' => $comment,
+        ]);
+
+        $email = (new Email())
+            ->from(new Address('no-reply@domainedusoleil.com', 'Domaine du Soleil'))
+            ->to($to)
+            ->subject('Votre commentaire a été désactivé.')
+            ->html($body);
+
+        $this->mailer->send($email);
+    }
+
+    public function sendDisabledBill(string $to, string $username, Bills $bill): void
+    {
+        $body = $this->twig->render('emails/disabledbill.html.twig', [
+            'username' => $username,
+            'bill' => $bill,
+        ]);
+
+        $email = (new Email())
+            ->from(new Address('no-reply@domainedusoleil.com', 'Domaine du Soleil'))
+            ->to($to)
+            ->subject('Votre facture a été désactivée.')
+            ->html($body);
+
+        $this->mailer->send($email);
+    }
+
+    public function sendDisabledReservationRental(string $to, string $username, ReservationsRentals $reservationsRentals): void
+    {
+        $body = $this->twig->render('emails/disabledReservationRental.html.twig', [
+            'username' => $username,
+            'reservationsRentals' => $reservationsRentals,
+        ]);
+
+        $email = (new Email())
+            ->from(new Address('no-reply@domainedusoleil.com', 'Domaine du Soleil'))
+            ->to($to)
+            ->subject('Votre réservation de location a été désactivée.')
+            ->html($body);
+
+        $this->mailer->send($email);
+    }
+
+    public function sendDisabledReservationEvent(string $to, string $username, ReservationsEvents $reservationsEvents): void
+    {
+        $body = $this->twig->render('emails/disabledReservationEvent.html.twig', [
+            'username' => $username,
+            'reservationsEvents' => $reservationsEvents,
+        ]);
+
+        $email = (new Email())
+            ->from(new Address('no-reply@domainedusoleil.com', 'Domaine du Soleil'))
+            ->to($to)
+            ->subject('Votre réservation d\'événement a été désactivée.')
             ->html($body);
 
         $this->mailer->send($email);

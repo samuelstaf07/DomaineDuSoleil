@@ -135,7 +135,7 @@ final class PaymentController extends AbstractController
 
         $checkout_session = Session::create([
             'customer_email' => $this->getUser()->getEmail(),
-            'payment_method_types' => ['card'],
+            'payment_method_types' => ['card', 'bancontact'],
             'line_items' => $productStripe,
             'mode' => 'payment',
             'success_url' => $this->urlGenerator->generate('app_payment_stripe_success', [], UrlGeneratorInterface::ABSOLUTE_URL),

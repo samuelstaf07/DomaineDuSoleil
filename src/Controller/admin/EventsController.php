@@ -112,7 +112,7 @@ final class EventsController extends AbstractController
         $entityManager->remove($event);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Le post a été supprimé.');
+        $this->addFlash('success', 'L\'événement a été supprimé.');
         return $this->redirectToRoute('app_events_index', [], Response::HTTP_SEE_OTHER);
     }
 

@@ -5,6 +5,7 @@ namespace App\Controller\admin;
 use App\Entity\Bills;
 use App\Form\BillsType;
 use App\Repository\BillsRepository;
+use App\Services\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -47,10 +48,18 @@ final class BillsController extends AbstractController
     }
 
     #[Route('/{id}/changeActive', name: 'app_bills_change_active')]
-    public function delete($id, BillsRepository $billsRepository, Request $request, EntityManagerInterface $entityManager): Response
+    public function delete($id, BillsRepository $billsRepository, Request $request, EntityManagerInterface $entityManager, MailerService $mailerService): Response
     {
         $bill = $billsRepository->find($id);
         $bill->setStatus(!$bill->getStatus());
+
+        if(!$bill->getStatus()){
+            $mailerService->sendDisabledBill(
+                $bill->getUser()->getEmail(),
+                $bill->getUser()->getFirstname(),
+                $bill
+            );
+        }
 
         $entityManager->persist($bill);
         $entityManager->flush();

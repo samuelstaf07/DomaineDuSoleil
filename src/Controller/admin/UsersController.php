@@ -6,6 +6,7 @@ use App\Entity\Users;
 use App\Repository\CommentsRepository;
 use App\Repository\RentalsRepository;
 use App\Repository\UsersRepository;
+use App\Services\MailerService;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Dompdf\Dompdf;
@@ -84,7 +85,7 @@ final class UsersController extends AbstractController
     }
 
     #[Route('/{id}/changeActive', name: 'app_users_change_active')]
-    public function delete($id, UsersRepository $usersRepository, EntityManagerInterface $entityManager): Response
+    public function delete($id, UsersRepository $usersRepository, EntityManagerInterface $entityManager, MailerService $mailerService): Response
     {
         $user = $usersRepository->find($id);
 
@@ -103,6 +104,12 @@ final class UsersController extends AbstractController
         }else{
             $this->addFlash("success", "Le compte de l'utilisateur a été désactivé.");
         }
+
+        $mailerService->sendDisabledAccount(
+            $user->getEmail(),
+            $user->getFirstname(),
+            $user->isActive()
+        );
 
         return $this->redirectToRoute('app_users_show', [
             'id' => $id,

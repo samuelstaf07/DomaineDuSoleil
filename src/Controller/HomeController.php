@@ -20,10 +20,18 @@ final class HomeController extends AbstractController
         $rentals = $rentalsRepository->findAllRentalsWithDiscountAndActive();
         $posts = $postsRepository->findLatestActivePosts();
         $events = $eventsRepository->findLatestActiveEvents();
+        $user = $this->getUser();
 
-        if($this->getUser()){
-            if(!$this->getUser()->isEmailAuthentificated()){
+        if($user){
+            if(!$user->isEmailAuthentificated()){
                 $this->addFlash('warning', 'Votre email n\'est pas vérifié, veuillez la vérifié dans vos paramètres d\'utilisateur.');
+            }
+
+            $commentUser = [];
+            foreach ($user->getComments() as $comment) {
+                if(!$comment->getIsActive()){
+                    $commentUser[] = $comment;
+                }
             }
         }
 
@@ -31,6 +39,7 @@ final class HomeController extends AbstractController
             'rentals' => $rentals,
             'posts' => $posts,
             'events' => $events,
+            'InactivCommentUser' => $commentUser,
         ]);
     }
 
