@@ -16,7 +16,11 @@
         {% set days_diff = date(rental_start).diff(date(now)).days %}
 
         <div class="text-center alert alert-{% if date(rental_start) >= date(now) and days_diff >= 3 %}info{% else %}warning{% endif %}">
-            <p>Le logement est dans {{ days_diff }} jour(s) !</p>
+            {% if date(rental_start) < date(now) %}
+                <p>La réservation est finie</p>
+            {% else %}
+                <p>La réservation est dans {{ days_diff }} jour(s) !</p>
+            {% endif %}
             {% if date(rental_start) >= date(now) and days_diff > 30 %}
                 <p>Il est recommandé de rembourser à 90% ({{ (reservation.totalPrice * 0.9)|number_format(2, ',', '') }}€) l'utilisateur.</p>
             {% elseif date(rental_start) >= date(now) and days_diff <= 30 and days_diff >= 15 %}

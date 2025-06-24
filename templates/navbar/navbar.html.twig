@@ -16,7 +16,7 @@
                 </li>
 
                 <li class="nav-item d-flex gap-3">
-                    <a class="btn-lightGreen" href="{{ path('app_rentals') }}">Logements</a>
+                    <a class="btn-lightGreen" href="{{ path('app_rentals') }}">Locations</a>
                     <a class="btn-lightGreen2" href="{{ path('app_cart') }}">
                         <img src="{{ asset('styles/img/cart.svg') }}" alt="Accéder au panier">
                     </a>
@@ -76,7 +76,7 @@
         {% if InactivCommentUser is defined %}
             {% for comment in InactivCommentUser %}
                 <div class="alert alert-warning alert-dismissible fade show mt-3 w-75 mx-auto" role="alert">
-                    Vous avez un commentaire sur <a href="{{ path('app_rental', {id:comment.rentals.id}) }}">{{ comment.rentals.title }}</a> a été désactivé ! <a href="{{ path('app_edit_comment', {id: comment.id}) }}">Cliquer ici</a> pour le modifier
+                    Vous avez un commentaire sur <a href="{{ path('app_rental', {id:comment.rentals.id}) }}">{{ comment.rentals.title }}</a> qui a été désactivé ! <a href="{{ path('app_edit_comment', {id: comment.id}) }}">Cliquer ici</a> pour le modifier
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                 </div>
             {% endfor %}

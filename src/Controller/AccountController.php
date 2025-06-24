@@ -230,29 +230,31 @@ final class AccountController extends AbstractController
                 if (!$passwordHasher->isPasswordValid($user, $data['password'])) {
                     $this->addFlash('danger', 'Mot de passe incorrect.');
                     return $this->redirectToRoute('app_account');
-                }else if($usersRepository->emailExists($data['newEmail'])){
-                    $this->addFlash('danger', 'Email déja utilisé.');
-                    return $this->redirectToRoute('app_account');
-                }else {
-                    $mailerService->sendChangeMail(
-                        $user->getEmail(),
-                        $user->getFirstname(),
-                        $data['newEmail'],
-                    );
-                    $mailerService->sendChangeMail(
-                        $data['newEmail'],
-                        $user->getFirstname(),
-                        $data['newEmail'],
-                    );
+                }
 
-                    $user->setEmail($data['newEmail']);
-                    $user->setUpdatedAt(new \DateTimeImmutable('now', new DateTimeZone('Europe/Brussels')));
-                    $entityManager->flush();
-
-                    $this->addFlash('success', 'Votre adresse e-mail a été modifiée.');
+                if ($usersRepository->emailExists($data['newEmail'])) {
+                    $this->addFlash('danger', 'Email déjà utilisé.');
                     return $this->redirectToRoute('app_account');
                 }
+
+                $signatureComponents = $verifyEmailHelper->generateSignature(
+                    'app_verify_new_email',
+                    $user->getId(),
+                    $data['newEmail'],
+                    ['id' => $user->getId(), 'email' => $data['newEmail']]
+                );
+
+                $mailerService->sendNewMail(
+                    $data['newEmail'],
+                    $user->getFirstname(),
+                    $signatureComponents->getSignedUrl()
+                );
+
+                $this->addFlash('success', 'Un email de confirmation a été envoyé à votre nouvelle adresse.');
+                return $this->redirectToRoute('app_account');
             }
+
+
 
             return $this->render('account/_changemail.html.twig', [
                 'form' => $form->createView(),
@@ -287,4 +289,43 @@ final class AccountController extends AbstractController
             'user' => $this->getUser(),
         ]);
     }
+
+    #[Route('/verify/new-email', name: 'app_verify_new_email')]
+    public function verifyNewEmail(
+        Request $request,
+        VerifyEmailHelperInterface $verifyEmailHelper,
+        EntityManagerInterface $entityManager,
+        UsersRepository $usersRepository
+    ): Response {
+        $user = $this->getUser();
+
+        if (!$user) {
+            $this->addFlash('danger', 'Vous devez être connecté.');
+            return $this->redirectToRoute('app_login');
+        }
+
+        $id = $request->query->get('id');
+        $newEmail = $request->query->get('email');
+        $signature = $request->getUri();
+
+        if (!$id || !$newEmail || $user->getId() != $id) {
+            $this->addFlash('danger', 'Lien invalide.');
+            return $this->redirectToRoute('app_account');
+        }
+
+        try {
+            $verifyEmailHelper->validateEmailConfirmation($signature, $id, $newEmail);
+        } catch (\Exception $e) {
+            $this->addFlash('danger', 'Le lien de confirmation est invalide ou expiré.');
+            return $this->redirectToRoute('app_account');
+        }
+
+        $user->setEmail($newEmail);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Votre nouvelle adresse e-mail a bien été confirmée.');
+        return $this->redirectToRoute('app_account');
+    }
+
+
 }

@@ -17,7 +17,7 @@
                         <p>Créé le: {{ comment.createdAt|date('d/m/Y') }}</p>
                     </li>
                     <li class="list-group-item">
-                        <p>Logement: <a href="{{ path('app_rental', {id:comment.rentals.id}) }}" data-turbo="false">{{ comment.rentals.title|capitalize }}</a></p>
+                        <p>Location: <a href="{{ path('app_rental', {id:comment.rentals.id}) }}" data-turbo="false">{{ comment.rentals.title|capitalize }}</a></p>
                     </li>
                     <li class="list-group-item">
                         <p>Actif: {{ comment.isActive ? '✅️' : '❌' }}</p>

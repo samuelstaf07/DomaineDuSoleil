@@ -70,7 +70,7 @@ final class CommentsController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager
     ): Response {
-        if ($comment->getUser() !== $this->getUser() && !$comment->getIsActive()) {
+        if ($comment->getUser() !== $this->getUser() || $comment->getIsActive()) {
             $this->addFlash('danger', 'Vous n\'avez pas le droit de modifier ce commentaire.');
             return $this->redirectToRoute('app_account');
         }

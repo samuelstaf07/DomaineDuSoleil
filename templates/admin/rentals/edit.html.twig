@@ -14,13 +14,13 @@
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
         {% if not rental.getHomePageImage() %}
             <div class="alert alert-warning d-flex gap-2">
-                <p>La logement ne possède pas d'image de présentation</p>
+                <p>La location ne possède pas d'image de présentation</p>
                 <a href="{{ path('app_rentals_add_image', {id:rental.id}) }}">en ajouter une</a>
             </div>
         {% endif %}
         <div class="mb-3 w-75 d-flex justify-content-start gap-2">
             <a href="{{ path('app_rentals_index') }}" class="btn-yellow mb-4">Revenir à la liste</a>
-            <a href="{{ path('app_rental', {id: rental.id}) }}" class="btn-lightGreen2 mb-4" data-turbo="false">Voir le logement</a>
+            <a href="{{ path('app_rental', {id: rental.id}) }}" class="btn-lightGreen2 mb-4" data-turbo="false">Voir la location</a>
         </div>
         <div class="w-75 bg-lightGreen d-flex flex-column p-5 rounded-4">
             <h1 class="text-center">Modification de {{ rental.title|capitalize }}</h1>
@@ -38,7 +38,7 @@
         </div>
 
         <div class="d-flex flex-column align-items-center justify-content-center my-4 .popup-gallery">
-            <h3>Gallerie photo du logement</h3>
+            <h3>Gallerie photo de la location</h3>
             <div class="d-flex popup-gallery w-75 justify-content-center gap-3">
                 {% for imageRental in rental.getImages() %}
                     {% if not imageRental.isHomePage %}

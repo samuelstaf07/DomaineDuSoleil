@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tous les logements{% endblock %}
+{% block title %}Toutes les locations{% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
@@ -10,7 +10,7 @@
 
 {% block body %}
     <div class="contentMargin d-flex align-items-center flex-column pb-3">
-        <h2 class="text-center">Tous les logements (<span class="countRentals">{{ rentals|length }}</span>)</h2>
+        <h2 class="text-center">Toutes les locations (<span class="countRentals">{{ rentals|length }}</span>)</h2>
         <div class="d-flex col-12 col-md-10 justify-content-center">
             <div class="d-flex flex-column w-75">
                 <button class="btn-green m-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltre" aria-expanded="false" aria-controls="collapseFiltre">

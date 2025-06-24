@@ -17,8 +17,8 @@
 
     <div class="contentMargin d-flex flex-column align-items-center justify-content-center mb-5">
         <div class="d-flex mb-3 w-75 justify-content-start gap-2">
-            <a href="{{ path('app_rentals_edit', {id:rental.id}) }}" class="btn-yellow" data-turbo="false">Retour au logement</a>
-            <a href="{{ path('app_rentals_index') }}" class="btn-lightGreen2">Retour à la liste des logements</a>
+            <a href="{{ path('app_rentals_edit', {id:rental.id}) }}" class="btn-yellow" data-turbo="false">Retour à la location</a>
+            <a href="{{ path('app_rentals_index') }}" class="btn-lightGreen2">Retour à la liste des locations</a>
         </div>
         <h1>Tous les commentaires de {{ rental.title|capitalize }}</h1>
 

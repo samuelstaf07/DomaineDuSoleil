@@ -8,6 +8,7 @@ use App\Entity\ReservationsEvents;
 use App\Entity\ReservationsRentals;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -62,6 +63,7 @@ class MailerService extends AbstractController
 
         $this->mailer->send($email);
     }
+
 
     public function sendPasswordReset(string $to, string $username, string $signedUrl): void
     {
@@ -207,6 +209,22 @@ class MailerService extends AbstractController
 
         $this->mailer->send($email);
     }
+
+    public function sendNewMail(string $to, string $firstname, string $signedUrl): void
+    {
+        $email = (new TemplatedEmail())
+            ->from(new Address('noreply@domainedusoleil.be', 'Domaine Du Soleil'))
+            ->to($to)
+            ->subject('Confirmation de changement d\'e-mail')
+            ->htmlTemplate('emails/change_email.html.twig')
+            ->context([
+                'firstname' => $firstname,
+                'signedUrl' => $signedUrl
+            ]);
+
+        $this->mailer->send($email);
+    }
+
 
     public function sendCommand(string $to, string $username, Bills $bill, $resEvents, $resRentals): void
     {

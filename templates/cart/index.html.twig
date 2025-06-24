@@ -12,9 +12,9 @@
             {% set events = cartElements|filter(element => element.type == 'event') %}
 
             {% if rentals is not empty %}
-                <h4>Logements</h4>
+                <h4>Locations</h4>
                 <p class="alert alert-secondary">Pour l'ensemble de nos hébergements, une caution correspondant à deux fois le tarif journalier (sans promotion) vous sera exigée. <br>
-                    Cette dernière vous sera intégralement remboursée si l'état du logement lors de votre départ est conforme à nos attentes.</p>
+                    Cette dernière vous sera intégralement remboursée si l'état de la location lors de votre départ est conforme à nos attentes.</p>
                 <table class="d-none d-xl-table flex-column table w-75">
                     <thead>
                     <tr>
@@ -57,7 +57,7 @@
                             </td>
                             <td class="align-middle text-center">
                                 {% set days = elem.dateEnd.diff(elem.dateStart).days + 1 %}
-                                {% if elem.rentalPricePerDay %}
+                                {% if elem.rentalIsOnPromotion %}
                                     {% set dailyPrice = (elem.rentalPricePerDay * 0.9)|round(2, 'floor') %}
                                 {% else %}
                                     {% set dailyPrice = elem.rentalPricePerDay|round(2, 'floor') %}
@@ -253,7 +253,7 @@
         {% else %}
             <p class="alert alert-secondary m-3">Panier vide.</p>
             <a href="{{ path('app_events') }}" class="btn btn-yellow">Voir tous les événements</a>
-            <a href="{{ path('app_rentals') }}" class="btn btn-green">Voir tous les Logements</a>
+            <a href="{{ path('app_rentals') }}" class="btn btn-green">Voir toutes les locations</a>
         {% endif %}
     </div>
 
