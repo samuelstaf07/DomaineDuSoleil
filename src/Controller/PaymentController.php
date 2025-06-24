@@ -111,7 +111,6 @@ final class PaymentController extends AbstractController
             }
         }
 
-        //Do a json cart because a limit of 500char send
         $orderChange = [];
 
         foreach ($order as $elem){

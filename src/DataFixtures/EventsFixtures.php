@@ -33,10 +33,11 @@ class EventsFixtures extends Fixture
 
                 if($j == 0){
                     $image->setIsHomePage(1);
+                    $image->setSrc('event' . ($i % 10) . '.jpg');
                 }else{
                     $image->setIsHomePage(0);
+                    $image->setSrc('sun.jpg');
                 }
-                $image->setSrc('Chalet.jpg');
                 $image->setAlt($faker->sentence(3));
                 $image->setEvents($event);
                 $event->addImage($image);

@@ -35,10 +35,11 @@ class RentalsFixtures extends Fixture
                 $image = new Images();
                 if($j == 0){
                     $image->setIsHomePage(true);
+                    $image->setSrc('rental' . ($i % 10) . '.jpg');
                 }else{
                     $image->setIsHomePage(false);
+                    $image->setSrc('Chalet.jpg');
                 }
-                $image->setSrc('Chalet.jpg');
                 $image->setAlt($faker->sentence(3));
                 $image->setRentals($rental);
                 $rental->addImage($image);

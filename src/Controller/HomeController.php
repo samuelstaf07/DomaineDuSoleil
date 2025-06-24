@@ -21,13 +21,13 @@ final class HomeController extends AbstractController
         $posts = $postsRepository->findLatestActivePosts();
         $events = $eventsRepository->findLatestActiveEvents();
         $user = $this->getUser();
+        $commentUser = [];
 
         if($user){
             if(!$user->isEmailAuthentificated()){
                 $this->addFlash('warning', 'Votre email n\'est pas vérifié, veuillez la vérifié dans vos paramètres d\'utilisateur.');
             }
 
-            $commentUser = [];
             foreach ($user->getComments() as $comment) {
                 if(!$comment->getIsActive()){
                     $commentUser[] = $comment;
